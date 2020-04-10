@@ -1,4 +1,4 @@
-# Install script for directory: /home/tobias/obj-lst-vis/src/object_list
+# Install script for directory: /home/tobias/obj-lst-vis/src/Object_List
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,17 +39,17 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/msg" TYPE FILE FILES
-    "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
-    "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
-    "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
-    "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
-    "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
-    "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+    "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/cmake" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/object_list/catkin_generated/installspace/object_list-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/cmake" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/Object_List/catkin_generated/installspace/object_list-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -77,21 +77,21 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/object_list/catkin_generated/installspace/object_list.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/Object_List/catkin_generated/installspace/object_list.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/cmake" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/object_list/catkin_generated/installspace/object_list-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/cmake" TYPE FILE FILES "/home/tobias/obj-lst-vis/build/Object_List/catkin_generated/installspace/object_list-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list/cmake" TYPE FILE FILES
-    "/home/tobias/obj-lst-vis/build/object_list/catkin_generated/installspace/object_listConfig.cmake"
-    "/home/tobias/obj-lst-vis/build/object_list/catkin_generated/installspace/object_listConfig-version.cmake"
+    "/home/tobias/obj-lst-vis/build/Object_List/catkin_generated/installspace/object_listConfig.cmake"
+    "/home/tobias/obj-lst-vis/build/Object_List/catkin_generated/installspace/object_listConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list" TYPE FILE FILES "/home/tobias/obj-lst-vis/src/object_list/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/object_list" TYPE FILE FILES "/home/tobias/obj-lst-vis/src/Object_List/package.xml")
 endif()
 

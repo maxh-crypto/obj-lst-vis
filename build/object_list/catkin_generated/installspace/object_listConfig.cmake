@@ -67,7 +67,7 @@ set(object_list_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(object_list_SOURCE_PREFIX /home/tobias/obj-lst-vis/src/object_list)
+  set(object_list_SOURCE_PREFIX /home/tobias/obj-lst-vis/src/Object_List)
   set(object_list_DEVEL_PREFIX /home/tobias/obj-lst-vis/devel)
   set(object_list_INSTALL_PREFIX "")
   set(object_list_PREFIX ${object_list_DEVEL_PREFIX})
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/tobias/obj-lst-vis/install/lib;/opt/ros/melodic/lib)
+    foreach(path /home/tobias/obj-lst-vis/install/lib;/home/tobias/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
