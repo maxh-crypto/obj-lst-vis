@@ -67,7 +67,7 @@ set(object_list_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(object_list_SOURCE_PREFIX /home/tobias/obj-lst-vis/src/Object_List)
+  set(object_list_SOURCE_PREFIX /home/tobias/obj-lst-vis/src/object_list)
   set(object_list_DEVEL_PREFIX /home/tobias/obj-lst-vis/devel)
   set(object_list_INSTALL_PREFIX "")
   set(object_list_PREFIX ${object_list_DEVEL_PREFIX})

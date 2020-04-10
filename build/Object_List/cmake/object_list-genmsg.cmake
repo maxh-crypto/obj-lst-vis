@@ -2,7 +2,7 @@
 
 message(STATUS "object_list: 6 messages, 0 services")
 
-set(MSG_I_FLAGS "-Iobject_list:/home/tobias/obj-lst-vis/src/Object_List/msg;-Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Iobject_list:/home/tobias/obj-lst-vis/src/object_list/msg;-Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -17,34 +17,34 @@ add_custom_target(object_list_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" "object_list/Classification:object_list/Geometric:object_list/Dimension:object_list/Features"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" "object_list/Classification:object_list/Geometric:object_list/Dimension:object_list/Features"
 )
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" ""
 )
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" "object_list/Classification:object_list/Geometric:std_msgs/Header:object_list/Dimension:object_list/Features:object_list/ObjectList"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" "object_list/Classification:object_list/Geometric:std_msgs/Header:object_list/Dimension:object_list/Features:object_list/ObjectList"
 )
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" ""
 )
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" ""
 )
 
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_custom_target(_object_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "object_list" "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" ""
 )
 
 #
@@ -54,37 +54,37 @@ add_custom_target(_object_list_generate_messages_check_deps_${_filename}
 ### Section generating for lang: gencpp
 ### Generating Messages
 _generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
   "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
 )
 _generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
-)
-_generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
-  "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
-)
-_generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
 )
 _generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+  "${MSG_I_FLAGS}"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg;/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
+)
+_generate_msg_cpp(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
 )
 _generate_msg_cpp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
+)
+_generate_msg_cpp(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/object_list
@@ -104,17 +104,17 @@ add_custom_target(object_list_generate_messages_cpp
 add_dependencies(object_list_generate_messages object_list_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_cpp _object_list_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -127,37 +127,37 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS object_list_generate_messages_cpp)
 ### Section generating for lang: geneus
 ### Generating Messages
 _generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
   "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
 )
 _generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
-)
-_generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
-  "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
-  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
-)
-_generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
 )
 _generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+  "${MSG_I_FLAGS}"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg;/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
+)
+_generate_msg_eus(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
 )
 _generate_msg_eus(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
+)
+_generate_msg_eus(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/object_list
@@ -177,17 +177,17 @@ add_custom_target(object_list_generate_messages_eus
 add_dependencies(object_list_generate_messages object_list_generate_messages_eus)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_eus _object_list_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -200,37 +200,37 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS object_list_generate_messages_eus)
 ### Section generating for lang: genlisp
 ### Generating Messages
 _generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
   "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
 )
 _generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
-)
-_generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
-  "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
-)
-_generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
 )
 _generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+  "${MSG_I_FLAGS}"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg;/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
+)
+_generate_msg_lisp(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
 )
 _generate_msg_lisp(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
+)
+_generate_msg_lisp(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/object_list
@@ -250,17 +250,17 @@ add_custom_target(object_list_generate_messages_lisp
 add_dependencies(object_list_generate_messages object_list_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_lisp _object_list_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -273,37 +273,37 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS object_list_generate_messages_lisp)
 ### Section generating for lang: gennodejs
 ### Generating Messages
 _generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
   "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
 )
 _generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
-)
-_generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
-  "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
-  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
-)
-_generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
 )
 _generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+  "${MSG_I_FLAGS}"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg;/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
+)
+_generate_msg_nodejs(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
 )
 _generate_msg_nodejs(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
+)
+_generate_msg_nodejs(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/object_list
@@ -323,17 +323,17 @@ add_custom_target(object_list_generate_messages_nodejs
 add_dependencies(object_list_generate_messages object_list_generate_messages_nodejs)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_nodejs _object_list_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -346,37 +346,37 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS object_list_generate_messages_nodej
 ### Section generating for lang: genpy
 ### Generating Messages
 _generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
   "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
 )
 _generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
-)
-_generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg"
-  "${MSG_I_FLAGS}"
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
-)
-_generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
 )
 _generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg"
+  "${MSG_I_FLAGS}"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg;/opt/ros/melodic/share/std_msgs/cmake/../msg/Header.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg;/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
+)
+_generate_msg_py(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
 )
 _generate_msg_py(object_list
-  "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg"
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
+)
+_generate_msg_py(object_list
+  "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/object_list
@@ -396,17 +396,17 @@ add_custom_target(object_list_generate_messages_py
 add_dependencies(object_list_generate_messages object_list_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Classification.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/ObjectsList.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Features.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Geometric.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg" NAME_WE)
+get_filename_component(_filename "/home/tobias/obj-lst-vis/src/object_list/msg/Dimension.msg" NAME_WE)
 add_dependencies(object_list_generate_messages_py _object_list_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
