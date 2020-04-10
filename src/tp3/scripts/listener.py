@@ -12,33 +12,38 @@ import math
 
 topic = 'visualization_marker_array'
 publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
-
 rospy.init_node('register')
 
-markerArray = MarkerArray()
-
+def evaluateObject(objectData):
+    marker = Marker()
+   
+    marker.header.frame_id = "/nect"
+    marker.type = marker.CUBE
+    marker.action = marker.ADD
+    marker.scale.x = objectData.dimension.length
+    marker.scale.y = objectData.dimension.width
+    marker.scale.z = 1
+    marker.color.a = 1.0
+    marker.color.r = 0.5
+    marker.color.g = 0.5
+    marker.color.b = 0.5
+    marker.pose.orientation.w = 1.0
+    marker.pose.position.x = objectData.geometric.x 
+    marker.pose.position.y = objectData.geometric.y
+    marker.pose.position.z = 1
+    #marker.id =0
+    return marker
 
 def callback(data):
-   rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.obj_list[0].obj_id)
-   marker = Marker()
-   marker.header.frame_id = "/neck"
-   marker.type = marker.CUBE
-   marker.action = marker.ADD
-   marker.scale.x = data.obj_list[0].dimension.length
-   marker.scale.y = data.obj_list[0].dimension.width
-   marker.scale.z = 1
-   marker.color.a = 1.0
-   marker.color.r = 1.0
-   marker.color.g = 1.0
-   marker.color.b = 0.0
-   marker.pose.orientation.w = 1.0
-   marker.pose.position.x = data.obj_list[0].geometric.x 
-   marker.pose.position.y = data.obj_list[0].geometric.y
-   marker.pose.position.z = 0
-   marker.id =0
-   markerArray.markers.append(marker)
+   
+    markerArray = MarkerArray()
+    for i in range(len(data.obj_list)):
+        markerObj = evaluateObject(data.obj_list[i])
+        rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.obj_list[i])
+        markerObj.id = i
+        markerArray.markers.append(markerObj)
 
-   publisher.publish(markerArray)
+    publisher.publish(markerArray)
    
 def listener():
 

@@ -2,4 +2,4 @@
 source_root_dir = '/home/tobias/obj-lst-vis/src'
 whitelisted_packages = ''.split(';') if '' != '' else []
 blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/opt/ros/melodic'.split(';') if '/opt/ros/melodic' != '' else []
+underlay_workspaces = '/home/tobias/catkin_ws/devel;/opt/ros/melodic'.split(';') if '/home/tobias/catkin_ws/devel;/opt/ros/melodic' != '' else []
