@@ -21,8 +21,6 @@ import time
 IM_WIDTH = 800
 IM_HEIGTH = 600
 
-def speed():
-    print('The distance is ')
 
 def myprocess(image):
     # Data processing
@@ -96,10 +94,10 @@ try:
 
     cc = carla.ColorConverter.Depth
     #sensor.listen(lambda image: image.save_to_disk('output/%06d.png' % image.frame, cc))
-    sensor.listen(lambda image: (myprocess(image),speed()))
+    sensor.listen(lambda image: (myprocess(image)))
 
 
-    time.sleep(55)
+    time.sleep(50)
 
 
 
