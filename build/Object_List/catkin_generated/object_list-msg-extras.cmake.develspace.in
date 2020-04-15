@@ -1,2 +1,0 @@
-set(object_list_MESSAGE_FILES "/home/tobias/obj-lst-vis/src/Object_List/msg/Classification.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Dimension.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Features.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/Geometric.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectList.msg;/home/tobias/obj-lst-vis/src/Object_List/msg/ObjectsList.msg")
-set(object_list_SERVICE_FILES "")
