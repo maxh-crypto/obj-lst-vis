@@ -3,7 +3,7 @@ Developement of an autonomous driving environment model visualization based on o
 
 This repository can be your catkin workspace for ROS
 
-# Installation in Ubuntu
+## Installation in Ubuntu
 1. Install git:
 ```bash
 sudo apt-get install git
@@ -27,7 +27,7 @@ catkin_make
 ```
 Now you can work on your own branch of the project. 
 
-# Typical Workflow
+## Typical Workflow
 1. Pull master (in your local git repository)
 ``` bash
 git pull 
@@ -45,15 +45,15 @@ git commit -m "comment"
 ``` bash
 git push 
 ```
-*Important: only add files of workspace directory 'src' to your git repo!*
+**Important: only add files of workspace directory 'src' to your git repo!**
   
-# Merging into your fork master
+## Merging into your fork master
 If you have a working state of your package you can merge it into the master branch
 1. Push your branch (git push)
 2. Go to GitHub 
 3. Make pull request of your branch
 
-# Merging of fork to origin repository
+## Merging of fork to origin repository
 If your whole TP has an working state of your repository you can make a pull request to merge it into the orgin repository (maxh-crypto/obj-lst-vis)
 
 *A visual respresentation of the workflow can be found under orga/workflow*
