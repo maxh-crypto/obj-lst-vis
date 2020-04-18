@@ -3,7 +3,7 @@ import rospy
 import rospkg
 
 from qt_gui.plugin import Plugin
-from python_qt_binding import loadUi
+# from python_qt_binding import loadUi
 # from python_qt_binding.QtWidgets import QWidget
 from postproc_widget import MyWidget
 
@@ -31,7 +31,7 @@ class PostProcPlugin(Plugin):
         # Get path to UI file which should be in the "resource" folder of this package
         ui_file = os.path.join(rospkg.RosPack().get_path('rqt_postproc'), 'resource', 'PostProcPlugin.ui')
         # Extend the widget with all attributes and children from UI file
-        loadUi(ui_file, self._widget)
+        # loadUi(ui_file, self._widget)
         # Give QObjects reasonable names
         self._widget.setObjectName('PostProcPluginUi')
         # Show _widget.windowTitle on left-top of each plugin (when 
