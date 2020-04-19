@@ -12,7 +12,7 @@ def sensor_model_dummy():
 
    pub = rospy.Publisher('camera_obj', ObjectsList, queue_size=100) #
    rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
-   rate=rospy.Rate(1)  #1 hz
+   rate=rospy.Rate(50)  #1 hz
 
    while not rospy.is_shutdown():
 

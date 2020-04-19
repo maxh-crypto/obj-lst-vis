@@ -12,7 +12,7 @@ import math
 
 topic = 'visualization_marker_array'
 publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
-rospy.init_node('register')
+rospy.init_node('Objekt_Visualization')
 
 #define each color to the specific class, input value ist the name(string) from the classifciation
 def evaluateColor(Class): 
