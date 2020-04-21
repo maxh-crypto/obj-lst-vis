@@ -1,5 +1,5 @@
 from python_qt_binding import QtCore, QtGui
-from pyhton_qt_binding.QtWidgets import QWidget, QLineEdit
+from python_qt_binding.QtWidgets import QWidget, QLineEdit
 
 class BagSelectorWidget(QWidget):
     

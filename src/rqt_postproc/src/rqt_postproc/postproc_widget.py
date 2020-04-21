@@ -13,11 +13,11 @@ class PostProcMainWidget(QWidget):
        contains three other widgets: BagSelectorWidget, InfoSelectorWidget, PlotWidget
     '''
     def __init__(self):
-        super(MyWidget, self).__init__()
+        super(PostProcMainWidget, self).__init__()
 
         self.bagSelector = BagSelectorWidget()
         #self.infoSelector = InfoSelctorWidget()
-        self.plot = PlotWidget()
+        #self.plot = PlotWidget()
 
         self.layout = QVBoxLayout()
         #self.layout.addWidget(self.bagSelector)
