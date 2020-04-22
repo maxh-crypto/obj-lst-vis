@@ -20,7 +20,7 @@ class PostProcMainWidget(QWidget):
         #self.plot = PlotWidget()
 
         self.layout = QVBoxLayout()
-        #self.layout.addWidget(self.bagSelector)
+        self.layout.addWidget(self.bagSelector)
         #self.layout.addWidget(self.infoSelector)
         #self.layout.addWidget(self.plot)
         self.setLayout(self.layout)
