@@ -31,3 +31,5 @@ class PlotWidget(QWidget):
         self.ax.figure.canvas.draw()
         
         
+        
+        

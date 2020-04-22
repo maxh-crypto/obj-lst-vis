@@ -8,8 +8,13 @@ class BagSelectorWidget(QWidget):
         # create elements
         self.bag1Edit = QLineEdit()
         self.bag1Btn = QPushButton("bag file 1")
+        self.bag1Btn.clicked.connect(btn1_clicked)
         self.bag2Edit = QLineEdit()
         self.bag2Btn = QPushButton("bag file 2")
+        # self.bag2Btn.clicked.connect(btn2_clicked)
+        
+        self.__fileName1 = ""
+        self.__fileName2 = ""
         
         self.layout = QGridLayout()
         self.layout.addWidget(self.bag1Edit, 1, 1)
@@ -17,3 +22,6 @@ class BagSelectorWidget(QWidget):
         self.layout.addWidget(self.bag2Edit, 2, 1)
         self.layout.addWidget(self.bag2Btn, 2, 2)
         self.setLayout(self.layout)
+
+    def btn1_clicked():
+        __fileName1 = QFileDialog.getOpenFileName(self, 'Select file', 'C:\\', "Bag files (*.bag)")
