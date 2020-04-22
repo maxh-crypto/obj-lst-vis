@@ -5,6 +5,7 @@ import sys
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QWidget, QLabel, QPushButton, QVBoxLayout)
 from bagselector_widget import BagSelectorWidget
+from plot_widget import PlotWidget
 
 class PostProcMainWidget(QWidget):
     '''
