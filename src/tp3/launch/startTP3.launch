@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="tp3" name="Objekt_Visualization" type="Objektlist_Visualization.py"/>
+    <node pkg="object_list" name="camera" type="sensor_model_dummy.py"/>
+    <node pkg="rviz" name="rviz" type="rviz"/>
+</launch>
