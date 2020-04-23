@@ -1,5 +1,5 @@
 <library path="src">
-  <class name="PostProcPlugin" type="rqt_postproc.postproc_module.PostProcPlugin" base_class_type="rqt_gui_py::Plugin">
+  <class name="PostProcPlugin" type="tp3.postproc_module.PostProcPlugin" base_class_type="rqt_gui_py::Plugin">
     <description>
       A rqt Plugin for performing postprocessing on object list message bag files
     </description>
