@@ -13,15 +13,17 @@ def sensor_model_dummy():
    pub = rospy.Publisher('camera_obj', ObjectsList, queue_size=100) #
    rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
    rate=rospy.Rate(50)  #1 hz
-
+   x=1;
    while not rospy.is_shutdown():
-
+	
         b=ObjectsList()
         a1=ObjectList()
 	a1.obj_id= 1
-        a1.geometric.x = 5 * math.sin(rospy.get_time() )
-        a1.geometric.y = 5 * math.cos(rospy.get_time())
-	a1.dimension.length = rospy.get_time() %5
+        #a1.geometric.x = 5 * math.sin(rospy.get_time() )
+	a1.geometric.x = x
+        #a1.geometric.y = 5 * math.cos(rospy.get_time())
+        a1.geometric.y = 2.5
+	a1.dimension.length = 5
 	a1.dimension.width= 1    
         a1.classification.car = 0.9    
 
@@ -29,20 +31,24 @@ def sensor_model_dummy():
 	a2.obj_id= 2
         a2.geometric.x = 2 * math.cos(rospy.get_time() )
         a2.geometric.y = 2 * math.sin(rospy.get_time())
-	a2.dimension.length = rospy.get_time() %6
-	a2.dimension.width= rospy.get_time() % 3  
-        a2.classification.pedestrian = 0.5  
+	a2.dimension.length = 1 + rospy.get_time() %6
+	a2.dimension.width= 1 + rospy.get_time() % 3  
+        a2.classification.pedestrian = 0.9
+	a2.classification.motorcycle = 0.8
         
         b.header.stamp = rospy.Time.now()
         b.header.frame_id = "sensor_model_dummy"
         b.obj_list = np.append(a1,a2)
 	#rospy.loginfo(b)
         rospy.loginfo(a1.geometric)
-        rospy.loginfo(a1.classification)
-        rospy.loginfo(a2.geometric)
-        rospy.loginfo(a2.classification)
+        #rospy.loginfo(a1.classification)
+        #rospy.loginfo(a2.geometric)
+        #rospy.loginfo(a2.classification)
         pub.publish(b)
         rate.sleep()
+        if x>50:
+            x=1
+        x = x + 0.1
 	
 
 if __name__ == '__main__':
