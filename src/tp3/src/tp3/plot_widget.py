@@ -35,7 +35,7 @@ class PlotWidget(QWidget):
         self.layout.addWidget(canvas)
         self.setLayout(self.layout)
         self.ax = canvas.figure.subplots()
-        self.plot()
+#         self.plot()
         
 #     def plot(self):    
 #         t = np.linspace(0, 10, 101)
