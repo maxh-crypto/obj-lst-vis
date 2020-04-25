@@ -3,7 +3,7 @@ from multiprocessing import sys
 import sys
 
 from python_qt_binding import QtCore, QtGui
-from python_qt_binding.QtWidgets import (QWidget, QLabel, QPushButton, QVBoxLayout)
+from python_qt_binding.QtWidgets import (QWidget, QLabel, QPushButton, QGridLayout)
 from bagselector_widget import BagSelectorWidget
 from plot_widget import PlotWidget
 
@@ -20,10 +20,10 @@ class PostProcMainWidget(QWidget):
         #self.infoSelector = InfoSelctorWidget()
         self.plot = PlotWidget()
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.bagSelector)
+        self.layout = QGridLayout()
+        self.layout.addWidget(self.bagSelector, 1, 1)
         #self.layout.addWidget(self.infoSelector)
-        self.layout.addWidget(self.plot)
+        self.layout.addWidget(self.plot, 2, 1)
         self.setLayout(self.layout)
 
         
