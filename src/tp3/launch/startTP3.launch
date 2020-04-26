@@ -2,4 +2,6 @@
     <node pkg="tp3" name="Objekt_Visualization" type="Objektlist_Visualization.py"/>
     <node pkg="object_list" name="camera" type="sensor_model_dummy.py"/>
     <node pkg="rviz" name="rviz" type="rviz"/>
+    <node pkg="tp3" name="RecordBagfile" type="RecordBagfile.py"/>
+    <node pkg="rosbag" name = "data_record" type ="record" args="-o /home/tobias/obj-lst-vis/src/tp3/bagfiles/Objektliste /camera_obj" />
 </launch>
