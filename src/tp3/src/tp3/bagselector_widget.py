@@ -25,6 +25,6 @@ class BagSelectorWidget(QWidget):
         self.setLayout(self.layout)
 
     def btn1_clicked(self):
-	cwd = os.getcwd() # current working directory
+        cwd = os.getcwd() # current working directory
         self.__fileName1 = QFileDialog.getOpenFileName(self, 'Select file', cwd, "Bag files (*.bag)")
-	self.bag1Edit.setText(self.__fileName1)
+        self.bag1Edit.setText(self.__fileName1[0]) # print filename to lineEdit
