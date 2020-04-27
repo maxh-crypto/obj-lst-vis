@@ -5,22 +5,37 @@ import numpy as np
 # --> is gonna be replaced by (or integrated) in GUI script 
 
 x_array_obj1 = []   # array of all x values of object 1
-x_array_obj2 = []   # array of all x values of object 2
 
-x_array_obj1 = ra.Rosbag_Analsysis.get_geometric_x('../bagfiles/2020-04-24-18-36-14.bag', 1)
-x_array_obj2 = ra.Rosbag_Analysis.get_geometric_x('../bagfiles/2020-04-24-18-36-14.bag', 2)
+# example: getting geometric.x values for simple plot
+(timestamps1, x_array_obj1) = ra.Rosbag_Analysis.get_geometric_x('../bagfiles/2020-04-24-18-36-14.bag', 1)
 
-# for showing the arrays
-for i in range(0, len(x_array_obj1), 1):
-    print(x_array_obj1[i])
+# generic implementation (in work) 
+                                                                                                                                 #bag file                               #object id     #category      #attribute
+(array_timestamps, array_values_x) = ra.Rosbag_Analysis.getRawData('../bagfiles/2020-04-24-18-36-14.bag', 1, "geometric", "x")
+(array_timestamps, array_values_y) = ra.Rosbag_Analysis.getRawData('../bagfiles/2020-04-24-18-36-14.bag', 1, "geometric", "y")
 
-for i in range(0, len(x_array_obj2), 1):
-    print(x_array_obj2[i])
+### for showing the arrays
+
+print("Printing  timestamps in ms out of generic function: ")
+for i in range(0, len(array_timestamps), 1):
+    print(array_timestamps[i])
+
+#print("Printingx values in ms out of simple function (not generic): ")
+#for i in range(0, len(x_array_obj1), 1):
+#    print(x_array_obj1[i])
+
+print("Printing  X values out of generic function: ")
+for i in range(0, len(array_values_x), 1):
+    print(array_values_x[i])
+    
+print("Printing  Y values out of generic function: ")
+for i in range(0, len(array_values_y), 1):
+    print(array_values_y[i])
+
+
   
-# just as example (makes no sense in the project):
-# calculate the difference between each array values (x1_obj1 - x1_obj2)
-# and print difference array
+# for calculating differnces between arrays:
   
-diff = []
-diff = np.subtract(x_array_obj1, x_array_obj2)
-print(diff)
+#diff = []
+#diff = np.subtract(x_array_obj1, x_array_obj2)
+#print(diff)
