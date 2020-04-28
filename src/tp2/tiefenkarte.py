@@ -21,7 +21,6 @@ except IndexError:
 IM_WIDTH = 800
 IM_HEIGTH = 600
 
-
 def processimage(image):
     xrange = np.array([390,410])
     yrange = np.array([390,410])
@@ -31,6 +30,7 @@ def processimage(image):
     i2 = i[:,:,:3]
     pixel = i2[400,400]
 
+
     # Entfernung aus GBR (nicht RGB!) Daten berechnen
     normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
     in_meters = 1000 * normalized
@@ -38,15 +38,16 @@ def processimage(image):
     poi = i2[290:510, 290:510]
     poi2 = cv2.cvtColor(poi, cv2.COLOR_BGR2GRAY)
     gaus = cv2.adaptiveThreshold(poi2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
-    #print('distance of pixel at frame ',image.frame_number, ' is ', in_meters, ' meters')
+    print('distance of pixel at frame ',image.frame_number, ' is ', in_meters, ' meters')
 
     # Visualisierung des Pixel of Interest
     #blue = [255,0,0]
     #i2[390:410, 390:410] = blue
     
     # Graphische Ausgabe des Sensorbilds
-    cv2.imshow('', gaus)
+    cv2.imshow('gaus', i2)
     cv2.waitKey(1)
+    #cv2.destroyAllWindows()
     #speed(in_meters)
     return in_meters
 
@@ -59,7 +60,7 @@ try:
     world = client.get_world()
 
     # Blueprints erstellen
-    # Blueprints = Fahrzeuge und Fußgänger
+    # Blueprints = Fahrzeuge
     blueprint_library = world.get_blueprint_library()
     #bp_1 = random.choice(blueprint_library.filter('vehicle'))
     bp_1 = blueprint_library.filter('model3')[0]
@@ -87,10 +88,11 @@ try:
     actor_list.append(vehicle_1)
     actor_list.append(vehicle_2)
 
-    cam_bp_2 = blueprint_library.find('sensor.camera.rgb')
+    cam_bp_2 = blueprint_library.find('sensor.camera.depth')
     #cam_bp_2.set_attribute('fov', '110')
     cam_bp_2.set_attribute('image_size_x', '800')
     cam_bp_2.set_attribute('image_size_y', '600')
+    cam_bp_2.set_attribute('sensor_tick', '0.5')
     transform = carla.Transform(carla.Location(x=1.5, z=2.4))
     sensor = world.spawn_actor(cam_bp_2, transform, attach_to=vehicle_2)
     
@@ -99,7 +101,7 @@ try:
     #sensor.listen(lambda image: image.save_to_disk('output/%06d.png' % image.frame, cc))
     sensor.listen(lambda image: (processimage(image)))
 
-    time.sleep(50)
+    time.sleep(25)
 
 
 
