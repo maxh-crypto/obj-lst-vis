@@ -1,0 +1,2 @@
+set(object_list_MESSAGE_FILES "/home/sts3170/obj-lst-vis/src/object_list/msg/Classification.msg;/home/sts3170/obj-lst-vis/src/object_list/msg/Dimension.msg;/home/sts3170/obj-lst-vis/src/object_list/msg/Features.msg;/home/sts3170/obj-lst-vis/src/object_list/msg/Geometric.msg;/home/sts3170/obj-lst-vis/src/object_list/msg/ObjectList.msg;/home/sts3170/obj-lst-vis/src/object_list/msg/ObjectsList.msg")
+set(object_list_SERVICE_FILES "")

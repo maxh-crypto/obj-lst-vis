@@ -1,0 +1,8 @@
+prefix=/home/sts3170/obj-lst-vis/install
+
+Name: tp1
+Description: Description of tp1
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
