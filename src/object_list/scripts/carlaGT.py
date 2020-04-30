@@ -23,10 +23,9 @@ import random
 import re
 import sys
 import weakref
-#try:
-#	import rospy 
-#	from object_list.msg import ObjectsList
-#	from object_list.msg import ObjectList
+import rospy 
+from object_list.msg import ObjectsList
+from object_list.msg import ObjectList
 
 
 try:
@@ -388,11 +387,9 @@ def Object_List_Talker(world):
 	a1.features.RM = Npc1_fea.RM
 	a1.features.RL = Npc1_fea.RL
 	a1.classification.car = 1   
-	a1.geometric = Geometric(world,world.npc1)
-	a1.dimension = Dimension(world.npc1)
 	a1.prop_existence = 1
 	a1.prop_mov = 0
-	a1.feature = Feature(world,world.npc1)
+
 
 	
 	a2=ObjectList()
@@ -421,7 +418,8 @@ def Object_List_Talker(world):
 	a2.features.RM = Npc2_fea.RM
 	a2.features.RL = Npc2_fea.RL
 	a2.classification.car = 1
-
+	a2.prop_existence = 1
+	a2.prop_mov = 0
 
 
 	a3=ObjectList()
@@ -450,20 +448,21 @@ def Object_List_Talker(world):
 	a3.features.RM = Walker1_fea.RM
 	a3.features.RL = Walker1_fea.RL
 	a3.classification.pedestrian = 1
-
+	a3.prop_existence = 1
+	a3.prop_mov = 1
 
 	a4=ObjectList()
 	a4.obj_id= 4
 	playertemp = world.player.get_location()
-	a3.geometric.x = playertemp.x
-	a3.geometric.y = playertemp.y
+	a4.geometric.x = playertemp.x
+	a4.geometric.y = playertemp.y
 	playertemp = world.player.get_velocity()
-	a3.geometric.vx = playertemp.vx
-	a3.geometric.vy = playertemp.vy
+	a4.geometric.vx = playertemp.x
+	a4.geometric.vy = playertemp.y
 	playertemp = world.player.get_acceleration()
-	a3.geometric.ax = playertemp.ax
-	a3.geometric.ay = playertemp.ay
-	a3.geometric.yaw= playertemp.yaw
+	a4.geometric.ax = playertemp.x
+	a4.geometric.ay = playertemp.y
+
 	
 
 # der ObjektListe werden noch charakteristische Eigenschaften zugewiesen wie			# TimeStamp und Frame ID
