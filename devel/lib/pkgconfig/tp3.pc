@@ -1,8 +1,0 @@
-prefix=/home/sts3170/obj-lst-vis/devel
-
-Name: tp3
-Description: Description of tp3
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
