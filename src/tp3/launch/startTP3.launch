@@ -15,6 +15,6 @@
     
     <node pkg="tp3" name="RecordBagfile" type="RecordBagfile.py"/>
     
-    <node pkg="rosbag" name = "data_record" type ="record" args="-o $(find tp3)/bagfiles/Objektliste /    	camera_obj" />
+    <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/2020-04-24-18-36-14.bag" />
    
 </launch>

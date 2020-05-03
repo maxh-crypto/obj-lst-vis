@@ -7,12 +7,12 @@ import numpy as np
 x_array_obj1 = []   # array of all x values of object 1
 
 # example: getting geometric.x values for simple plot
-(timestamps1, x_array_obj1) = ra.Rosbag_Analysis.get_geometric_x('../bagfiles/2020-04-24-18-36-14.bag', 1)
+(timestamps1, x_array_obj1) = ra.Rosbag_Analysis.get_geometric_x('../bagfiles/Objektliste_2020-05-03-13-07-58.bag', 1)
 
 # generic implementation (in work) 
                                                                                                                                  #bag file                               #object id     #category      #attribute
-(array_timestamps, array_values_x) = ra.Rosbag_Analysis.getRawData('../bagfiles/2020-04-24-18-36-14.bag', 1, "geometric", "x")
-(array_timestamps, array_values_y) = ra.Rosbag_Analysis.getRawData('../bagfiles/2020-04-24-18-36-14.bag', 1, "geometric", "y")
+(array_timestamps, array_values_x) = ra.Rosbag_Analysis.getRawData('../bagfiles/Objektliste_2020-05-03-13-07-58.bag', 1, "geometric", "x")
+(array_timestamps, array_values_y) = ra.Rosbag_Analysis.getRawData('../bagfiles/Objektliste_2020-05-03-13-07-58.bag', 1, "geometric", "y")
 
 ### for showing the arrays
 
