@@ -30,7 +30,7 @@ IM_HEIGTH = 600
 
 i1 = 0
 
-#test1
+#test3
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 #ap.add_argument("-i", "--image", required=True,
