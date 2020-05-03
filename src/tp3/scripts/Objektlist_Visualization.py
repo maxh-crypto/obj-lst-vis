@@ -9,10 +9,16 @@ from visualization_msgs.msg import Marker
 from visualization_msgs.msg import MarkerArray
 import rospy
 import math
+import tf
 
+OFFSET_CAR_X = -2.3 # distance to front
+car_ego_x = 0
+car_ego_y = 0
+data_alt = 0
 topic = 'visualization_marker_array'
 publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
 rospy.init_node('Objekt_Visualization')
+br = tf.TransformBroadcaster()
 
 #define each color to the specific class, input value ist the name(string) from the classifciation
 def evaluateColor(Class): 
@@ -48,10 +54,10 @@ def evaluateClassification(objectClass):
 def evaluateObject(objectData):
     marker = Marker()
     r, g, b, typ = evaluateColor(evaluateClassification(objectData.classification))
-    marker.header.frame_id = "/obj_vis"
-    #marker.type = marker.CUBE
+    marker.header.frame_id = "/base_link"
+    
     marker.type = typ
-    #rospy.loginfo(typ)
+    
     marker.action = marker.ADD
     marker.scale.x = objectData.dimension.length
     marker.scale.y = objectData.dimension.width
@@ -64,23 +70,40 @@ def evaluateObject(objectData):
     marker.color.b = b
     
     marker.pose.orientation.w = 1.0
-    marker.pose.position.x = objectData.geometric.x 
-    marker.pose.position.y = objectData.geometric.y * (-1)
+    marker.pose.position.x = car_ego_x + objectData.geometric.x 
+    marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height/2
     #marker.id =0
     return marker
 
 def callback(data):
-   
+    global data_alt
+    global car_ego_x
+    global car_ego_y 
+    #solange keine ego_v vorhanden statisch berechenen
+    if data_alt == 0:
+        car_ego_x = 0
+        car_ego_y = 0
+    else:
+        car_ego_x += data_alt.obj_list[0].geometric.x -data.obj_list[0].geometric.x
+        car_ego_y -= data_alt.obj_list[0].geometric.y - data.obj_list[0].geometric.y
     markerArray = MarkerArray()
-    rospy.loginfo(data.obj_list[0].geometric)
+    rospy.loginfo(data.obj_list[0].geometric.y)
+     
+
     for i in range(len(data.obj_list)):
         markerObj = evaluateObject(data.obj_list[i])
-        #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.obj_list[i])
+       
         markerObj.id = i
         markerArray.markers.append(markerObj)
 
+    br.sendTransform((OFFSET_CAR_X+car_ego_x,car_ego_y,0),
+                     tf.transformations.quaternion_from_euler(0,0,1.57),
+                     rospy.Time.now(),
+                     "chassis",
+                     "base_link")
     publisher.publish(markerArray)
+    data_alt = data
    
 def listener():
 
@@ -93,6 +116,7 @@ def listener():
 
     #rospy.Subscriber("chatter", String, callback)
     rospy.Subscriber("camera_obj", ObjectsList, callback)
+
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 

@@ -1,7 +1,20 @@
 <launch>
+
+  <arg name="model" default="$(find tp3)/urdf/prius.urdf"/>
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find tp3)/rviz/urdf.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+
+  <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
     <node pkg="tp3" name="Objekt_Visualization" type="Objektlist_Visualization.py"/>
-    <node pkg="object_list" name="camera" type="sensor_model_dummy.py"/>
-    <node pkg="rviz" name="rviz" type="rviz"/>
+    
     <node pkg="tp3" name="RecordBagfile" type="RecordBagfile.py"/>
-    <node pkg="rosbag" name = "data_record" type ="record" args="-o /home/tobias/obj-lst-vis/src/tp3/bagfiles/Objektliste /camera_obj" />
+    
+    <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/2020-04-24-18-36-14.bag" />
+   
 </launch>
