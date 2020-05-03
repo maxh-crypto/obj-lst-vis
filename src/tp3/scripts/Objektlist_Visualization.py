@@ -9,10 +9,13 @@ from visualization_msgs.msg import Marker
 from visualization_msgs.msg import MarkerArray
 import rospy
 import math
+import tf
 
+OFFSET_CAR_X = -2.3
 topic = 'visualization_marker_array'
 publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
 rospy.init_node('Objekt_Visualization')
+br = tf.TransformBroadcaster()
 
 #define each color to the specific class, input value ist the name(string) from the classifciation
 def evaluateColor(Class): 
@@ -48,7 +51,7 @@ def evaluateClassification(objectClass):
 def evaluateObject(objectData):
     marker = Marker()
     r, g, b, typ = evaluateColor(evaluateClassification(objectData.classification))
-    marker.header.frame_id = "/obj_vis"
+    marker.header.frame_id = "/base_link"
     #marker.type = marker.CUBE
     marker.type = typ
     #rospy.loginfo(typ)
@@ -80,6 +83,11 @@ def callback(data):
         markerObj.id = i
         markerArray.markers.append(markerObj)
 
+    br.sendTransform((OFFSET_CAR_X,0,0),
+                     tf.transformations.quaternion_from_euler(0,0,1.57),
+                     rospy.Time.now(),
+                     "chassis",
+                     "base_link")
     publisher.publish(markerArray)
    
 def listener():
