@@ -14,9 +14,9 @@ import os
 
 rospy.init_node('Record_Objektlist')
 root_path = os.environ['HOME'] + '/obj-lst-vis/src/tp3/bagfiles/' 
-current_time = rospy.Time
-path  = root_path + 'Objektliste_' + str(datetime.datetime.now()) + '.bag'
-rospy.loginfo (datetime.datetime.now())
+current_time = datetime.datetime.now()
+path  = root_path + 'Objektliste_' + str(current_time.year) + '-' + str(current_time.month) + '-' + str(current_time.day) + '-' + str(current_time.hour) + '-' + str(current_time.minute) + '-' + str(current_time.second) + '.bag'
+rospy.loginfo (current_time.year)
 
 bag = rosbag.Bag(path,'w')
 
