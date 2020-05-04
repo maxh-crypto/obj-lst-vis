@@ -72,6 +72,10 @@ def objSum(number):
     global objNumber
     objNumber = number
 
+def dist(number1):
+    global distance
+    distance = number1
+
 
 def myprocess(image):
     # loop over the frames from the video stream
@@ -196,11 +200,12 @@ def myprocess2(image2):
     # Entfernung aus GBR (nicht RGB!) Daten berechnen
     normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
     in_meters = 1000 * normalized
+    dist(in_meters)
 
     poi = i2[290:510, 290:510]
     poi2 = cv2.cvtColor(poi, cv2.COLOR_BGR2GRAY)
     gaus = cv2.adaptiveThreshold(poi2, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
-    print('distance of pixel at frame ',image2.frame_number, ' is ', in_meters, ' meters')
+    #print('distance of pixel at frame ',image2.frame_number, ' is ', in_meters, ' meters')
 
     # Visualisierung des Pixel of Interest
     #blue = [255,0,0]
@@ -272,9 +277,10 @@ try:
     #cc = carla.ColorConverter.rgb
     #sensor.listen(lambda image: image.save_to_disk('output/%06d.png' % image.frame, cc))
     
-
+    #yolo 
     sensor.listen(lambda image: (myprocess(image)))
     time.sleep(0.6)
+    #depth
     sensor2.listen(lambda image2: (myprocess2(image2)))   
 
 
@@ -291,6 +297,7 @@ try:
             a = b1[i][0] + b1[i][2]*0.5
             print(a)
             print(detectionName[i])
+            print(distance)
         #print(b1[0][0],b1[0][1])
         #print(b2)
         #print(objNumber)
@@ -299,7 +306,23 @@ try:
     time.sleep(55)
 
 
+#objNumber
+#Anzahl der detek. obj
 
+#pixelcoordinaten
+#b1[i] ganze Zeile, b1[i][0]
+#i   0 1 2 3
+#1   x y w h
+#2   x y w h
+
+#Objektname
+#i name
+#1 car
+#2 car 
+#3 truck
+
+#Abstand
+#variable -> distance (bisher nur ein fester Integerwert in m)
 finally:
     for actor in actor_list:
         actor.destroy()
