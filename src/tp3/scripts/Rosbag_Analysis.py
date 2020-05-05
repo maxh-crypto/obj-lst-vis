@@ -9,21 +9,20 @@ class Rosbag_Analysis:
     ### method for getting count of objects contained in rosbag ###
     
     @staticmethod
-    def getObjectCount(bagfile):
+    def getObjectIDs(bagfile):
         
         bag = rosbag.Bag(bagfile)
-        count_max = 0
+        array_ids = []
         
-        for topic, msg, t in bag.read_messages(topics=['/camera_obj']):
-            count = 0
+        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
             for i in msg.obj_list:
-                count += 1
-            
-            if(count > count_max):
-                count_max = count
+                if i.obj_id not in array_ids:
+                    array_ids.append(i.obj_id)
+               
+        np.sort(array_ids)
         
         bag.close()
-        return count_max
+        return array_ids
     
     
     ### method for getting array of raw values of all frames in a rosbag ###
@@ -41,7 +40,7 @@ class Rosbag_Analysis:
         array_values = []
         array_timestamps = []
 
-        for topic, msg, t in bag.read_messages(topics=['/camera_obj']):
+        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
             counter += 1
             bag.read_messages()
             
@@ -80,7 +79,7 @@ class Rosbag_Analysis:
         array_timestamps1 = []
         array_timestamps2 = []
 
-        for topic, msg, t in bag1.read_messages(topics=['/camera_obj']):
+        for topic, msg, t in bag1.read_messages(topics=['camera_obj']):
             counter1 += 1
             bag1.read_messages()
             
@@ -91,7 +90,7 @@ class Rosbag_Analysis:
         #print('Number of sequences: ')     #sequence = count of frames
         #print(counter)
         
-        for topic, msg, t in bag2.read_messages(topics=['/camera_obj']):
+        for topic, msg, t in bag2.read_messages(topics=['camera_obj']):
             counter2 += 1
             bag2.read_messages()
             
@@ -132,7 +131,7 @@ class Rosbag_Analysis:
         array_x = []
         array_timestamps = []
         
-        for topic, msg, t in bag.read_messages(topics=["/camera_obj"]):
+        for topic, msg, t in bag.read_messages(topics=["camera_obj"]):
             counter += 1
             bag.read_messages()
             
