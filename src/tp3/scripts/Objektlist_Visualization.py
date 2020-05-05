@@ -99,7 +99,7 @@ def evaluateObjectID(objectData):
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height + 1
     
-    marker.text = "Objekt-ID:" + str(objectData.obj_id)
+    marker.text = "ID:" + str(objectData.obj_id)
     return marker
 
 
