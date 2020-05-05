@@ -1,30 +1,50 @@
 import os
 from python_qt_binding import QtCore, QtGui
-from python_qt_binding.QtWidgets import QWidget, QLineEdit, QPushButton, QGridLayout, QFileDialog
+from python_qt_binding.QtWidgets import (QWidget, QLineEdit, QPushButton, 
+                                         QHBoxLayout, QVBoxLayout, QFileDialog)
 
-class BagSelectorWidget(QWidget):    
+class BagWidget(QWidget):  
+    '''
+        contains two selectors two determine 
+        which bag files should be imported
+    '''  
     def __init__(self):
-        super(BagSelectorWidget, self).__init__()
+        super(BagWidget, self).__init__()
         
         # create elements
-        self.bag1Edit = QLineEdit()
-        self.bag1Btn = QPushButton("bag file 1")
-        self.bag1Btn.clicked.connect(self.btn1_clicked)
-        self.bag2Edit = QLineEdit()
-        self.bag2Btn = QPushButton("bag file 2")
-        # self.bag2Btn.clicked.connect(btn2_clicked)
+        self.bagSelector1 = BagSelector('bag file 1')
+        self.bagSelector2 = BagSelector('bag file 2')
         
-        self.__fileName1 = ""
-        self.__fileName2 = ""
+        layout = QVBoxLayout()
+        layout.addWidget(self.bagSelector1)
+        layout.addWidget(self.bagSelector2)
+        self.setLayout(layout)
         
-        self.layout = QGridLayout()
-        self.layout.addWidget(self.bag1Edit, 1, 1)
-        self.layout.addWidget(self.bag1Btn, 1, 2)
-        self.layout.addWidget(self.bag2Edit, 2, 1)
-        self.layout.addWidget(self.bag2Btn, 2, 2)
-        self.setLayout(self.layout)
-
-    def btn1_clicked(self):
+    def getBagFiles(self):
+        return [self.bagSelector1.fileName, self.bagSelector1.fileName]
+    
+class BagSelector(QWidget):
+    '''
+        one line for selecting one bag file
+        contains a line edit which displays the filename
+        and a button which opens a file dialog 
+    '''
+    def __init__(self, btnText):
+        super(BagSelector, self).__init__()
+        self.bagEdit = QLineEdit()
+        self.bagBtn = QPushButton(btnText)
+        self.bagBtn.clicked.connect(self.btnClicked)
+        
+        self.fileName = ""
+        
+        layout = QHBoxLayout()
+        layout.addWidget(self.bagEdit)
+        layout.addWidget(self.bagBtn)
+        self.setLayout(layout)
+        
+    def btnClicked(self):
         cwd = os.getcwd() # current working directory
-        self.__fileName1 = QFileDialog.getOpenFileName(self, 'Select file', cwd, "Bag files (*.bag)")
-        self.bag1Edit.setText(self.__fileName1[0]) # print filename to lineEdit
+        fileTupel = QFileDialog.getOpenFileName(self, 'Select file', cwd, "Bag files (*.bag)")
+        self.fileName = fileTupel[0]
+        self.bagEdit.setText(self.fileName) # print filename to lineEdit
+    

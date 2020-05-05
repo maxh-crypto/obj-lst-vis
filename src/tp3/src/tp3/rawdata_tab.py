@@ -10,31 +10,25 @@ from python_qt_binding.QtWidgets import (QWidget, QGridLayout,
                                          QRadioButton, QFrame, QGroupBox)
 
 from valueSelector_widget import ValueSelectorWidget
-from axisTypeSelector_widget import AxisTypeSelectorWidget
-from xType_enum import xAxisTypes
+from id_selector_widget import IDSelectorWidget
 
 class RawDataTab(QWidget):
     
-    def __init__(self):
+    def __init__(self, parent=None):
         super(RawDataTab, self).__init__()
+        self.parent = parent
         self.layout = QGridLayout()
-        
-        self.selectedBag = 0
-        self.selectedValue = ('', '') # contains value as a tupel like ('<message>', '<value>')
-        self.xAxisType = xAxisTypes.NotSelected        
+    
+        self.selectedBag = 2
+        self.selectedValue = ('', '') # contains value as a tupel like ('<message>', '<value>')      
         
         # init the widgets
         self.bagSelector = self.initBagSelector()
         self.layout.addWidget(self.bagSelector, 1, 1)
-        self.axisTypeSelector = AxisTypeSelectorWidget()
-        self.layout.addWidget(self.axisTypeSelector, 1, 2)
         self.valueWidget = ValueSelectorWidget()
-        self.layout.addWidget(self.valueWidget, 1, 3)
-        
-        # init the start button
-        startBtn = QPushButton("Start")
-        startBtn.clicked.connect(self.getPlotData)
-        self.layout.addWidget(startBtn, 2, 3)
+        self.layout.addWidget(self.valueWidget, 1, 2)
+        self.idSelector = IDSelectorWidget()
+        self.layout.addWidget(self.idSelector, 1, 3)
         
         self.setLayout(self.layout)
         
@@ -46,17 +40,24 @@ class RawDataTab(QWidget):
         bagSelector = QGroupBox('Select Bag')
         bagSelectorLayout = QVBoxLayout()
         bag1RadioBtn = QRadioButton('BagFile1')
+        bag1RadioBtn.clicked.connect(self.btn1Clicked)
         bag2RadioBtn = QRadioButton('BagFile2')
+        bag2RadioBtn.clicked.connect(self.btn2Clicked)
         bagSelectorLayout.addWidget(bag1RadioBtn)
         bagSelectorLayout.addWidget(bag2RadioBtn)
         bagSelector.setLayout(bagSelectorLayout)
         
         return bagSelector
-              
     
-    def getPlotData(self):
-        # is called when start button is clicked
-        # gets an Array from 
-        pass
+    def btn1Clicked(self):
+        self.selectedBag = 0
+        
+    def btn2Clicked(self):
+        self.selectedBag = 1
+              
+        
+        
+        
+        
         
         
