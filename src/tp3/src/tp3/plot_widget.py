@@ -27,26 +27,29 @@ class PlotWidget(QWidget):
         
         self.layout = QVBoxLayout()
         
-        canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        toolbar = NavigationToolbar(canvas, self)
+        self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        toolbar = NavigationToolbar(self.canvas, self)
         self.layout.addWidget(toolbar)
-        self.layout.addWidget(canvas)
+        self.layout.addWidget(self.canvas)
         self.setLayout(self.layout)
-        self.ax = canvas.figure.subplots()
+        self.ax = self.canvas.figure.subplots()
         
-    def plot(self, plotData):    
+    def plot(self, plotData):  
+        print(plotData)
         t = plotData[0]
         values = plotData[1]
-        self.ax.plot(t, values)
-        self.ax._set_label('bag1.obj1.geometric.x')
+        line, = self.ax.plot(t, values)
+        line.set_label('bag1.obj1.geometric.x')
         self.ax.set_ylabel('value [m]')
         self.ax.set_xlabel('time [s]')
+        self.ax.legend()
+#         self.canvas.figure.legend(loc='upper center', bbox_to_anchor=(1.45, 0.8), shadow=True, ncol=1)
         
         # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
         # TODO: Unterscheidung objid -> Farbe
         # TODO: legende aghaengig von attribute machen
         
-        self.ax.grid()
+        self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
     

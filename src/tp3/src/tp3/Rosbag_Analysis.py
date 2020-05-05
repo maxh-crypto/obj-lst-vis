@@ -13,7 +13,7 @@ class Rosbag_Analysis:
         bag = rosbag.Bag(bagfile)
         count_max = 0
         
-        for topic, msg, t in bag.read_messages(topics=['/camera_obj']):
+        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
             count = 0
             for i in msg.obj_list:
                 count += 1
@@ -40,7 +40,7 @@ class Rosbag_Analysis:
         array_values = []
         array_timestamps = []
 
-        for topic, msg, t in bag.read_messages(topics=['/camera_obj']):
+        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
             counter += 1
             bag.read_messages()
             
@@ -72,7 +72,7 @@ class Rosbag_Analysis:
         array_x = []
         array_timestamps = []
         
-        for topic, msg, t in bag.read_messages(topics=["/camera_obj"]):
+        for topic, msg, t in bag.read_messages(topics=["camera_obj"]):
             counter += 1
             bag.read_messages()
             
