@@ -35,7 +35,7 @@ class PlotWidget(QWidget):
         self.ax = self.canvas.figure.subplots()
         
     def plot(self, plotData):  
-        print(plotData)
+        # print(plotData)
         t = plotData[0]
         values = plotData[1]
         line, = self.ax.plot(t, values)

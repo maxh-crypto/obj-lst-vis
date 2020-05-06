@@ -20,6 +20,7 @@ class IDSelectorWidget(QGroupBox):
         
         self.lineEdit = QLineEdit()
         self.idList = QListWidget()
+        self.idList.currentItemChanged.connect(self.idSelected)
         
         layout.addWidget(self.lineEdit)
         layout.addWidget(self.idList)
@@ -29,6 +30,23 @@ class IDSelectorWidget(QGroupBox):
         id = int(self.lineEdit.text())
         return id
     
-    def refreshList(self):
+    def refreshList(self, bagFileName):
+        
+        if bagFileName == "":
+            return
+        
+        ids = Rosbag_Analysis.getObjectIDs(bagFileName)
+        ids = map(str, ids) # convert list to strings
+        self.idList.clear()
+        self.idList.addItems(ids)
+        
+    def idSelected(self, curItem, prevItem):
+        '''
+            is called when list item is clicked
+            fills the lineEdit with the clicked id
+        '''
+        self.lineEdit.setText(curItem.text())
+        
+        
         
         

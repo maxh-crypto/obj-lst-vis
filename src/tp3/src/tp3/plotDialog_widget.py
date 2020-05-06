@@ -48,7 +48,7 @@ class PlotDialogWidget(QDialog):
         if currentTab == 0: # rawDataTab is active
             self.getRawData()
         if currentTab == 1: # 
-            # TODO
+            # TODO: advanced analysis
             pass
             
         
@@ -75,7 +75,6 @@ class PlotDialogWidget(QDialog):
         if bagfile == "":
             self.showMessage("no bag file loaded! Please import bag file in the main interface.")
             return
-        # bagfile = "/home/max/obj-lst-vis/src/tp3/bagfiles/2020-04-24-18-36-14.bag"
         
         try:
             obj_id = self.rawDataTab.idSelector.getID()
