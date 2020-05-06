@@ -26,6 +26,7 @@ import weakref
 import rospy 
 from object_list.msg import ObjectsList
 from object_list.msg import ObjectList
+from object_list.msg import Geometric as geo
 
 
 try:
@@ -451,17 +452,7 @@ def Object_List_Talker(world):
 	a3.prop_existence = 1
 	a3.prop_mov = 1
 
-	a4=ObjectList()
-	a4.obj_id= 4
-	playertemp = world.player.get_location()
-	a4.geometric.x = playertemp.x
-	a4.geometric.y = playertemp.y
-	playertemp = world.player.get_velocity()
-	a4.geometric.vx = playertemp.x
-	a4.geometric.vy = playertemp.y
-	playertemp = world.player.get_acceleration()
-	a4.geometric.ax = playertemp.x
-	a4.geometric.ay = playertemp.y
+
 
 	
 
@@ -474,13 +465,50 @@ def Object_List_Talker(world):
 	b.obj_list.append(a1)
 	b.obj_list.append(a2)
 	b.obj_list.append(a3)
-	b.obj_list.append(a4)
 	b.header.stamp = rospy.Time.now()
 # hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
 	pub.publish(b)
 	rospy.loginfo(b)
 	
 
+
+def Object_List_Talker_Player(world):
+
+	pub = rospy.Publisher('camera_obj2', ObjectsList, queue_size=100) #
+	rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
+   #rate=rospy.Rate(50)  #50 hz
+
+   #while not rospy.is_shutdown():
+
+	b=ObjectsList() # Erstellen des Objekts ObjectsList (enthaelt alle Obj)
+
+# ab hier werden die Eigenschaften eines Objektes zugewiesen
+	 
+
+	a0=geo()
+	playertemp = world.player.get_location()
+	a0.x = playertemp.x
+	a0.y = playertemp.y
+	playertemp = world.player.get_velocity()
+	a0.vx = playertemp.x
+	a0.vy = playertemp.y
+	playertemp = world.player.get_acceleration()
+	a0.ax = playertemp.x
+	a0.ay = playertemp.y
+
+	
+
+# der ObjektListe werden noch charakteristische Eigenschaften zugewiesen wie			# TimeStamp und Frame ID
+
+	b.header.stamp = rospy.Time.now()
+	b.header.frame_id = "ObjectListego_GroundTruth"
+
+# hier werden die Objekte der Objektliste hinzugefuegt mittels append
+	b.ego_geometric.append(a0)
+	b.header.stamp = rospy.Time.now()
+# hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
+	pub.publish(b)
+	rospy.loginfo(b)
 	
 # ==============================================================================
 # -- KeyboardControl -----------------------------------------------------------
@@ -945,6 +973,7 @@ def game_loop(args):
 			
 		###----Extract Ground Truth Data----####
 			Object_List_Talker(world)
+			Object_List_Talker_Player(world)
 
 
 
