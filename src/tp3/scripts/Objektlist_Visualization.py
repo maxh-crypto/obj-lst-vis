@@ -76,6 +76,33 @@ def evaluateObject(objectData):
     #marker.id =0
     return marker
 
+def evaluateObjectID(objectData):
+    marker = Marker()
+    
+    marker.header.frame_id = "/base_link"
+    
+    marker.type = marker.TEXT_VIEW_FACING
+    
+    marker.action = marker.ADD
+    marker.scale.x = 2
+    marker.scale.y = 2
+    marker.scale.z = 1
+
+    marker.color.a = 1.0
+   
+    marker.color.r = 0.3
+    marker.color.g = 0.4
+    marker.color.b = 1.0
+    
+    marker.pose.orientation.w = 1.0
+    marker.pose.position.x = car_ego_x + objectData.geometric.x 
+    marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
+    marker.pose.position.z = objectData.dimension.height + 1
+    
+    marker.text = "ID:" + str(objectData.obj_id)
+    return marker
+
+
 def callback(data):
     global data_alt
     global car_ego_x
@@ -87,15 +114,18 @@ def callback(data):
     else:
         car_ego_x += data_alt.obj_list[0].geometric.x -data.obj_list[0].geometric.x
         car_ego_y -= data_alt.obj_list[0].geometric.y - data.obj_list[0].geometric.y
+
     markerArray = MarkerArray()
-    rospy.loginfo(data.obj_list[0].geometric.y)
-     
 
     for i in range(len(data.obj_list)):
         markerObj = evaluateObject(data.obj_list[i])
-       
-        markerObj.id = i
+        markerObj.id = i*2
+        
+        markerID = evaluateObjectID(data.obj_list[i])
+        
+        markerID.id = i*2+1
         markerArray.markers.append(markerObj)
+        markerArray.markers.append(markerID)
 
     br.sendTransform((OFFSET_CAR_X+car_ego_x,car_ego_y,0),
                      tf.transformations.quaternion_from_euler(0,0,1.57),
