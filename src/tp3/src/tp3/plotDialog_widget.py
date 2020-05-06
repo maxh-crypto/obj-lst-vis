@@ -10,9 +10,10 @@ from python_qt_binding.QtWidgets import QDialog, QTabWidget, QVBoxLayout, QPushB
 from rawdata_tab import RawDataTab
 from compareData_tab import CompareDataTab
 from Rosbag_Analysis import Rosbag_Analysis
+from wx.tools.XRCed import attribute
 
 class PlotDialogWidget(QDialog):    
-    newPlotData = QtCore.Signal(object)
+    newPlotData = QtCore.Signal(object, object)
     
     def __init__(self, bagFiles, parent=None):
         super(PlotDialogWidget, self).__init__()
@@ -57,6 +58,13 @@ class PlotDialogWidget(QDialog):
             gets the raw data according to the selected parameters
             from Rosbag_Analysis
         '''
+        plotInfo = {
+            'bagFile_id' : 0,
+            'obj_id' : 0,
+            'category' : "",
+            'attribute' : ""            
+            }
+        
         selectedValue = self.rawDataTab.valueWidget.getCatAndAtt()
         category = selectedValue['category']
         attribute = selectedValue['attribute']   
@@ -67,9 +75,14 @@ class PlotDialogWidget(QDialog):
             self.showMessage("Please select a plottable attribute.")
             return 
         
+        plotInfo['category'] = category
+        plotInfo['attribute'] = attribute
+        
         if self.rawDataTab.selectedBag > 1: # no bag file is selected
             self.showMessage("Please select a bag file.")
             return
+        
+        plotInfo['bagFile_id'] = self.rawDataTab.selectedBag + 1
             
         bagfile = self.bagFiles[self.rawDataTab.selectedBag]
         if bagfile == "":
@@ -81,6 +94,9 @@ class PlotDialogWidget(QDialog):
         except ValueError:
             self.showMessage("ObjectID is not a number! Insert valid ID.")
             return
+        
+        plotInfo['obj_id'] = obj_id
+        
         try:    
             plotData = Rosbag_Analysis.getRawData(bagfile, obj_id, category, attribute)
         except:
@@ -88,7 +104,7 @@ class PlotDialogWidget(QDialog):
             return
             
 	    # emit signal with data
-        self.newPlotData.emit(plotData)
+        self.newPlotData.emit(plotData, plotInfo)
         
         # close dialog
         self.close()

@@ -1,3 +1,5 @@
+# import matplotlib
+# matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -14,6 +16,7 @@ else:
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar
         )
 from matplotlib.figure import Figure
+from object_list_msg import units
 
 class PlotWidget(QWidget):
     '''
@@ -34,14 +37,24 @@ class PlotWidget(QWidget):
         self.setLayout(self.layout)
         self.ax = self.canvas.figure.subplots()
         
-    def plot(self, plotData):  
+    def plot(self, plotData, plotInfo):  
+        '''
+            is connected to the clicked signal of the dialog start button
+            plots the given data into the figure
+        '''
         # print(plotData)
         t = plotData[0]
         values = plotData[1]
         line, = self.ax.plot(t, values)
-        line.set_label('bag1.obj1.geometric.x')
-        self.ax.set_ylabel('value [m]')
-        self.ax.set_xlabel('time [s]')
+        
+        label = 'bag' + str(plotInfo['bagFile_id']) + '.'
+        label += 'obj' + str(plotInfo['obj_id']) + '.'
+        label += plotInfo['category'] + '.'
+        label += plotInfo['attribute']
+        line.set_label(label)
+        unit = units[plotInfo['attribute']]
+        self.ax.set_ylabel('value [' + unit + ']')
+        self.ax.set_xlabel('time [ms]')
         self.ax.legend()
 #         self.canvas.figure.legend(loc='upper center', bbox_to_anchor=(1.45, 0.8), shadow=True, ncol=1)
         
