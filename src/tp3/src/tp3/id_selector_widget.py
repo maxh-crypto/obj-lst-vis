@@ -8,6 +8,7 @@
 
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import *
+from Rosbag_Analysis import Rosbag_Analysis
 
 class IDSelectorWidget(QGroupBox):
     
@@ -27,4 +28,7 @@ class IDSelectorWidget(QGroupBox):
     def getID(self):
         id = int(self.lineEdit.text())
         return id
+    
+    def refreshList(self):
+        
         

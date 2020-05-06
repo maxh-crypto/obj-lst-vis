@@ -14,12 +14,13 @@ from id_selector_widget import IDSelectorWidget
 
 class RawDataTab(QWidget):
     
-    def __init__(self, parent=None):
+    def __init__(self, bagFiles, parent=None):
         super(RawDataTab, self).__init__()
         self.parent = parent
         self.layout = QGridLayout()
     
-        self.selectedBag = 2
+        self.bagFiles = bagFiles
+        self.selectedBag = 2 # no bag is selected
         self.selectedValue = ('', '') # contains value as a tupel like ('<message>', '<value>')      
         
         # init the widgets
@@ -51,10 +52,11 @@ class RawDataTab(QWidget):
     
     def btn1Clicked(self):
         self.selectedBag = 0
+        self.idSelector.refreshList(self.bagFiles[0])
         
     def btn2Clicked(self):
         self.selectedBag = 1
-              
+        self.idSelector.refreshList(self.bagFiles[1])
         
         
         

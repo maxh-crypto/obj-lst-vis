@@ -25,7 +25,7 @@ class PlotDialogWidget(QDialog):
         
         # TabWidget
         self.tabWidget = QTabWidget()
-        self.rawDataTab = RawDataTab()
+        self.rawDataTab = RawDataTab(bagFiles)
         self.compareTab = CompareDataTab() 
         self.tabWidget.addTab(self.rawDataTab, "Raw Data")
         self.tabWidget.addTab(self.compareTab, "Compare Bag Files")
