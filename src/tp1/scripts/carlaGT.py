@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
 
 # Copyright (c) 2018 Intel Labs.
 # authors: German Ros (german.ros@intel.com)
