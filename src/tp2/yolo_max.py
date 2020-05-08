@@ -204,8 +204,8 @@ def processdistance(image2):
     pixel = i2[398,344] #400,400
     distance_in_middle = 0
     count_steps = 0
-    for width in range(b1[0],b1[1]):
-        for length in range(b1[2],b1[3]):
+    for width in range(b1[0],(b1[0]+b1[2])):
+        for length in range(b1[1],(b1[1]+b1[3])):
             if frame[width,length] == [0,0,0]:
                 # Entfernung aus GBR (nicht RGB!) Daten berechnen
                 normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
