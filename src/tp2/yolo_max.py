@@ -181,7 +181,7 @@ def myprocess(image):
                 
             #print(LABELS[classIDs[i]], "at" , boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3])
 
-            forblackwhiteframe = frame[(boxes[i][0]):(boxes[i][0]+boxes[i][1]), (boxes[i][2]):(boxes[i][2]+boxes[i][3])]
+            forblackwhiteframe = frame[(boxes[i][0]):(boxes[i][0]+boxes[i][2]), (boxes[i][1]):(boxes[i][1]+boxes[i][3])]
             frameingrey = cv2.cvtColor(forblackwhiteframe, cv2.COLOR_BGR2GRAY)
             blackwhite = cv2.adaptiveThreshold(frameingrey, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
             bwframe(blackwhite)
@@ -204,8 +204,8 @@ def processdistance(image2):
     #pixel = i2[398,344] #400,400
     distance_in_middle = 0
     count_steps = 0
-    for width in range(b1[0],(b1[0]+b1[2])):
-        for length in range(b1[1],(b1[1]+b1[3])):
+    for width in range(b1[0][0],(b1[0][0]+b1[2][0])):
+        for length in range(b1[1][0],(b1[1][0]+b1[3][0])):
             poi = frame[width,length]
             if poi == [0,0,0]:
                 # Entfernung aus GBR (nicht RGB!) Daten berechnen
