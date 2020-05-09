@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
 
 # Copyright (c) 2018 Intel Labs.
 # authors: German Ros (german.ros@intel.com)
@@ -26,6 +26,7 @@ import weakref
 import rospy 
 from object_list.msg import ObjectsList
 from object_list.msg import ObjectList
+from object_list.msg import Geometric as geo
 
 
 try:
@@ -111,6 +112,7 @@ class World(object):
 		self.recording_enabled = False
 		self.recording_start = 0
 		
+		
 
 	
 	def restart(self):
@@ -134,9 +136,10 @@ class World(object):
 
 		while self.player is None:
 			spawn_points = self.map.get_spawn_points() 
-		#spawn_point = random.choice(spawn_points) if spawn_points else carla.Transform()
+		#spawn_point = random.choice(spawn_points) if spawn_points else carla.Transform() 
 			spawn_point = carla.Transform(carla.Location(x=119.600000, y=8.330196, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
 			self.player = self.world.spawn_actor(blueprintPlayer, spawn_point)
+			
 			self.player.set_velocity(carla.Vector3D(x=11.111111, y=0.000000, z=0.000000)) #40kmh
 	   
 		# Spawn the npc cars
@@ -167,7 +170,8 @@ class World(object):
 		self.control = carla.WalkerControl()
 		self.control.speed = 1.39
 		self.control.direction = carla.Vector3D(x=0.000000, y=-1.000000, z=0.000000)
-
+		
+		
 		
 		npc1_dim = Dimension(self.npc1)
 		#print(npc1_dim.length)
@@ -185,6 +189,7 @@ class World(object):
 		self.camera_manager.set_sensor(cam_index, notify=False)
 		actor_type = get_actor_display_name(self.player)
 		self.hud.notification(actor_type)
+		#self.LOS_sensor = LineOfSightSensor(self.npc2,self.hud)
 
 	def next_weather(self, reverse=False):
 		self._weather_index += -1 if reverse else 1
@@ -234,14 +239,45 @@ class World(object):
 			if actor is not None:
 				actor.destroy()
 
+class LineOfSightSensor(object):
+	def __init__(self, parent_actor, hud):
+		self.sensor = None
+		self._history = []
+		self._parent = parent_actor
+		self._hud = hud
+		self._event_count = 0
+		self.sensor_transform = carla.Transform(carla.Location(x=1.6, z=1.7), carla.Rotation(yaw=0)) # Put this sensor on the windshield of the car.
+		world = self._parent.get_world()
+		bp = world.get_blueprint_library().find('sensor.other.obstacle')
+		bp.set_attribute('distance', '20')
+		bp.set_attribute('hit_radius', '10')
+		bp.set_attribute('only_dynamics', 'false')
+		bp.set_attribute('debug_linetrace', 'true')
+		bp.set_attribute('sensor_tick', '0.2')
+		self.sensor = world.spawn_actor(bp, self.sensor_transform, attach_to=self._parent)
+		weak_self = weakref.ref(self)
+		self.sensor.listen(lambda event: LineOfSightSensor._on_LOS(weak_self, event))
+
+	@staticmethod
+	def _on_LOS(weak_self, event):
+		self = weak_self()
+		if not self:
+			return
+			print (str(event.other_actor), event.distance)
+		#if event.other_actor.type_id.startswith('vehicle.'):
+			#print ("Event %s, in line of sight with %s at distance %u" % (self._event_count, event.other_actor.type_id, event.distance))
+			#self._event_count += 1
+
 class Feature(object):
 	def __init__(self,world,actor):
-	
+		fov_angle = 30
+
 		FR = actor.bounding_box.extent
 		FR.x = 0
 		FR.z = 0
 		FR = FR + (actor.get_location() - world.player.get_location())
-		if FR.x>0 and FR.y<0:
+		angle = math.atan2(FR.y, FR.x) * 180 / math.pi
+		if FR.x>0 and FR.y<0 and FR.x<=200 and abs(angle) < fov_angle:
 			FRbool = 1
 		else:
 			FRbool = 0
@@ -251,7 +287,8 @@ class Feature(object):
 		FM.z = 0 
 		FM.y = 0
 		FM = FM + (actor.get_location() - world.player.get_location())
-		if FM.x>0:
+		angle = math.atan2(FM.y, FM.x) * 180 / math.pi
+		if FM.x>0 and FM.x<=200 and abs(angle) < fov_angle:
 			FMbool = 0
 		else:
 			FMbool = 0
@@ -261,7 +298,8 @@ class Feature(object):
 		FL.z = 0
 		FL.y = -FL.y
 		FL = FL + (actor.get_location() - world.player.get_location())
-		if FL.x>0 and FL.y>0:
+		angle = math.atan2(FL.y, FL.x) * 180 / math.pi
+		if FL.x>0 and FL.y>0 and FL.x<=200 and abs(angle) < fov_angle:
 			FLbool = 1
 		else:
 			FLbool = 0
@@ -270,7 +308,8 @@ class Feature(object):
 		MR.x = -MR.x
 		MR.z = 0
 		MR = MR + (actor.get_location() - world.player.get_location())
-		if MR.x>0 and MR.y<0:
+		angle = math.atan2(MR.y, MR.x) * 180 / math.pi
+		if MR.x>0 and MR.y<0 and MR.x<=200 and abs(angle) < fov_angle:
 			MRbool = 1
 		else:
 			MRbool = 0
@@ -282,7 +321,8 @@ class Feature(object):
 		ML.z = 0
 		ML.y = -ML.y
 		ML = ML + (actor.get_location() - world.player.get_location())	
-		if ML.x>0 and ML.y>0:
+		angle = math.atan2(ML.y, ML.x) * 180 / math.pi
+		if ML.x>0 and ML.y>0 and ML.x<=200 and abs(angle) < fov_angle:
 			MLbool = 1
 		else:
 			MLbool = 0
@@ -290,8 +330,9 @@ class Feature(object):
 		RR = actor.bounding_box.extent
 		RR.x = -2*RR.x
 		RR.z = 0
-		RR = RR + (actor.get_location() - world.player.get_location())		
-		if RR.x>0:
+		RR = RR + (actor.get_location() - world.player.get_location())	
+		angle = math.atan2(RR.y, RR.x) * 180 / math.pi	
+		if RR.x>0 and RR.x<=200 and abs(angle) < fov_angle:
 			RRbool = 1
 		else:
 			RRbool = 0
@@ -301,7 +342,8 @@ class Feature(object):
 		RM.z = 0
 		RM.y = 0
 		RM = RM + (actor.get_location() - world.player.get_location())
-		if RM.x>0:
+		angle = math.atan2(RM.y, RM.x) * 180 / math.pi
+		if RM.x>0 and RM.x<=200 and abs(angle) < fov_angle:
 			RMbool = 1
 		else:
 			RMbool = 0
@@ -311,7 +353,9 @@ class Feature(object):
 		RL.z = 0
 		RL.y = -RL.y
 		RL = RL + (actor.get_location() - world.player.get_location())	
-		if RL.x>0:
+		angle = math.atan2(RL.y, RL.x) * 180 / math.pi
+
+		if RL.x>0 and RL.x<=200 and abs(angle) < fov_angle:
 			RLbool = 1
 		else:
 			RLbool = 0
@@ -325,6 +369,15 @@ class Feature(object):
 		self.RR = RRbool
 		self.RM = RMbool
 		self.RL = RLbool
+		self.check_exist()
+	
+	def check_exist(self):
+		val = self.FR +self.FM +self.FL +self.MR +self.ML +self.RR +self.RM +self.RL
+		if val > 0:
+			self.exist = 1
+		else:
+			self.exist = 0
+		
 
 class Dimension:
 	def __init__(self,actor):
@@ -350,9 +403,9 @@ class Geometric:
 		self.yawrate = tempav
 
 
-def Object_List_Talker(world):
+def Object_List_Talker(world,args):
 
-	pub = rospy.Publisher('camera_obj', ObjectsList, queue_size=100) #
+	pub = rospy.Publisher('simulation', ObjectsList, queue_size=100) #
 	rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
    #rate=rospy.Rate(50)  #50 hz
 
@@ -360,7 +413,7 @@ def Object_List_Talker(world):
 
 	b=ObjectsList() # Erstellen des Objekts ObjectsList (enthaelt alle Objekte)
 	a1=ObjectList() # Erstellen eines Objektes von der Klasse ObjectList
-	a1.obj_id= 1	# Zuweisen der ID
+	a1.obj_id= 2	# Zuweisen der ID
 
 # ab hier werden die Eigenschaften eines Objektes zugewiesen
 	 
@@ -393,7 +446,7 @@ def Object_List_Talker(world):
 
 	
 	a2=ObjectList()
-	a2.obj_id= 2
+	a2.obj_id= 1
 
 	Npc2_geo = Geometric(world,world.npc2)
 	Npc2_dim = Dimension(world.npc2)
@@ -451,17 +504,7 @@ def Object_List_Talker(world):
 	a3.prop_existence = 1
 	a3.prop_mov = 1
 
-	a4=ObjectList()
-	a4.obj_id= 4
-	playertemp = world.player.get_location()
-	a4.geometric.x = playertemp.x
-	a4.geometric.y = playertemp.y
-	playertemp = world.player.get_velocity()
-	a4.geometric.vx = playertemp.x
-	a4.geometric.vy = playertemp.y
-	playertemp = world.player.get_acceleration()
-	a4.geometric.ax = playertemp.x
-	a4.geometric.ay = playertemp.y
+
 
 	
 
@@ -470,17 +513,60 @@ def Object_List_Talker(world):
 #b.header.stamp = rospy.Time.now()
 	b.header.frame_id = "ObjectList_GroundTruth"
 
+
+	Npc1_fea = Feature(world,world.npc1)
+
 # hier werden die Objekte der Objektliste hinzugefuegt mittels append
-	b.obj_list.append(a1)
-	b.obj_list.append(a2)
-	b.obj_list.append(a3)
-	b.obj_list.append(a4)
+	if Npc1_fea.exist == 1 or args.visible:
+		b.obj_list.append(a2)
+	if Npc2_fea.exist == 1 or args.visible:
+		b.obj_list.append(a1)
+	if Walker1_fea.exist == 1 or args.visible:
+		b.obj_list.append(a3)
 	b.header.stamp = rospy.Time.now()
 # hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
 	pub.publish(b)
 	rospy.loginfo(b)
 	
 
+
+def Object_List_Talker_Player(world,args):
+
+	pub = rospy.Publisher('egovehicle', ObjectsList, queue_size=100) #
+	rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
+   #rate=rospy.Rate(50)  #50 hz
+
+   #while not rospy.is_shutdown():
+
+	b=ObjectsList() # Erstellen des Objekts ObjectsList (enthaelt alle Obj)
+
+# ab hier werden die Eigenschaften eines Objektes zugewiesen
+	 
+
+	a0=geo()
+	playertemp = world.player.get_location()
+	a0.x = playertemp.x
+	a0.y = playertemp.y
+	playertemp = world.player.get_velocity()
+	a0.vx = playertemp.x
+	a0.vy = playertemp.y
+	playertemp = world.player.get_acceleration()
+	a0.ax = playertemp.x
+	a0.ay = playertemp.y
+
+	
+
+# der ObjektListe werden noch charakteristische Eigenschaften zugewiesen wie			# TimeStamp und Frame ID
+
+	b.header.stamp = rospy.Time.now()
+	b.header.frame_id = "ObjectListego_GroundTruth"
+
+# hier werden die Objekte der Objektliste hinzugefuegt mittels append
+	b.ego_geometric.append(a0)
+	b.header.stamp = rospy.Time.now()
+# hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
+	pub.publish(b)
+	rospy.loginfo(b)
 	
 # ==============================================================================
 # -- KeyboardControl -----------------------------------------------------------
@@ -944,8 +1030,11 @@ def game_loop(args):
 	
 			
 		###----Extract Ground Truth Data----####
-			Object_List_Talker(world)
-
+			Object_List_Talker(world,args)
+			Object_List_Talker_Player(world,args)
+			
+			#if args.ego_data:
+				#print("nice")
 
 
 		#control.agent.run_step()
@@ -974,6 +1063,12 @@ def main():
 		action='store_true',
 		dest='debug',
 		help='print debug information')
+
+	argparser.add_argument(
+		'-s', '--visible',
+		help='publish only ego data',
+		action="store_true")
+
 	argparser.add_argument(
 		'--host',
 		metavar='H',
