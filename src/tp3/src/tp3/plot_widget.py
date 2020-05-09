@@ -42,25 +42,18 @@ class PlotWidget(QWidget):
             is connected to the clicked signal of the dialog start button
             plots the given data into the figure
         '''
-        # print(plotData)
         t = plotData[0]
         values = plotData[1]
         line, = self.ax.plot(t, values)
         
-        label = 'bag' + str(plotInfo['bagFile_id']) + '.'
-        label += 'obj' + str(plotInfo['obj_id']) + '.'
-        label += plotInfo['category'] + '.'
-        label += plotInfo['attribute']
-        line.set_label(label)
-        unit = units[plotInfo['attribute']]
+        line.set_label(plotInfo['label'])
+        unit = plotInfo['unit']
         self.ax.set_ylabel('value [' + unit + ']')
         self.ax.set_xlabel('time [ms]')
         self.ax.legend()
-#         self.canvas.figure.legend(loc='upper center', bbox_to_anchor=(1.45, 0.8), shadow=True, ncol=1)
         
         # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
         # TODO: Unterscheidung objid -> Farbe
-        # TODO: legende aghaengig von attribute machen
         
         self.ax.grid(b=True)
         self.ax.figure.canvas.draw()

@@ -26,8 +26,8 @@ class PlotDialogWidget(QDialog):
         
         # TabWidget
         self.tabWidget = QTabWidget()
-        self.rawDataTab = RawDataTab(bagFiles)
-        self.compareTab = CompareDataTab() 
+        self.rawDataTab = RawDataTab(bagFiles, self)
+        self.compareTab = CompareDataTab(bagFiles, self) 
         self.tabWidget.addTab(self.rawDataTab, "Raw Data")
         self.tabWidget.addTab(self.compareTab, "Compare Bag Files")
         self.layout.addWidget(self.tabWidget)
@@ -47,72 +47,12 @@ class PlotDialogWidget(QDialog):
         '''        
         currentTab = self.tabWidget.currentIndex()
         if currentTab == 0: # rawDataTab is active
-            self.getRawData()
-        if currentTab == 1: # 
-            # TODO: advanced analysis
-            pass
+            plotData, plotInfo = self.rawDataTab.getPlotData()
+        elif currentTab == 1: # 
+            plotData, plotInfo = self.compareTab.getPlotData()
             
-        
-    def getRawData(self):
-        '''
-            gets the raw data according to the selected parameters
-            from Rosbag_Analysis
-        '''
-        plotInfo = {
-            'bagFile_id' : 0,
-            'obj_id' : 0,
-            'category' : "",
-            'attribute' : ""            
-            }
-        
-        selectedValue = self.rawDataTab.valueWidget.getCatAndAtt()
-        category = selectedValue['category']
-        attribute = selectedValue['attribute']   
-        # check whether category or attribute is empty
-        # show error message when it is the case
-        # and return the function
-        if category == "" or attribute == "":
-            self.showMessage("Please select a plottable attribute.")
-            return 
-        
-        plotInfo['category'] = category
-        plotInfo['attribute'] = attribute
-        
-        if self.rawDataTab.selectedBag > 1: # no bag file is selected
-            self.showMessage("Please select a bag file.")
-            return
-        
-        plotInfo['bagFile_id'] = self.rawDataTab.selectedBag + 1
-            
-        bagfile = self.bagFiles[self.rawDataTab.selectedBag]
-        if bagfile == "":
-            self.showMessage("no bag file loaded! Please import bag file in the main interface.")
-            return
-        
-        try:
-            obj_id = self.rawDataTab.idSelector.getID()
-        except ValueError:
-            self.showMessage("ObjectID is not a number! Insert valid ID.")
-            return
-        
-        plotInfo['obj_id'] = obj_id
-        
-        try:    
-            plotData = Rosbag_Analysis.getRawData(bagfile, obj_id, category, attribute)
-        except:
-            self.showMessage("Sorry, unexpected error occurred.")
-            return
-            
-	    # emit signal with data
+        # emit signal with data
         self.newPlotData.emit(plotData, plotInfo)
         
-        # close dialog
+        # close dialog 
         self.close()
-        
-    def showMessage(self, msgText):
-        msgBox = QMessageBox()
-        msgBox.setText(msgText)
-        msgBox.exec_()
-        
-        
-
