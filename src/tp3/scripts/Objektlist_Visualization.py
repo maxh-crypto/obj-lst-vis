@@ -73,7 +73,7 @@ def evaluateObject(objectData):
     marker.pose.position.x = car_ego_x + objectData.geometric.x 
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height/2
-    #marker.id =0
+    marker.lifetime = rospy.Duration(0.1)
     return marker
 
 def evaluateObjectID(objectData):
@@ -98,7 +98,7 @@ def evaluateObjectID(objectData):
     marker.pose.position.x = car_ego_x + objectData.geometric.x 
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height + 1
-    
+    marker.lifetime = rospy.Duration(0.1)
     marker.text = "ID:" + str(objectData.obj_id)
     return marker
 
@@ -112,6 +112,7 @@ def callback_simulation(data):
 
     markerArray = MarkerArray()
 
+
     for i in range(len(data.obj_list)):
         markerObj = evaluateObject(data.obj_list[i])
         markerObj.id = i*2
@@ -123,6 +124,7 @@ def callback_simulation(data):
         markerArray.markers.append(markerID)
 
     
+    rospy.loginfo(markerArray)
     publisher.publish(markerArray)
     
    
@@ -132,7 +134,7 @@ def callback_egovehicle(data):
 
     car_ego_x = data.ego_geometric[0].x
     car_ego_y = data.ego_geometric[0].y
-    rospy.loginfo(data.ego_geometric[0].x)
+    
     
 
 
