@@ -4,9 +4,11 @@ import numpy as np
 import matplotlib.pyplot as py
 
 #bag_gt = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste_2020-04-26-12-46-25.bag')
+#bag_gt = rosbag.Bag('/home/christoph/Schreibtisch/Objektliste_2020-5-9-18-31-39.bag')
 bag_gt = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste.bag')
 
 bag_cam = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste_2020-04-26-12-47-33.bag')
+#bag_gt = rosbag.Bag('/home/christoph/Schreibtisch/Objektliste_2020-5-9-18-31-39.bag')
 #bag_cam = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste.bag')
 
 
