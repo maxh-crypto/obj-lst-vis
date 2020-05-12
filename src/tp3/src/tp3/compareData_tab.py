@@ -24,17 +24,17 @@ class CompareDataTab(QWidget):
         # widgets
         self.operationSelector = OperationSelectorWidget(self)
         self.operationSelector.selectionChanged.connect(self.operationChanged)
+        self.valueSelector = ValueSelectorWidget(self)
+        self.valueSelector.setEnabled(False)
         self.idSelector = IDSelectorWidget()
         self.idSelector.setEnabled(False)
         self.idSelector.refreshList(bagFiles[0])
-        self.valueSelector = ValueSelectorWidget(self)
-        self.valueSelector.setEnabled(False)
         
         # layout:
         layout = QHBoxLayout()
         layout.addWidget(self.operationSelector)
-        layout.addWidget(self.idSelector)
         layout.addWidget(self.valueSelector)
+        layout.addWidget(self.idSelector)
         
         self.setLayout(layout)
         
