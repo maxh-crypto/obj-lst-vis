@@ -5,16 +5,26 @@ import numpy as np
 # These functions can be called by the file "Rosbag_Analysis_main.py" #
 
 class Rosbag_Analysis:
-    
+   
+    ### method for analysing if messages were published by simulation (ground trouth)
+    ### or by the camera sensor
+    #@staticmethod
+    #def getBagType(bagfile):
+        
+        #bag = rosbag.Bag(bagfile)
+        #topics = bag.get_type_and_topic_info()[1].keys()
+        
+        #print(topics)
+     
     ### method for getting count of objects contained in rosbag ###
-    
     @staticmethod
     def getObjectIDs(bagfile):
-        
+
+        print(x)
         bag = rosbag.Bag(bagfile)
         array_ids = []
         
-        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
+        for topic, msg, t in bag.read_messages(topics=['objectlist's]):
             for i in msg.obj_list:
                 if i.obj_id not in array_ids:
                     array_ids.append(i.obj_id)
@@ -40,7 +50,7 @@ class Rosbag_Analysis:
         array_values = []
         array_timestamps = []
 
-        for topic, msg, t in bag.read_messages(topics=['camera_obj']):
+        for topic, msg, t in bag.read_messages(topics=['objectlist']):
             counter += 1
             bag.read_messages()
             
@@ -79,7 +89,7 @@ class Rosbag_Analysis:
         array_timestamps1 = []
         array_timestamps2 = []
 
-        for topic, msg, t in bag1.read_messages(topics=['camera_obj']):
+        for topic, msg, t in bag1.read_messages(topics=['objectlist']):
             counter1 += 1
             bag1.read_messages()
             
@@ -90,7 +100,7 @@ class Rosbag_Analysis:
         #print('Number of sequences: ')     #sequence = count of frames
         #print(counter)
         
-        for topic, msg, t in bag2.read_messages(topics=['camera_obj']):
+        for topic, msg, t in bag2.read_messages(topics=['objectlist']):
             counter2 += 1
             bag2.read_messages()
             
@@ -131,7 +141,7 @@ class Rosbag_Analysis:
         array_x = []
         array_timestamps = []
         
-        for topic, msg, t in bag.read_messages(topics=["camera_obj"]):
+        for topic, msg, t in bag.read_messages(topics=['objectlist']):
             counter += 1
             bag.read_messages()
             

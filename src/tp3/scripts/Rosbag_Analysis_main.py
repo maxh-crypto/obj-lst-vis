@@ -4,8 +4,10 @@ import numpy as np
 # Main function for calling rosbag analysis methods
 # --> is gonna be replaced by (or integrated) in GUI script 
 
-array_objectIDs = ra.Rosbag_Analysis.getObjectIDs('../bagfiles/Objektliste_2020-5-4-13-7-21.bag')
+array_objectIDs = ra.Rosbag_Analysis.getObjectIDs('../bagfiles/Objektliste.bag')
 print(array_objectIDs)
+
+#ra.Rosbag_Analysis.getBagType('../bagfiles/Objektliste.bag')
 
 # generic implementation (in work) 
                                                                                                         #bag file                #object id    #category      #attribute
