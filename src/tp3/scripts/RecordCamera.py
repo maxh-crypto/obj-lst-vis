@@ -11,9 +11,15 @@ import math
 import rosbag
 import datetime
 import os
+import rospkg
 
-rospy.init_node('Record_Objektlist')
-root_path = os.environ['HOME'] + '/obj-lst-vis/src/tp3/bagfiles/' 
+rospack = rospkg.RosPack()
+rospack.list()
+
+
+rospy.init_node('Record_Objektlist_Camera')
+root_path =  rospack.get_path('tp3') + '/bagfiles/' 
+ 
 current_time = datetime.datetime.now()
 path  = root_path + 'Camera_' + str(current_time.year) + '-' + str(current_time.month) + '-' + str(current_time.day) + '-' + str(current_time.hour) + '-' + str(current_time.minute) + '-' + str(current_time.second) + '.bag'
 rospy.loginfo (current_time.year)
