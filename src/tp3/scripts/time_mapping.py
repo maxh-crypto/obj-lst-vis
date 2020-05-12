@@ -35,7 +35,7 @@ diff_time = [] # plot
 
 
 
-for topic, msg, t in bag_gt.read_messages(topics=['/camera_obj']):
+for topic, msg, t in bag_gt.read_messages(topics=['objectlist']):
     bag_gt.read_messages()
     #array_msg_gt. append([(float)(t.__str__()) / 1000000, msg])
     array_msg_gt. append([(float)((t.__sub__(startTime_gt)).__str__()) / 1000000, msg])
@@ -44,7 +44,7 @@ for topic, msg, t in bag_gt.read_messages(topics=['/camera_obj']):
     array_x_gt.append(msg.obj_list[0].geometric.x)
     
 
-for topic, msg, t in bag_cam.read_messages(topics=['/camera_obj']):
+for topic, msg, t in bag_cam.read_messages(topics=['objectlist']):
     bag_cam.read_messages()
     #array_msg_cam. append([(float)(t.__str__()) / 1000000, msg])
     array_msg_cam. append([(float)((t.__sub__(startTime_cam)).__str__()) / 1000000, msg])
