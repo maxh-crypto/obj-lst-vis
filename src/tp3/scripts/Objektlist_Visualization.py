@@ -73,7 +73,7 @@ def evaluateObject(objectData):
     marker.pose.position.x = car_ego_x + objectData.geometric.x 
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height/2
-    #marker.id =0
+    marker.lifetime = rospy.Duration(0.1)
     return marker
 
 def evaluateObjectID(objectData):
@@ -98,24 +98,20 @@ def evaluateObjectID(objectData):
     marker.pose.position.x = car_ego_x + objectData.geometric.x 
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
     marker.pose.position.z = objectData.dimension.height + 1
-    
+    marker.lifetime = rospy.Duration(0.1)
     marker.text = "ID:" + str(objectData.obj_id)
     return marker
 
 
-def callback(data):
-    global data_alt
+def callback_simulation(data):
+
     global car_ego_x
     global car_ego_y 
-    #solange keine ego_v vorhanden statisch berechenen
-    if data_alt == 0:
-        car_ego_x = 0
-        car_ego_y = 0
-    else:
-        car_ego_x += data_alt.obj_list[0].geometric.x -data.obj_list[0].geometric.x
-        car_ego_y -= data_alt.obj_list[0].geometric.y - data.obj_list[0].geometric.y
+    
+    
 
     markerArray = MarkerArray()
+
 
     for i in range(len(data.obj_list)):
         markerObj = evaluateObject(data.obj_list[i])
@@ -127,14 +123,30 @@ def callback(data):
         markerArray.markers.append(markerObj)
         markerArray.markers.append(markerID)
 
+    
+    rospy.loginfo(markerArray)
+    publisher.publish(markerArray)
+    
+   
+def callback_egovehicle(data):
+    global car_ego_x
+    global car_ego_y
+
+    car_ego_x = data.ego_geometric[0].x
+    car_ego_y = data.ego_geometric[0].y
+    
+    
+
+
     br.sendTransform((OFFSET_CAR_X+car_ego_x,car_ego_y,0),
                      tf.transformations.quaternion_from_euler(0,0,1.57),
                      rospy.Time.now(),
                      "chassis",
                      "base_link")
-    publisher.publish(markerArray)
-    data_alt = data
-   
+    
+    
+
+
 def listener():
 
     # In ROS, nodes are uniquely named. If two nodes with the same
@@ -145,7 +157,8 @@ def listener():
     
 
     #rospy.Subscriber("chatter", String, callback)
-    rospy.Subscriber("camera_obj", ObjectsList, callback)
+    rospy.Subscriber("simulation", ObjectsList, callback_simulation)
+    rospy.Subscriber("egovehicle", ObjectsList, callback_egovehicle)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

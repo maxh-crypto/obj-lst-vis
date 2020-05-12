@@ -6,7 +6,7 @@
 
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 
- 
+ <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
   <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
@@ -15,6 +15,6 @@
     
     <node pkg="tp3" name="RecordBagfile" type="RecordBagfile.py"/>
     
-    <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/2020-04-24-18-36-14.bag" />
+    <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp1)/rosbags/2020-05-08-CamerasichtObjekte.bag" />
    
 </launch>

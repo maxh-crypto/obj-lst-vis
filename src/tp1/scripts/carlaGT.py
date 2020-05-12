@@ -517,9 +517,9 @@ def Object_List_Talker(world,args):
 	Npc1_fea = Feature(world,world.npc1)
 
 # hier werden die Objekte der Objektliste hinzugefuegt mittels append
-	if Npc1_fea.exist == 1 or args.visible:
-		b.obj_list.append(a2)
 	if Npc2_fea.exist == 1 or args.visible:
+		b.obj_list.append(a2)
+	if Npc1_fea.exist == 1 or args.visible:
 		b.obj_list.append(a1)
 	if Walker1_fea.exist == 1 or args.visible:
 		b.obj_list.append(a3)
