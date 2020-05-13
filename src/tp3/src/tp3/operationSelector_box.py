@@ -35,7 +35,6 @@ class OperationSelectorWidget(QGroupBox):
     def switchOperation(self, operation):
         self._currentSelected = operation
         self.selectionChanged.emit(operation)
-        print('Button clicked ' + operation)
         
     def getOperation(self):
         return self._currentSelected

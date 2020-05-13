@@ -21,7 +21,7 @@ class BagWidget(QWidget):
         self.setLayout(layout)
         
     def getBagFiles(self):
-        return [self.bagSelector1.fileName, self.bagSelector1.fileName]
+        return [self.bagSelector1.fileName, self.bagSelector2.fileName]
     
 class BagSelector(QWidget):
     '''

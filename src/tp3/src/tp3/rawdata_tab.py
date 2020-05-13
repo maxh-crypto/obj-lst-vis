@@ -13,6 +13,7 @@ from valueSelector_widget import ValueSelectorWidget
 from id_selector_widget import IDSelectorWidget
 from Rosbag_Analysis import Rosbag_Analysis
 import object_list_msg 
+import message_module
 
 class RawDataTab(QWidget):
     
@@ -67,7 +68,8 @@ class RawDataTab(QWidget):
         '''
         plotInfo = {
             'label' : '',
-            'unit' : '',
+            'y_label' : '',
+            'bag' : 1
             }
         
         selectedValue = self.valueWidget.getCatAndAtt()
@@ -77,29 +79,24 @@ class RawDataTab(QWidget):
         # show error message when it is the case
         # and return the function
         if attribute == "":
-            self.showMessage("Please select a plottable attribute.")
-            return 
-        
+            raise Exception("Please select a plottable attribute.")
+                    
         if self.selectedBag > 1: # no bag file is selected
-            self.showMessage("Please select a bag file.")
-            return
-            
+            raise Exception("Please select a bag file.")
+                        
         bagfile = self.bagFiles[self.selectedBag]
         if bagfile == "":
-            self.showMessage("no bag file loaded! Please import bag file in the main interface.")
-            return
-        
+            raise Exception("no bag file loaded! Please import bag file in the main interface.")
+                    
         try:
             obj_id = self.idSelector.getID()
         except ValueError:
-            self.showMessage("ObjectID is not a number! Insert valid ID.")
-            return
-        
+            raise Exception("ObjectID is not a number! Insert valid ID.")
+                    
         try:    
             plotData = Rosbag_Analysis.getRawData(bagfile, obj_id, category, attribute)
         except:
-            self.showMessage("Sorry, unexpected error occurred.")
-            return
+            raise Exception("Sorry, unexpected error occurred.")
         
         bag_id = self.selectedBag + 1
         plotInfo['label'] = 'bag' + str(bag_id) + '.'
@@ -107,14 +104,12 @@ class RawDataTab(QWidget):
         plotInfo['label'] += category + '.'
         plotInfo['label'] += attribute
         
-        plotInfo['unit'] = object_list_msg.units[attribute]
+        plotInfo['y_label'] = object_list_msg.units[attribute]
+        
+        plotInfo['bag'] = bag_id
         
         return plotData, plotInfo
     
-    def showMessage(self, msgText):
-        msgBox = QMessageBox()
-        msgBox.setText(msgText)
-        msgBox.exec_()
         
         
         

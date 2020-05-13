@@ -18,7 +18,7 @@ else:
 from matplotlib.figure import Figure
 from object_list_msg import units
 
-MAX_AXES = 3
+MAX_LINES = 3
 
 class PlotWidget(QWidget):
     '''
@@ -26,7 +26,8 @@ class PlotWidget(QWidget):
         besides the matplot it contains a button to add new plots
     '''
     
-    rowCount = 0 # counter for all active axes 
+    lineCount = 0 # counter for all active axes 
+    linesList = []
     
     def __init__(self, bagFiles):
         super(PlotWidget, self).__init__()
@@ -51,9 +52,11 @@ class PlotWidget(QWidget):
         line, = self.ax.plot(t, values)
         
         line.set_label(plotInfo['label'])
-        unit = plotInfo['unit']
-        self.ax.set_ylabel('value [' + unit + ']')
+        self.ax.set_ylabel(plotInfo['y_label'])
         self.ax.set_xlabel('time [ms]')
+        if plotInfo['bag'] == 2:
+            line.set_linestyle('dashed')
+        
         self.ax.legend()
         
         # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
@@ -63,20 +66,21 @@ class PlotWidget(QWidget):
         self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
-        self.rowCount += 1
+        self.lineCount += 1
+        self.linesList.append(line)
         
-    def deleteGraph(self, line):
-        # self.canvax.figure.gca().remove(line)
+    def deleteGraph(self, lineNr):
+        line = self.linesList.pop(lineNr)
         line.remove()
-        self.rowCount -= 1
+        self.lineCount -= 1
         self.ax.figure.canvas.draw()
+        self.ax.legend()
         
     def getLines(self):
         '''
             returns a list of all lines in the figure
         '''
-        return self.canvas.figure.gca().get_lines()
-        
+        return self.linesList
         
         
         

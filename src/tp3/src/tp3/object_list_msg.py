@@ -14,33 +14,20 @@ obj_list_msg = {
     'features' : ['FL', 'FM', 'FR', 'MR', 'RR', 'RM', 'RL', 'ML']
     }
 
-units_tex = {
-    'x' : 'm',
-    'y' : 'm',
-    'vx' : 'm/s',
-    'vy' : 'm/s',
-    'ax' : 'm/s^2',
-    'ay' : 'm/s^2',
-    'yaw' : '\N{DEGREE_SIGN}',
-    'yawrate' : '\N{DEGREE_SIGN}/s',
-    'length' : 'm',
-    'width' : 'm',
-    'height' : 'm',
+units = {
+    'x' : 'distance[m]',
+    'y' : 'distance[m]',
+    'vx' : 'velocity[m/s]',
+    'vy' : 'velocity[m/s]',
+    'ax' : 'acceleration[m/s^2]',
+    'ay' : 'acceleration[m/s^2]',
+    'yaw' : 'angle[Deg]',
+    'yawrate' : 'angular frequency [Deg/m]',
+    'length' : 'dimension[m]',
+    'width' : 'dimension[m]',
+    'height' : 'dimension[m]',
     }
 
-units = {
-    'x' : 'm',
-    'y' : 'm',
-    'vx' : 'm/s',
-    'vy' : 'm/s',
-    'ax' : 'm/s^2',
-    'ay' : 'm/s^2',
-    'yaw' : 'degree',
-    'yawrate' : 'degree/s',
-    'length' : 'm',
-    'width' : 'm',
-    'height' : 'm',
-    }
 
     
     

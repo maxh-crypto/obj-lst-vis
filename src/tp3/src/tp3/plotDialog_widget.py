@@ -11,6 +11,8 @@ from rawdata_tab import RawDataTab
 from compareData_tab import CompareDataTab
 from Rosbag_Analysis import Rosbag_Analysis
 
+import message_module
+
 class PlotDialogWidget(QDialog):    
     newPlotData = QtCore.Signal(object, object)
     
@@ -45,13 +47,19 @@ class PlotDialogWidget(QDialog):
             dependent on what tab is selected            
         '''        
         currentTab = self.tabWidget.currentIndex()
-        if currentTab == 0: # rawDataTab is active
-            plotData, plotInfo = self.rawDataTab.getPlotData()
-        elif currentTab == 1: # 
-            plotData, plotInfo = self.compareTab.getPlotData()
+        try:
             
-        # emit signal with data
-        self.newPlotData.emit(plotData, plotInfo)
+            if currentTab == 0: # rawDataTab is active
+                plotData, plotInfo = self.rawDataTab.getPlotData()
+            elif currentTab == 1: # 
+                plotData, plotInfo = self.compareTab.getPlotData()
+                
+            # emit signal with data
+            self.newPlotData.emit(plotData, plotInfo)
+            
+            # close dialog 
+            self.close()
+            
+        except Exception as e:
+            message_module.showMessage(str(e))
         
-        # close dialog 
-        self.close()
