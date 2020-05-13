@@ -10,7 +10,6 @@ from python_qt_binding.QtWidgets import QDialog, QTabWidget, QVBoxLayout, QPushB
 from rawdata_tab import RawDataTab
 from compareData_tab import CompareDataTab
 from Rosbag_Analysis import Rosbag_Analysis
-from wx.tools.XRCed import attribute
 
 class PlotDialogWidget(QDialog):    
     newPlotData = QtCore.Signal(object, object)
@@ -19,7 +18,7 @@ class PlotDialogWidget(QDialog):
         super(PlotDialogWidget, self).__init__()
         self.parent = parent
         self.bagFiles = bagFiles
-        self.setWindowTitle("Add new Plot")
+        self.setWindowTitle("Add new Graph")
         # self.setWindowModality(Qt.ApplicationModal)
         self.layout = QVBoxLayout()        
         self.resize(600, 400)

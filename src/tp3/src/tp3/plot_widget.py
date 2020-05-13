@@ -18,12 +18,16 @@ else:
 from matplotlib.figure import Figure
 from object_list_msg import units
 
+MAX_AXES = 3
+
 class PlotWidget(QWidget):
     '''
         This is the widget for the plot area
         besides the matplot it contains a button to add new plots
-        and a Slider to adjust the time or the objectID
     '''
+    
+    rowCount = 0 # counter for all active axes 
+    
     def __init__(self, bagFiles):
         super(PlotWidget, self).__init__()
         self.bagFiles = bagFiles
@@ -54,11 +58,24 @@ class PlotWidget(QWidget):
         
         # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
         # TODO: Unterscheidung objid -> Farbe
+        # TODO: mehrere y-Achsen (axis)
         
         self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
-    
+        self.rowCount += 1
+        
+    def deleteGraph(self, line):
+        # self.canvax.figure.gca().remove(line)
+        line.remove()
+        self.rowCount -= 1
+        self.ax.figure.canvas.draw()
+        
+    def getLines(self):
+        '''
+            returns a list of all lines in the figure
+        '''
+        return self.canvas.figure.gca().get_lines()
         
         
         
