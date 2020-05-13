@@ -4,33 +4,23 @@ import numpy as np
 
 # These functions can be called by the file "Rosbag_Analysis_main.py" #
 
+TOPIC = '/simulation'
+
 class Rosbag_Analysis:
-   
-    ### method for analysing if messages were published by simulation (ground trouth)
-    ### or by the camera sensor
-    #@staticmethod
-    #def getBagType(bagfile):
-        
-        #bag = rosbag.Bag(bagfile)
-        #topics = bag.get_type_and_topic_info()[1].keys()
-        
-        #print(topics)
-     
+  
     ### method for getting count of objects contained in rosbag ###
     @staticmethod
     def getObjectIDs(bagfile):
-
-        print(x)
         bag = rosbag.Bag(bagfile)
         array_ids = []
         
-        for topic, msg, t in bag.read_messages(topics=['objectlist's]):
+        for topic, msg, t in bag.read_messages(topics=[TOPIC]):
+        #for topic, msg, t in bag.read_messages(topics=['objectlist']) and len(msg.obj_list) > 0:
             for i in msg.obj_list:
                 if i.obj_id not in array_ids:
                     array_ids.append(i.obj_id)
                
         np.sort(array_ids)
-        
         bag.close()
         return array_ids
     
@@ -39,27 +29,35 @@ class Rosbag_Analysis:
     ### generic implementation ###
     
     @staticmethod
-    def getRawData(bagfile, obj_id, category, attribute):
+    def getRawData(bagfile, obj_id_target, category, attribute):
         
         bag = rosbag.Bag(bagfile)
-		       
+        
         startTimeRaw= bag.get_start_time()
         startTime = genpy.rostime.Time.from_sec(startTimeRaw)
 
-        counter = 0
         array_values = []
         array_timestamps = []
 
-        for topic, msg, t in bag.read_messages(topics=['objectlist']):
-            counter += 1
+        # loop through all messages in bagfile
+        for topic, msg, t in bag.read_messages(topics=[TOPIC]):
             bag.read_messages()
+            index_counter = 0
+            obj_id_index = 99
             
-            array_values.append(getattr(getattr(msg.obj_list[obj_id], category), attribute))
-            
-            array_timestamps.append((float)((t.__sub__(startTime)).__str__()) / 1000000)  #appends timestamp in milli seconds
-           
-        #print('Number of sequences: ')     #sequence = count of frames
-        #print(counter)
+            # loop through all objects in message
+            # to find array index of target object ID
+            for i in msg.obj_list:
+                if i.obj_id == obj_id_target:
+                    array_values.append(getattr(getattr(msg.obj_list[index_counter], category), attribute))
+                    array_timestamps.append((float)((t.__sub__(startTime)).__str__()) / 1000000)  #timestamp in milli seconds
+                    break
+                else: index_counter += 1
+                    
+            #if obj_id_index == 99:  # id not found in message # insert value '0' if object ID can be found in message
+                #array_values.append(0)
+                #array_timestamps.append((float)((t.__sub__(startTime)).__str__()) / 1000000)  #appends timestamp in milli seconds
+                #break
         
         bag.close()
         return (array_timestamps, array_values)
@@ -89,7 +87,7 @@ class Rosbag_Analysis:
         array_timestamps1 = []
         array_timestamps2 = []
 
-        for topic, msg, t in bag1.read_messages(topics=['objectlist']):
+        for topic, msg, t in bag1.read_messages(topics=[TOPIC]):
             counter1 += 1
             bag1.read_messages()
             
@@ -100,7 +98,7 @@ class Rosbag_Analysis:
         #print('Number of sequences: ')     #sequence = count of frames
         #print(counter)
         
-        for topic, msg, t in bag2.read_messages(topics=['objectlist']):
+        for topic, msg, t in bag2.read_messages(topics=[TOPIC]):
             counter2 += 1
             bag2.read_messages()
             
@@ -141,7 +139,7 @@ class Rosbag_Analysis:
         array_x = []
         array_timestamps = []
         
-        for topic, msg, t in bag.read_messages(topics=['objectlist']):
+        for topic, msg, t in bag.read_messages(topics=[TOPIC]):
             counter += 1
             bag.read_messages()
             
