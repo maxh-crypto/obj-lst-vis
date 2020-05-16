@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.pyplot as py
 
 #bag_gt = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste_2020-04-26-12-46-25.bag')
-#bag_gt = rosbag.Bag('/home/christoph/Schreibtisch/Objektliste_2020-5-9-18-31-39.bag')
-bag_gt = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste.bag')
+bag_gt = rosbag.Bag('/home/christoph/Schreibtisch/Groundtruth_2020-5-12-14-43-53.bag')
+#bag_gt = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste.bag')
 
-bag_cam = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste_2020-04-26-12-47-33.bag')
-#bag_gt = rosbag.Bag('/home/christoph/Schreibtisch/Objektliste_2020-5-9-18-31-39.bag')
+#bag_cam = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste_2020-04-26-12-47-33.bag')
+bag_cam = rosbag.Bag('/home/christoph/Schreibtisch/Camera_2020-5-12-14-43-53.bag')
 #bag_cam = rosbag.Bag('/home/christoph/git_ws/obj-lst-vis/src/tp3/bagfiles/Objektliste.bag')
 
 
@@ -41,6 +41,7 @@ for topic, msg, t in bag_gt.read_messages(topics=['objectlist']):
     array_msg_gt. append([(float)((t.__sub__(startTime_gt)).__str__()) / 1000000, msg])
     
     array_timestamps_gt.append((float)((t.__sub__(startTime_gt)).__str__()))
+    print(msg.obj_list[0].geometric.x)
     array_x_gt.append(msg.obj_list[0].geometric.x)
     
 
