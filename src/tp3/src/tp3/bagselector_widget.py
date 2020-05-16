@@ -12,8 +12,8 @@ class BagWidget(QWidget):
         super(BagWidget, self).__init__()
         
         # create elements
-        self.bagSelector1 = BagSelector('bag file 1')
-        self.bagSelector2 = BagSelector('bag file 2')
+        self.bagSelector1 = BagSelector('ground truth bag file')
+        self.bagSelector2 = BagSelector('camera data bag file')
         
         layout = QVBoxLayout()
         layout.addWidget(self.bagSelector1)
@@ -21,7 +21,7 @@ class BagWidget(QWidget):
         self.setLayout(layout)
         
     def getBagFiles(self):
-        return [self.bagSelector1.fileName, self.bagSelector1.fileName]
+        return [self.bagSelector1.fileName, self.bagSelector2.fileName]
     
 class BagSelector(QWidget):
     '''

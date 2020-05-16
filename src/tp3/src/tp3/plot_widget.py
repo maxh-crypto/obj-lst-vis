@@ -1,3 +1,5 @@
+# import matplotlib
+# matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -14,43 +16,71 @@ else:
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar
         )
 from matplotlib.figure import Figure
+from object_list_msg import units
+
+MAX_LINES = 3
 
 class PlotWidget(QWidget):
     '''
         This is the widget for the plot area
         besides the matplot it contains a button to add new plots
-        and a Slider to adjust the time or the objectID
     '''
+    
+    lineCount = 0 # counter for all active axes 
+    linesList = []
+    
     def __init__(self, bagFiles):
         super(PlotWidget, self).__init__()
         self.bagFiles = bagFiles
         
         self.layout = QVBoxLayout()
         
-        canvas = FigureCanvas(Figure(figsize=(5, 3)))
-        toolbar = NavigationToolbar(canvas, self)
+        self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        toolbar = NavigationToolbar(self.canvas, self)
         self.layout.addWidget(toolbar)
-        self.layout.addWidget(canvas)
+        self.layout.addWidget(self.canvas)
         self.setLayout(self.layout)
-        self.ax = canvas.figure.subplots()
+        self.ax = self.canvas.figure.subplots()
         
-    def plot(self, plotData):    
+    def plot(self, plotData, plotInfo):  
+        '''
+            is connected to the clicked signal of the dialog start button
+            plots the given data into the figure
+        '''
         t = plotData[0]
         values = plotData[1]
-        self.ax.plot(t, values)
-        self.ax._set_label('bag1.obj1.geometric.x')
-        self.ax.set_ylabel('value [m]')
-        self.ax.set_xlabel('time [s]')
+        line, = self.ax.plot(t, values, '.')
+        
+        line.set_label(plotInfo['label'])
+        self.ax.set_ylabel(plotInfo['y_label'])
+        self.ax.set_xlabel('time [ms]')
+        if plotInfo['bag'] == 2:
+            line.set_linestyle('dashed')
+        
+        self.ax.legend()
         
         # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
         # TODO: Unterscheidung objid -> Farbe
-        # TODO: legende aghaengig von attribute machen
+        # TODO: mehrere y-Achsen (axis)
         
-        self.ax.grid()
+        self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
-    
+        self.lineCount += 1
+        self.linesList.append(line)
         
+    def deleteGraph(self, lineNr):
+        line = self.linesList.pop(lineNr)
+        line.remove()
+        self.lineCount -= 1
+        self.ax.figure.canvas.draw()
+        self.ax.legend()
+        
+    def getLines(self):
+        '''
+            returns a list of all lines in the figure
+        '''
+        return self.linesList
         
         
         

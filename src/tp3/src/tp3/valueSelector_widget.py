@@ -7,8 +7,6 @@ from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import *
 from object_list_msg import obj_list_msg
 
-# TODO: Maybe import ObjectList.msg directly for the tree structure?
-
 class ValueSelectorWidget(QGroupBox):
     
     def __init__(self, parent=None):
@@ -16,9 +14,8 @@ class ValueSelectorWidget(QGroupBox):
         self.parent = parent
         
         self.layout = QVBoxLayout()
-        self.setTitle('3.Select Value')
+        self.setTitle('2.Select Value')
         self.valueTreeWidget = QTreeWidget()
-#         self.valueTreeWidget.itemSelectionChanged.connect(self.selectionChanged)
         self.buildTree()
         self.layout.addWidget(self.valueTreeWidget)
         self.setLayout(self.layout)
@@ -34,8 +31,6 @@ class ValueSelectorWidget(QGroupBox):
             for att in obj_list_msg[key]:
                 attribute = QTreeWidgetItem(category)
                 attribute.setText(0, att)
-#                 attBtn = QRadioButton(att)
-#                 category.addChild(attBtn)
             
     def getAttribute(self):
         currentItem = self.valueTreeWidget.currentItem()
@@ -53,9 +48,14 @@ class ValueSelectorWidget(QGroupBox):
         
     def getCatAndAtt(self):
         currentItem = self.valueTreeWidget.currentItem()
-        if currentItem.childCount() == 0: # selctedItem is a attribute
+        if currentItem.childCount() == 0: # selctedItem is on the lowest layer
             selectedAttribute = currentItem.text(0)
-            selectedCategory = currentItem.parent().text(0)
+            if (selectedAttribute == "prop_existence" or 
+            selectedAttribute == "prop_mov" or
+            selectedAttribute == "obj_id"):
+                selectedCategory = ""
+            else:
+                selectedCategory = currentItem.parent().text(0)
         else: # selected Item is not an attribute
             selectedAttribute = ""
             selectedCategory = ""
