@@ -49,7 +49,7 @@ class PlotWidget(QWidget):
         '''
         t = plotData[0]
         values = plotData[1]
-        line, = self.ax.plot(t, values)
+        line, = self.ax.plot(t, values, '.')
         
         line.set_label(plotInfo['label'])
         self.ax.set_ylabel(plotInfo['y_label'])

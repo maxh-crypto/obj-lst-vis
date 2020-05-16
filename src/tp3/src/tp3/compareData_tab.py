@@ -77,7 +77,7 @@ class CompareDataTab(QWidget):
                 return
             
             try:
-                plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, obj_id, category, attribute, operation)
+                plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, operation)
             except ValueError:
                 self.showMessage("Sorry, unexpected error occurred.")
                 return
