@@ -12,6 +12,9 @@ IoU_THRESHOLD = 0.8
 array_objectIDs = ra.Rosbag_Analysis.getObjectIDs(BAGFILE)
 print(array_objectIDs)
 
+gt_object_count = ra.Rosbag_Analysis.getObjectCountTotal(BAGFILE)
+print(gt_object_count)
+
 ######################## get Raw Data ############################
 
 # # generic implementation (in work) 
@@ -39,6 +42,8 @@ print(array_objectIDs)
 (timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 2, "geometric", "x", "difference", IoU_THRESHOLD)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 1, "", "obj_id", "difference")
 
+(timestamps, TP) = ra.Rosbag_Analysis.getTP(BAGFILE, BAGFILE, IoU_THRESHOLD)
+print(TP)
 
 #plotting arrays
 py.plot(timestamps, result , '-b')
