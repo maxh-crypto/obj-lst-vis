@@ -7,7 +7,6 @@ import shapely.geometry
 import shapely.affinity
 import numpy as np
 
-@staticmethod
 def intersection(B_gt, B_pr):
     '''
         calculates the intersection of the given bounding boxes 
@@ -18,7 +17,6 @@ def intersection(B_gt, B_pr):
     return intersection.area
 
 
-@staticmethod
 def union(B_gt, B_pr):
     '''
         calculates the union of the given bounding boxes 
@@ -27,7 +25,6 @@ def union(B_gt, B_pr):
     return area(B_gt) + area(B_pr) - intersection(B_gt, B_pr)
 
 
-@staticmethod
 def iou(B_gt, B_pr):
     '''
         calculates the intersection over union of the given bounding boxes
@@ -36,7 +33,6 @@ def iou(B_gt, B_pr):
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
 
 
-@staticmethod
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
         determines whether the given B_pr in this frame is a TP
@@ -78,7 +74,6 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
         return (1, None) # given B_pr is a FN case
     
     
-@staticmethod
 def isFN(B_gt, B_pr_list, threshold):
     '''
         determines if there is a B_pr for the given B_gt

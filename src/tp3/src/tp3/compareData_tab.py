@@ -38,6 +38,7 @@ class CompareDataTab(QWidget):
         
         self.setLayout(layout)
         
+        
     def operationChanged(self, operation):
         if operation == self.operationSelector.operations[0]:
             self.idSelector.setEnabled(True)
@@ -45,6 +46,7 @@ class CompareDataTab(QWidget):
         else:
             self.idSelector.setEnabled(False)
             self.valueSelector.setEnabled(False)
+            
             
     def getPlotData(self):
         '''
@@ -55,32 +57,32 @@ class CompareDataTab(QWidget):
             'unit' : '',
             }
         
+        obj_id = 0
+        category = ""
+        attribute = ""
+        
         # get operation
         operation = self.operationSelector.getOperation()
+        
+        if operation == '':
+            raise Exception("Please select an operation.")
         
         # operation "difference":
         if operation == self.operationSelector.operations[0]:
             selectedValue = self.valueSelector.getCatAndAtt()
             category = selectedValue['category']
             attribute = selectedValue['attribute']  
+            
             # check whether category or attribute is empty
             # show error message when it is the case
             # and exit the function
             if attribute == "":
-                self.showMessage("Please select a plottable attribute.")
-                return 
+                raise Exception("Please select a plottable attribute.") 
             
             try:
                 obj_id = self.idSelector.getID()
             except ValueError:
-                self.showMessage("ObjectID is not a number! Insert valid ID.")
-                return
-            
-            try:
-                plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, operation)
-            except ValueError:
-                self.showMessage("Sorry, unexpected error occurred.")
-                return
+                raise Exception("ObjectID is not a number! Insert valid ID.")
             
             plotInfo['label'] = operation + '.'
             plotInfo['label'] += 'obj' + str(obj_id) + '.'
@@ -88,16 +90,12 @@ class CompareDataTab(QWidget):
             plotInfo['label'] += attribute
             
             plotInfo['unit'] = object_list_msg.units[attribute]
-            
-        else:
-            self.showMessage("Operation not supported yet.")
-            return
+        
+        try:
+            plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, operation)
+        except ValueError:
+            raise Exception("Sorry, unexpected error occurred.")
         
         return plotData, plotInfo
-        
-    def showMessage(self, msgText):
-        msgBox = QMessageBox()
-        msgBox.setText(msgText)
-        msgBox.exec_()
         
         
