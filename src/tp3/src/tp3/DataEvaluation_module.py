@@ -7,6 +7,7 @@ import shapely.geometry
 import shapely.affinity
 import numpy as np
 
+@staticmethod
 def intersection(B_gt, B_pr):
     '''
         calculates the intersection of the given bounding boxes 
@@ -17,6 +18,7 @@ def intersection(B_gt, B_pr):
     return intersection.area
 
 
+@staticmethod
 def union(B_gt, B_pr):
     '''
         calculates the union of the given bounding boxes 
@@ -25,6 +27,7 @@ def union(B_gt, B_pr):
     return area(B_gt) + area(B_pr) - intersection(B_gt, B_pr)
 
 
+@staticmethod
 def iou(B_gt, B_pr):
     '''
         calculates the intersection over union of the given bounding boxes
@@ -32,30 +35,32 @@ def iou(B_gt, B_pr):
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
 
+
+@staticmethod
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
         determines whether the given B_pr in this frame is a TP
         B_gt_list is a list of GT-Bounding Boxes in the given frame
         B_pr is a predicted Bounding Box which should be tested
         
-        return value 1:
+        first return value:
         0 -> given B_pr is a TP case
         1 -> given B_pr is a FN case
         2 -> given B_pr is a mm (mismatch) case 
         
-        return value 2:
+        second return value:
         if the case is TP there is a second return value
         which indicates the index of the GT-Object which 
         matched to the given B_pr
         
         if the case is not TP the second return value
-        is None
+        is 'None'
     '''
     iou_list = []
     
     for B_gt in B_gt_list:
-        iou = iou(B_gt, B_pr)
-        iou_list.append(iou)
+        iou_val = iou(B_gt, B_pr)
+        iou_list.append(iou_val)
     
     max_iou = np.max(iou_list)
     
@@ -72,7 +77,8 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     else:
         return (1, None) # given B_pr is a FN case
     
-
+    
+@staticmethod
 def isFN(B_gt, B_pr_list, threshold):
     '''
         determines if there is a B_pr for the given B_gt
@@ -86,8 +92,8 @@ def isFN(B_gt, B_pr_list, threshold):
     iou_list = []
     
     for B_pr in B_pr_list:
-        iou = iou(B_gt, B_pr)
-        iou_list.append(iou)
+        iou_val = iou(B_gt, B_pr)
+        iou_list.append(iou_val)
     
     if np.max(iou_list) < threshold:
         return true
