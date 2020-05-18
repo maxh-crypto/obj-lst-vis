@@ -216,7 +216,7 @@ class Rosbag_Analysis:
                     # test FN (false negative) case:
                     for i in array_objects_gt:
                         
-                        if isFN(i, array_objects_cam) == true:
+                        if de.isFN(i, array_objects_cam) == true:
                             count_FN += 1
                     
                       
