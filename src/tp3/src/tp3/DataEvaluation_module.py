@@ -7,6 +7,7 @@ import shapely.geometry
 import shapely.affinity
 import numpy as np
 
+
 def intersection(B_gt, B_pr):
     '''
         calculates the intersection of the given bounding boxes 
@@ -16,7 +17,6 @@ def intersection(B_gt, B_pr):
     
     return intersection.area
 
-
 def union(B_gt, B_pr):
     '''
         calculates the union of the given bounding boxes 
@@ -24,14 +24,12 @@ def union(B_gt, B_pr):
     '''
     return area(B_gt) + area(B_pr) - intersection(B_gt, B_pr)
 
-
 def iou(B_gt, B_pr):
     '''
         calculates the intersection over union of the given bounding boxes
         B_gt (Ground Truth) and B_pr (Predicted)
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
-
 
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
@@ -41,7 +39,7 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
         
         first return value:
         0 -> given B_pr is a TP case
-        1 -> given B_pr is a FN case
+        1 -> given B_pr is a FP case
         2 -> given B_pr is a mm (mismatch) case 
         
         second return value:
@@ -65,14 +63,13 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
         idx = iou_list.index(max_iou)
         
         # compare the classes:
-        if B.pr.cls == B_gt_list[idx].cls:
+        if getClass(B_pr) == getClass(B_gt_list[idx]):
             return (0, idx) # given B_pr is a TP case
         else:
-            return (2, None) # given B_pr is a mm case
+            return (2, idx) # given B_pr is a mm case
     
     else:
-        return (1, None) # given B_pr is a FN case
-    
+        return (1, None) # given B_pr is a FP case
     
 def isFN(B_gt, B_pr_list, threshold):
     '''
@@ -96,7 +93,6 @@ def isFN(B_gt, B_pr_list, threshold):
     else:
         return false    
     
-
 def get_contour(B):
     l = B.dimension.length
     w = B.dimension.width
@@ -106,6 +102,20 @@ def get_contour(B):
 
 def area(B):
     return get_contour(B).area  
+
+
+def getClass(B):
+    max_prop = 0.0
+    cls = ''
+    
+    for attr, value in B.classification.__dict__.iteritems():
+        
+        if value > max_prop:
+            max_prop = value
+            cls = attr
+            # cls = prop_class.__name__
+            
+    return cls
 
 
 # class BoundingBox2D():
