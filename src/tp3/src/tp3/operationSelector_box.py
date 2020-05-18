@@ -14,7 +14,11 @@ class OperationSelectorWidget(QGroupBox):
     operations = ['difference', 
                   'false negative', 
                   'false positive', 
-                  'true positive']
+                  'true positive', 
+                  'precision',
+                  'recall'
+                  ]
+    
     
     def __init__(self, parent=None):
         super(OperationSelectorWidget, self).__init__()
@@ -26,15 +30,18 @@ class OperationSelectorWidget(QGroupBox):
         
         self.setLayout(self.layout)
         
+        
     def initRadioButtons(self):
         for operation in self.operations:
             btn = QRadioButton(operation)
             btn.clicked.connect(lambda state, x=operation: self.switchOperation(x))  
             self.layout.addWidget(btn)
             
+            
     def switchOperation(self, operation):
         self._currentSelected = operation
         self.selectionChanged.emit(operation)
+        
         
     def getOperation(self):
         return self._currentSelected
