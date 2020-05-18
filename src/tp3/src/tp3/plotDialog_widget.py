@@ -29,8 +29,8 @@ class PlotDialogWidget(QDialog):
         self.tabWidget = QTabWidget()
         self.rawDataTab = RawDataTab(bagFiles, self)
         self.compareTab = CompareDataTab(bagFiles, self) 
-        self.tabWidget.addTab(self.rawDataTab, "Raw Data")
-        self.tabWidget.addTab(self.compareTab, "Compare Bag Files")
+        self.tabWidget.addTab(self.rawDataTab, "Raw Data Graphs")
+        self.tabWidget.addTab(self.compareTab, "Evaluation Graphs")
         self.layout.addWidget(self.tabWidget)
         
         # init the start button

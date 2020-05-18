@@ -54,8 +54,9 @@ class PlotWidget(QWidget):
         line.set_label(plotInfo['label'])
         self.ax.set_ylabel(plotInfo['y_label'])
         self.ax.set_xlabel('time [ms]')
-        if plotInfo['bag'] == 2:
-            line.set_linestyle('dashed')
+        
+#         if plotInfo['bag'] == 2:
+#             line.set_linestyle('dashed')
         
         self.ax.legend()
         
