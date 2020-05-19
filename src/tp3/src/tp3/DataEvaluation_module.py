@@ -33,7 +33,6 @@ def iou(B_gt, B_pr):
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
 
-
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
         determines whether the given B_pr in this frame is a TP
@@ -97,6 +96,12 @@ def isFN(B_gt, B_pr_list, threshold):
     else:
         return False    
     
+
+def evaluateObjects(B_gt_list, B_pr_list, threshold):
+    '''
+        returns a matrix with
+    '''
+    
     
 def get_contour(B):
     l = B.dimension.length
@@ -111,17 +116,6 @@ def area(B):
 
 
 def getClass(B):
-#     max_prop = 0.0
-#     cls = ''
-#     
-#     for attr, value in B.classification.__dict__.iteritems():
-#         
-#         if value > max_prop:
-#             max_prop = value
-#             cls = attr
-#             # cls = prop_class.__name__
-#             
-#     return cls
 
     temp_prop = 0
     result = ""
@@ -130,47 +124,135 @@ def getClass(B):
     
 
     for i in range(len(tmp)):
-        if(getattr(objectClass, tmp[i]) > temp_prop ):
-            temp_prop = getattr(objectClass, tmp[i])
+        if(getattr(B.classification, tmp[i]) > temp_prop ):
+            temp_prop = getattr(B.classification, tmp[i])
             result = tmp[i]
     return (result) # return value is the name of the class whith the highest probability
 
 
-# class BoundingBox2D():
-#     pos_x = 0.0 # x value of the center
-#     pos_y = 0.0 # y value of the center
-#     length = 0.0 # length of the BB
-#     width = 0.0 # width of the BB
-#     yaw = 0.0 # yaw angle of the BB
-#     cls = "" # class of the BB as String
-#     
-#     def __init__(self, x, y, l, w, yaw, cls):
-#         self.pos_x = x
-#         self.pos_y = y
-#         self.length = l
-#         self.width = w
-#         self.yaw = yaw
-#         self.cls = cls
-#                
-#     def get_contour(self):
-#         l = self.length
-#         w = self.width
-#         c = shapely.geometry.box(-l / 2.0, -w / 2.0, l / 2.0, w / 2.0)
-#         rc = shapely.affinity.rotate(c, self.yaw)
-#         return shapely.affinity.translate(rc, self.pos_x, self.pos_y)
-#     
-#     def area(self):
-#         return self.get_contour().area
-# 
-#     def intersection(self, other):
-#         intersection = self.get_contour().intersection(other.get_contour())
-#         return intersection.area 
-#     
-#     def union(self, other):
-#         return self.area + other.area - self.intersection(other)
-#     
-#     def iou(self, other):
-#         return self.intersection(other) / self.union(other)
+def genIouMat(B_gt_list, B_pr_list):
+    '''
+        generates a matrix of all iou values
+        rows: Cam-Objects
+        columns: GT-Objects
+    '''
+    row_count = len(B_pr_list)
+    col_count = len(B_gt_list)
     
+    iou_mat = np.zeros((row_count, col_count))
     
+    cur_row_idx = 0
     
+    # fill iou matrix
+    for row in range(row_count):
+        for col in range(col_count):
+            iou_val = iou(B_gt_list(col), B_pr_list(row))
+            iou_mat[row][col] = iou_val
+
+    return iou_mat
+
+
+def getTPs(B_gt_list, B_pr_list, threshold):
+    '''
+        returns a list of tupels with the indices of matching objects
+        like (gt_index, pr_index)
+        the indices refer to the indices in the passed lists
+    '''
+    tp_list = []
+    
+    iou_mat = genIouMat(B_gt_list, B_pr_list)
+    
+    for row in iou_mat:
+        max_iou = np.max(row) # get the maximum iou of all B_gts for this B_pr
+        
+        if max_iou < threshold: 
+            continue
+        
+        # get the indices:
+        row_idx = iou_mat.index(row)
+        col_idx = row.index(max_iou)
+            
+        # check the classes
+        if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]):
+            # missmatch found
+            continue
+        
+        # if there is another match for this B_gt
+        # this B_pr would be a FP
+        max_in_col = np.max(iou_mat[row_idx])
+        
+        if max_in_col != max_iou: 
+            continue
+
+        # otherwise it is a TP
+        tp_list.append(col_idx , row_idx)
+        
+    return tp_list
+
+def getMMs(B_gt_list, B_pr_list, threshold):
+    '''
+        returns a list of indices of those pr_Objects 
+        which are accounted as a mismatch
+        the indices refer to the indices in the passed B_pr_list
+    '''
+    mm_list = []
+    
+    iou_mat = genIouMat(B_gt_list, B_pr_list)
+    
+    for row in iou_mat:
+        max_iou = np.max(row) # get the maximum iou of all B_gts for this B_pr
+        
+        if max_iou < threshold: 
+            continue
+        
+        # get the indices:
+        row_idx = iou_mat.index(row)
+        col_idx = row.index(max_iou)
+            
+        # check the classes
+        if getClass(B_pr_list[row_idx]) == getClass(B_gt_list[col_idx]):
+            continue
+        
+        # if there is another match for this B_gt
+        # this B_pr would be a FP
+        max_in_col = np.max(iou_mat[row_idx])
+        
+        if max_in_col != max_iou: 
+            continue
+
+        # otherwise it is a mm
+        mm_list.append(row_idx)
+        
+    return mm_list
+
+
+def getFPs(B_gt_list, B_pr_list, threshold):
+    '''
+        returns a list of indices of those pr_Objects 
+        which are accounted as a FP
+        the indices refer to the indices in the passed B_pr_list
+    '''
+    
+    fp_list = []
+    
+    iou_mat = genIouMat(B_gt_list, B_pr_list)
+    
+    # two cases:
+    # 1. there is no B_gt for which the iou is higher than threshold
+    # 2. there is a B_gt for which the iou is higher than threshold,
+    #     but iou is higher with another B_pr
+    
+    for row in iou_mat:
+        row_idx = iou_mat.index(row)
+        
+        max_iou = np.max(row) # get the maximum iou of all B_gts for this B_pr
+        
+        if max_iou < threshold: # case 1
+            # fp found
+            fp_list.append(row_idx)
+            continue
+        
+        ## case 2
+        if max_iou < np.max(iou_mat[row_index])
+    
+    return fp_list
