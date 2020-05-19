@@ -122,7 +122,7 @@ class RawDataTab(QWidget):
             
             for bag in self.bagFiles:
                 if bag == "":
-                    raise Exception("no bag file loaded! Please import bag file in the main interface.")
+                    raise Exception("Bag file missing! Please import bag file in the main interface.")
             
             try:
                 plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, 'difference')

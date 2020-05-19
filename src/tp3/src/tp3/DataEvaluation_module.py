@@ -17,6 +17,7 @@ def intersection(B_gt, B_pr):
     
     return intersection.area
 
+
 def union(B_gt, B_pr):
     '''
         calculates the union of the given bounding boxes 
@@ -24,12 +25,14 @@ def union(B_gt, B_pr):
     '''
     return area(B_gt) + area(B_pr) - intersection(B_gt, B_pr)
 
+
 def iou(B_gt, B_pr):
     '''
         calculates the intersection over union of the given bounding boxes
         B_gt (Ground Truth) and B_pr (Predicted)
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
+
 
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
@@ -71,6 +74,7 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     else:
         return (1, None) # given B_pr is a FP case
     
+    
 def isFN(B_gt, B_pr_list, threshold):
     '''
         determines if there is a B_pr for the given B_gt
@@ -93,12 +97,14 @@ def isFN(B_gt, B_pr_list, threshold):
     else:
         return false    
     
+    
 def get_contour(B):
     l = B.dimension.length
     w = B.dimension.width
     c = shapely.geometry.box(-l / 2.0, -w / 2.0, l / 2.0, w / 2.0)
     rc = shapely.affinity.rotate(c, B.geometric.yaw)
     return shapely.affinity.translate(rc, B.geometric.x, B.geometric.y)  
+
 
 def area(B):
     return get_contour(B).area  
