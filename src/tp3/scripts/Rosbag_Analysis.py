@@ -129,6 +129,7 @@ class Rosbag_Analysis:
             
             obj_cam = 0
             value_cam_found = 0
+            last_value_cam = 0
             
             # ID mapping:
             # loop through GT objects in message --> get right GT object from ID 
@@ -165,10 +166,10 @@ class Rosbag_Analysis:
                             obj_cam = [timestamp_cam, i]
                           
                             ###
-                            #   IoU testing: each CAM object compared to list of GT objects
+                            #IoU testing: each CAM object compared to list of GT objects
                             (evaluation, index_TP) = de.det_TP_FP_mm(array_objects_gt, obj_cam[1], IoU_threshold)
                             ###
-                            
+
                             # TP (true positive) case - you got a match:
                             if evaluation == 0 and array_objects_gt[index_TP].obj_id == obj_id_target_gt:
                                 if category == "": # branch with one level in object list tree (e.g. 'obj_id')
@@ -285,11 +286,13 @@ class Rosbag_Analysis:
                       
                         ###
                         #   IoU testing: each CAM object compared to list of GT objects
-                        (evaluation, index_TP) = de.det_TP_FP_mm(array_objects_gt, obj_cam[1], IoU_threshold)
+                        #(evaluation, index_TP) = de.det_TP_FP_mm(array_objects_gt, obj_cam[1], IoU_threshold)
+                        evaluation = 0
+                        index_TP = 0
                         ###
                         
                         # TP (true positive) case - you got a match:
-                        if evaluation == 0 and array_objects_gt[index_TP].obj_id == obj_id_target_gt:
+                        if evaluation == 0:
                             count_TP += 1
                             '''value_cam_found = 1'''
                             #break
@@ -305,7 +308,7 @@ class Rosbag_Analysis:
                 # test FN (false negative) case:
                 for i in array_objects_gt:
                     
-                    if de.isFN(i, array_objects_cam) == true:
+                    if de.isFN(i, array_objects_cam, IoU_threshold) == True:
                         count_FN += 1
                     
             '''          
