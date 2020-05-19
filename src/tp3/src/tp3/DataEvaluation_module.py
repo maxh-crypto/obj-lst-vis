@@ -17,6 +17,7 @@ def intersection(B_gt, B_pr):
     
     return intersection.area
 
+
 def union(B_gt, B_pr):
     '''
         calculates the union of the given bounding boxes 
@@ -24,12 +25,14 @@ def union(B_gt, B_pr):
     '''
     return area(B_gt) + area(B_pr) - intersection(B_gt, B_pr)
 
+
 def iou(B_gt, B_pr):
     '''
         calculates the intersection over union of the given bounding boxes
         B_gt (Ground Truth) and B_pr (Predicted)
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
+
 
 def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     '''
@@ -71,6 +74,7 @@ def det_TP_FP_mm(B_gt_list, B_pr, threshold):
     else:
         return (1, None) # given B_pr is a FP case
     
+    
 def isFN(B_gt, B_pr_list, threshold):
     '''
         determines if there is a B_pr for the given B_gt
@@ -88,10 +92,11 @@ def isFN(B_gt, B_pr_list, threshold):
         iou_list.append(iou_val)
     
     if np.max(iou_list) < threshold:
-        return true
+        return True
     
     else:
-        return false    
+        return False    
+    
     
 def get_contour(B):
     l = B.dimension.length
@@ -100,22 +105,35 @@ def get_contour(B):
     rc = shapely.affinity.rotate(c, B.geometric.yaw)
     return shapely.affinity.translate(rc, B.geometric.x, B.geometric.y)  
 
+
 def area(B):
     return get_contour(B).area  
 
 
 def getClass(B):
-    max_prop = 0.0
-    cls = ''
+#     max_prop = 0.0
+#     cls = ''
+#     
+#     for attr, value in B.classification.__dict__.iteritems():
+#         
+#         if value > max_prop:
+#             max_prop = value
+#             cls = attr
+#             # cls = prop_class.__name__
+#             
+#     return cls
+
+    temp_prop = 0
+    result = ""
+    #tmp includes all Attributes of the message Classification
+    tmp = [a for a in dir(B.classification) if not a.startswith('__') and not a.startswith('_') and not callable(getattr(B.classification,a))]
     
-    for attr, value in B.classification.__dict__.iteritems():
-        
-        if value > max_prop:
-            max_prop = value
-            cls = attr
-            # cls = prop_class.__name__
-            
-    return cls
+
+    for i in range(len(tmp)):
+        if(getattr(objectClass, tmp[i]) > temp_prop ):
+            temp_prop = getattr(objectClass, tmp[i])
+            result = tmp[i]
+    return (result) # return value is the name of the class whith the highest probability
 
 
 # class BoundingBox2D():

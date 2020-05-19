@@ -9,6 +9,7 @@ from bagselector_widget import BagWidget
 from plot_widget import PlotWidget, MAX_LINES
 from plotDialog_widget import PlotDialogWidget
 from delPlotDialog_widget import DelPlotDialog
+from QualityDialog_widget import QualityDialog
 
 class PostProcMainWidget(QWidget):
     '''
@@ -30,6 +31,7 @@ class PostProcMainWidget(QWidget):
         # connect signals to slots:
         self.__addPlotBtn.clicked.connect(self.openNewGraphDialog)
         self.__delPlotBtn.clicked.connect(self.openDelGraphDialog)
+        self.__qualityBtn.clicked.connect(self.openQualityDialog)
         
         # setup the layout:
         layout = QGridLayout()
@@ -56,9 +58,10 @@ class PostProcMainWidget(QWidget):
             return 
         
         self.bagFiles = self.bagWidget.getBagFiles()
-        plotDialog = PlotDialogWidget(self.bagFiles)
+        plotDialog = PlotDialogWidget(self.bagFiles, self)
         plotDialog.newPlotData.connect(self.plotWidget.plot)
         plotDialog.exec_()
+        
 
     def openDelGraphDialog(self):
         '''
@@ -69,3 +72,11 @@ class PostProcMainWidget(QWidget):
         delPlotDialog.deletePressed.connect(self.plotWidget.deleteGraph)
         delPlotDialog.exec_()
         
+    
+    def openQualityDialog(self):
+        '''
+            opens a new dialog that shows the data quality
+        '''
+        self.bagFiles = self.bagWidget.getBagFiles()
+        qualityDialog = QualityDialog(self.bagFiles, self)
+        qualityDialog.exec_()
