@@ -92,10 +92,10 @@ def isFN(B_gt, B_pr_list, threshold):
         iou_list.append(iou_val)
     
     if np.max(iou_list) < threshold:
-        return true
+        return True
     
     else:
-        return false    
+        return False    
     
     
 def get_contour(B):
@@ -111,17 +111,29 @@ def area(B):
 
 
 def getClass(B):
-    max_prop = 0.0
-    cls = ''
+#     max_prop = 0.0
+#     cls = ''
+#     
+#     for attr, value in B.classification.__dict__.iteritems():
+#         
+#         if value > max_prop:
+#             max_prop = value
+#             cls = attr
+#             # cls = prop_class.__name__
+#             
+#     return cls
+
+    temp_prop = 0
+    result = ""
+    #tmp includes all Attributes of the message Classification
+    tmp = [a for a in dir(B.classification) if not a.startswith('__') and not a.startswith('_') and not callable(getattr(B.classification,a))]
     
-    for attr, value in B.classification.__dict__.iteritems():
-        
-        if value > max_prop:
-            max_prop = value
-            cls = attr
-            # cls = prop_class.__name__
-            
-    return cls
+
+    for i in range(len(tmp)):
+        if(getattr(objectClass, tmp[i]) > temp_prop ):
+            temp_prop = getattr(objectClass, tmp[i])
+            result = tmp[i]
+    return (result) # return value is the name of the class whith the highest probability
 
 
 # class BoundingBox2D():
