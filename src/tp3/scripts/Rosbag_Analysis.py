@@ -209,8 +209,6 @@ class Rosbag_Analysis:
         startTime_cam = genpy.rostime.Time.from_sec(startTimeRaw_cam)
         
         array_timestamps_gt = []
-        FP_total = 0
-        count_GT_objects_total = 0
         
         # loop through GT messages/frames
         for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
@@ -218,51 +216,24 @@ class Rosbag_Analysis:
             timestamp_gt = (float)((t.__sub__(startTime_gt)).__str__()) / 1000000   #normed timestamp GT in ms
             array_timestamps_gt.append(timestamp_gt)
             
-            obj_gt = 0
-            index_counter = 0
-            obj_id_index = 99
-            
             array_objects_gt = []
             array_objects_cam = []
-            
-            obj_cam = 0
-            #value_cam_found = 0
             
             count_TP = 0
             count_FP = 0 
             count_mm = 0
             count_FN = 0
            
-            array_precision = []
-            array_recall = []
             array_TP = []
             array_FP = []
             array_FN = []
             array_mm = []
+            array_precision = []
+            array_recall = []
             
-            '''           
-            # ID mapping:
-            # loop through GT objects in message --> get right GT object from ID 
-            for i in msg.obj_list:
-                #collect all GT objects
-                array_objects_gt.append(i)
-                count_GT_objects_total += len(array_objects_gt)
-                
-                #get calculation values of target GT object with timestamp
-                if i.obj_id == obj_id_target_gt:      
-                                # timestamp       # GT object    
-                    obj_gt = [timestamp_gt, msg.obj_list[index_counter]]
-                    if category == "": # branch with one level in object list tree (e.g. 'obj_id')
-                        array_values_gt.append(getattr(obj_gt[1], attribute))
-                    else:
-                        array_values_gt.append(getattr(getattr(obj_gt[1], category), attribute))
-                else: index_counter += 1 # next object
-            '''      
             #collect all GT objects
             for i in msg.obj_list:
                 array_objects_gt.append(i)
-                count_GT_objects_total += len(array_objects_gt)
-
 
             # finding concerning CAM object 
             # loop through CAM messages/frames to find message concerning to GT frame (in time) 
@@ -277,57 +248,51 @@ class Rosbag_Analysis:
                     
                     # position mapping: 
                     # loop through CAM objects in message --> proceed IoU evaluation
-                    '''if value_cam_found == 0: '''
                     for i in msg.obj_list:
                         #collect all CAM objects
                         array_objects_cam.append(i)
                                         #index 0: timest.  #index 1: object
-                        obj_cam = [timestamp_cam, i]
+                        #obj_cam = [timestamp_cam, i]
                       
-                        ###
-                        #   IoU testing: each CAM object compared to list of GT objects
-                        #(evaluation, index_TP) = de.det_TP_FP_mm(array_objects_gt, obj_cam[1], IoU_threshold)
-                        evaluation = 0
-                        index_TP = 0
-                        ###
-                        
+                    ###
+                    #   IoU testing: each CAM object compared to list of GT objects
+                    (array_evaluations, array_indices_gt) = de.det_TP_FP_mm(array_objects_gt, array_objects_cam, IoU_threshold)
+                    ###
+                    
+                    # analysing evaluation results
+                    for row in array_evaluations:
+                    
                         # TP (true positive) case - you got a match:
-                        if evaluation == 0:
+                        if row[0] == 0:
                             count_TP += 1
-                            '''value_cam_found = 1'''
-                            #break
                         
                         # FP (false positive) case:
-                        elif evaluation == 1:
+                        elif row[0] == 1:
                             count_FP += 1
                         
                         # mm (mismatch) case:
-                        elif evaluation == 2:
+                        elif row[0] == 2:
                             count_mm += 1
                   
-                # test FN (false negative) case:
-                for i in array_objects_gt:
+                    # test FN (false negative) case:                    
+                    (array_evaluation_FN) = de.isFN(array_objects_gt, array_objects_cam, IoU_threshold)
                     
-                    if de.isFN(i, array_objects_cam, IoU_threshold) == True:
-                        count_FN += 1
+                    for i in array_evaluation_FN:
+                        if i == True:
+                            count_FN += 1
                     
-            '''          
-            # PROBLEMATISCH ???
-            if value_cam_found == 0:
-                array_values_cam.append(last_value_cam)
-                #print('insert last value: ')
-                #print(last_val_cam)
-            '''   
-            array_precision.append(count_TP / (count_TP + count_FP))
-            array_recall.append(count_TP / (count_TP + count_FN))
-            array_TP.append(count_TP)
-            array_FP.append(count_FP)
-            array_FN.append(count_FN) 
-            array_mm.append(count_mm)
+                # add values per GT frame
+                array_TP.append(count_TP)
+                array_FP.append(count_FP)
+                array_FN.append(count_FN) 
+                array_mm.append(count_mm)
+                array_precision.append(count_TP / (count_TP + count_FP))
+                array_recall.append(count_TP / (count_TP + count_FN))
             
         bag_gt.close()
         bag_cam.close()
-        return (array_gttimestamps, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall)
+        return (array_timestamps_gt, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall)
+        
     '''
     @staticmethod
     def getmm(bagfile1, bagfile2, IoU_threshold):
@@ -393,6 +358,7 @@ class Rosbag_Analysis:
         count_objects_GT_total = Rosbag_Analysis.getObjectCountTotal(bagfile1)
 
         MOTA = 1 - ((FN_total + FP_total + mm_total) / count_objects_GT_total)
+    
     #@staticmethod
     #def get MOTP
     
