@@ -33,76 +33,7 @@ def iou(B_gt, B_pr):
     '''
     return intersection(B_gt, B_pr) / union(B_gt, B_pr)
 
-def det_TP_FP_mm(B_gt_list, B_pr, threshold):
-    '''
-        determines whether the given B_pr in this frame is a TP
-        B_gt_list is a list of GT-Bounding Boxes in the given frame
-        B_pr is a predicted Bounding Box which should be tested
-        
-        first return value:
-        0 -> given B_pr is a TP case
-        1 -> given B_pr is a FP case
-        2 -> given B_pr is a mm (mismatch) case 
-        
-        second return value:
-        if the case is TP there is a second return value
-        which indicates the index of the GT-Object which 
-        matched to the given B_pr
-        
-        if the case is not TP the second return value
-        is 'None'
-    '''
-    iou_list = []
-    
-    for B_gt in B_gt_list:
-        iou_val = iou(B_gt, B_pr)
-        iou_list.append(iou_val)
-    
-    max_iou = np.max(iou_list)
-    
-    if max_iou >= threshold: 
-        # get the index:
-        idx = iou_list.index(max_iou)
-        
-        # compare the classes:
-        if getClass(B_pr) == getClass(B_gt_list[idx]):
-            return (0, idx) # given B_pr is a TP case
-        else:
-            return (2, idx) # given B_pr is a mm case
-    
-    else:
-        return (1, None) # given B_pr is a FP case
-    
-    
-def isFN(B_gt, B_pr_list, threshold):
-    '''
-        determines if there is a B_pr for the given B_gt
-        B_gt_list is a list of GT-Bounding Boxes in the given frame
-        B_pr is a predicted Bounding Box which should be tested
-        
-        return values:
-        true -> no matching B_pr to this B_gt, a FN case is detected
-        false -> no FN case
-    '''
-    iou_list = []
-    
-    for B_pr in B_pr_list:
-        iou_val = iou(B_gt, B_pr)
-        iou_list.append(iou_val)
-    
-    if np.max(iou_list) < threshold:
-        return True
-    
-    else:
-        return False    
-    
 
-def evaluateObjects(B_gt_list, B_pr_list, threshold):
-    '''
-        returns a matrix with
-    '''
-    
-    
 def get_contour(B):
     l = B.dimension.length
     w = B.dimension.width
@@ -130,11 +61,95 @@ def getClass(B):
     return (result) # return value is the name of the class whith the highest probability
 
 
+def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
+    '''
+        determines whether the B_prs in the given list are a TP, a FP or mm
+        B_gt_list is a list of GT-Bounding Boxes in the given frame
+        B_pr_list is a list of predicted Bounding Box which should be tested
+        
+        returns a list of tuples which are structured like:
+        
+        first value:
+        0 -> given B_pr is a TP case
+        1 -> given B_pr is a FP case
+        2 -> given B_pr is a mm (mismatch) case 
+        
+        second value:
+        if the case is TP there is a second return value
+        which indicates the index of the GT-Object which 
+        matched to the given B_pr        
+        if the case is not TP the second value is 'None'
+    '''
+    iou_mat = genIouMat(B_gt_list, B_pr_list)
+    
+    res_list = []
+    
+    for row in iou_mat: # loop through all B_pr
+        max_iou = np.max(row) # get the max iou for this B_pr
+        
+        if max_iou < threshold: # FP case
+            res_list.append(1, None)
+            continue
+        
+        # max_iou >= threshold:
+        row_idx = iou_mat.index(row)
+        col_idx = row.index(max_iou)
+        
+        if max_iou < np.max(iou_mat[:, col_idx]): # there is a greater iou value for this B_gt -> the B_pr here is a FP
+            # TODO:
+            # should here be tested, if the greater iou value of this B_gt is a mismatch?
+            res_list.append(1, None) # append the index of the B_pr to the list
+            continue
+        
+        # there is no other B_pr for the found B_gt:
+        # compare the classes:
+        if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]): # missmatch found
+            # TODO:
+            # should here be tested, if there is another iou value for this B_pr 
+            # which is also greater than threshold? -> B_pr can be a TP anyway
+            res_list.append(2, None)
+            continue
+    
+        # otherwise the B_pr is a TP:
+        res_list.append(0, B_gt_list[col_idx])
+        
+    return res_list
+    
+    
+def isFN(B_gt_list, B_pr_list, threshold):
+    '''
+        determines if there is a B_pr for each B_gt in B_gt_list
+        B_gt_list is a list of GT-Bounding Boxes in the given frame
+        B_pr_list is a list predicted Bounding Boxes which should be tested
+        
+        returns a list of bool values which determine whether 
+        the B_gt has a matching B_pr
+        
+        return values:
+        true -> no matching B_pr to this B_gt, a FN case is detected
+        false -> no FN case
+    '''
+    iou_mat = genIouMat(B_gt_list, B_pr_list)
+    res_list = []
+    
+    for col in iou_mat[:, 0]: # loop through the columns, means the B_gt objects
+        
+        max_iou = np.max(col)
+        
+        if max_iou < threshold:
+            res_list.append(False)
+        
+        else:
+            res_list.append(True)
+    
+    return res_list   
+
+
 def genIouMat(B_gt_list, B_pr_list):
     '''
         generates a matrix of all iou values
-        rows: Cam-Objects
-        columns: GT-Objects
+        rows: Cam-Objects (B_pr)
+        columns: GT-Objects (B_gt)
     '''
     row_count = len(B_pr_list)
     col_count = len(B_gt_list)
@@ -144,10 +159,10 @@ def genIouMat(B_gt_list, B_pr_list):
     cur_row_idx = 0
     
     # fill iou matrix
-    for row in range(row_count):
-        for col in range(col_count):
-            iou_val = iou(B_gt_list(col), B_pr_list(row))
-            iou_mat[row][col] = iou_val
+    for row_idx in range(row_count):
+        for col_idx in range(col_count):
+            iou_val = iou(B_gt_list[col_idx], B_pr_list[row_idx])
+            iou_mat[row_idx][col_idx] = iou_val
 
     return iou_mat
 
@@ -162,10 +177,10 @@ def getTPs(B_gt_list, B_pr_list, threshold):
     
     iou_mat = genIouMat(B_gt_list, B_pr_list)
     
-    for row in iou_mat:
+    for row in iou_mat: # loop through the rows of the matrix, means through B_prs
         max_iou = np.max(row) # get the maximum iou of all B_gts for this B_pr
         
-        if max_iou < threshold: 
+        if max_iou < threshold: # FP case 
             continue
         
         # get the indices:
@@ -173,21 +188,26 @@ def getTPs(B_gt_list, B_pr_list, threshold):
         col_idx = row.index(max_iou)
             
         # check the classes
-        if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]):
-            # missmatch found
+        if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]): # missmatch found
+            # TODO:
+            # should here be tested, if there is another iou value for this B_pr 
+            # which is also greater than threshold? -> B_pr can be a TP anyway
             continue
         
         # if there is another match for this B_gt
         # this B_pr would be a FP
-        max_in_col = np.max(iou_mat[row_idx])
+        max_in_col = np.max(iou_mat[:, col_idx])
         
-        if max_in_col != max_iou: 
+        if max_in_col != max_iou: # there is a better match for this B_gt
+            # TODO:
+            # should here be tested, if the greater iou value of this B_gt is a mismatch?
             continue
 
         # otherwise it is a TP
         tp_list.append(col_idx , row_idx)
         
     return tp_list
+
 
 def getMMs(B_gt_list, B_pr_list, threshold):
     '''
@@ -210,15 +230,19 @@ def getMMs(B_gt_list, B_pr_list, threshold):
         col_idx = row.index(max_iou)
             
         # check the classes
-        if getClass(B_pr_list[row_idx]) == getClass(B_gt_list[col_idx]):
+        if getClass(B_pr_list[row_idx]) == getClass(B_gt_list[col_idx]): # rather a TP case
             continue
         
         # if there is another match for this B_gt
         # this B_pr would be a FP
-        max_in_col = np.max(iou_mat[row_idx])
+        max_in_col = np.max(iou_mat[:, col_idx])
         
         if max_in_col != max_iou: 
             continue
+        
+        # TODO:
+        # should here be tested, if there is another iou value for this B_pr 
+        # which is also greater than threshold? -> B_pr can be a TP anyway
 
         # otherwise it is a mm
         mm_list.append(row_idx)
@@ -243,16 +267,22 @@ def getFPs(B_gt_list, B_pr_list, threshold):
     #     but iou is higher with another B_pr
     
     for row in iou_mat:
-        row_idx = iou_mat.index(row)
-        
+                
         max_iou = np.max(row) # get the maximum iou of all B_gts for this B_pr
+        row_idx = iou_mat.index(row)
+        col_idx = row.index(max_iou)
         
-        if max_iou < threshold: # case 1
-            # fp found
-            fp_list.append(row_idx)
+        ## case 1
+        if max_iou < threshold: 
+            # FP found
+            fp_list.append(row_idx) # append the index of the B_pr to the list
             continue
         
         ## case 2
-        if max_iou < np.max(iou_mat[row_index])
+        # max_iou > threshold
+        if max_iou < np.max(iou_mat[:, col_idx]): # there is a greater iou value for this B_gt
+            # TODO:
+            # should here be tested, if the greater iou value of this B_gt is a mismatch?
+            fp_list.append(row_idx) # append the index of the B_pr to the list
     
     return fp_list
