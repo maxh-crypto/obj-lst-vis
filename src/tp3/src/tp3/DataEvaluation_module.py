@@ -35,6 +35,7 @@ def iou(B_gt, B_pr):
 
 
 def get_contour(B):
+#     print(str(B.geometric.x) + ', ' + str(B.geometric.y))
     l = B.dimension.length
     w = B.dimension.width
     c = shapely.geometry.box(-l / 2.0, -w / 2.0, l / 2.0, w / 2.0)
@@ -88,17 +89,20 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
         max_iou = np.max(row) # get the max iou for this B_pr
         
         if max_iou < threshold: # FP case
-            res_list.append(1, None)
+            res_list.append((1, None))
             continue
         
         # max_iou >= threshold:
-        row_idx = iou_mat.index(row)
-        col_idx = row.index(max_iou)
+        res = np.where(iou_mat == row)
+        row_idx = res[0][0]
+        
+        res = np.where(row == max_iou)
+        col_idx = res[0][0]
         
         if max_iou < np.max(iou_mat[:, col_idx]): # there is a greater iou value for this B_gt -> the B_pr here is a FP
             # TODO?:
             # should here be tested, if the greater iou value of this B_gt is a mismatch?
-            res_list.append(1, None) # append the index of the B_pr to the list
+            res_list.append((1, None)) # append the index of the B_pr to the list
             continue
         
         # there is no other B_pr for the found B_gt:
@@ -107,11 +111,11 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
             # TODO?:
             # should here be tested, if there is another iou value for this B_pr 
             # which is also greater than threshold? -> B_pr can be a TP anyway
-            res_list.append(2, None)
+            res_list.append((2, None))
             continue
     
         # otherwise the B_pr is a TP:
-        res_list.append(0, col_idx)
+        res_list.append((0, col_idx))
         
     return res_list
     
