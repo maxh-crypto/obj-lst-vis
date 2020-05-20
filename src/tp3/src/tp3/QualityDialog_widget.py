@@ -5,8 +5,8 @@
     and label which present the values FPPI, MOTA, MOTP
 '''
 
-from pyhton_qt_binding import QtCore, QtGui
-from pyhton_qt_binding.QtWidget import (QDialog, QVBoxLayout, 
+from python_qt_binding import QtCore, QtGui
+from python_qt_binding.QtWidgets import (QDialog, QVBoxLayout, 
                                         QLabel, QDoubleSpinBox,
                                         QPushButton)
 
