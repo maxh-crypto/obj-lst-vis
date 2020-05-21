@@ -26,7 +26,7 @@ rospy.loginfo (current_time.year)
 
 bag = rosbag.Bag(path,'w')
 
-def callback_simulation(data):
+def callback_camera(data):
     
     bag.write('objectlist',data)
    
@@ -35,7 +35,7 @@ def callback_egovehicle(data):
     bag.write('egovehicle',data)
 def listener():
 
-    rospy.Subscriber("camera", ObjectsList, callback_simulation)
+    rospy.Subscriber("camera_calculation", ObjectsList, callback_camera)
     rospy.Subscriber("egovehicle", ObjectsList, callback_egovehicle)
     # spin() simply keeps python from exiting until this node is stopped
     
