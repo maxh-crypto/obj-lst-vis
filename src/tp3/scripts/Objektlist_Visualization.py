@@ -15,13 +15,15 @@ OFFSET_CAR_X = -2.3 # distance to front
 car_ego_x = 0
 car_ego_y = 0
 data_alt = 0
-topic = 'visualization_marker_array'
-publisher = rospy.Publisher(topic, MarkerArray,queue_size=10)
+topic_simulation = 'simulation_marker_array'
+topic_camera = 'camera_marker_array'
+publisher_simulation = rospy.Publisher(topic_simulation, MarkerArray,queue_size=10)
+publisher_camera = rospy.Publisher(topic_camera, MarkerArray,queue_size=10)
 rospy.init_node('Objekt_Visualization')
 br = tf.TransformBroadcaster()
 
 #define each color to the specific class, input value ist the name(string) from the classifciation
-def evaluateColor(Class): 
+def evaluateColor_sim(Class): 
     class_List = {
 	"car": [1,0,0,1],
 	"truck":[0,1,0,1],
@@ -32,7 +34,18 @@ def evaluateColor(Class):
 	"other":[1,1,1,2]   
     }
     return class_List.get(Class)
-    
+   
+def evaluateColor_cam(Class): 
+    class_List = {
+	"car": [1,0,0,1,2],
+	"truck":[0,1,0,1,4],
+	"motorcycle": [0,0,1,1,1.5],
+	"bicycle": [1,1,0,1.5],
+	"pedestrian": [1,0,1,3,1.8],
+	"stacionary": [0,1,1,3,2],
+	"other":[1,1,1,2,2]   
+    }
+    return class_List.get(Class) 
  
 def evaluateClassification(objectClass):
     
@@ -46,14 +59,17 @@ def evaluateClassification(objectClass):
         if(getattr(objectClass, tmp[i]) > temp_prop ):
             temp_prop = getattr(objectClass, tmp[i])
             result = tmp[i]
-    return (result) # return value is the name of the class whith the highest probability
+    if result == '':
+        return ("other")
+    else:
+        return (result) # return value is the name of the class whith the highest probability
             
     
 
 
-def evaluateObject(objectData):
+def evaluateObject_sim(objectData):
     marker = Marker()
-    r, g, b, typ = evaluateColor(evaluateClassification(objectData.classification))
+    r, g, b, typ = evaluateColor_sim(evaluateClassification(objectData.classification))
     marker.header.frame_id = "/base_link"
     
     marker.type = typ
@@ -76,7 +92,32 @@ def evaluateObject(objectData):
     marker.lifetime = rospy.Duration(0.1)
     return marker
 
-def evaluateObjectID(objectData):
+def evaluateObject_cam(objectData):
+    marker = Marker()
+    r, g, b, typ, height = evaluateColor_cam(evaluateClassification(objectData.classification))
+    marker.header.frame_id = "/base_link"
+    
+    marker.type = typ
+    
+    marker.action = marker.ADD
+    marker.scale.x = objectData.dimension.length
+    marker.scale.y = objectData.dimension.width
+    
+    marker.scale.z = height
+    marker.color.a = 0.5
+   
+    marker.color.r = r
+    marker.color.g = g
+    marker.color.b = b
+    
+    marker.pose.orientation.w = 1.0
+    marker.pose.position.x = car_ego_x + objectData.geometric.x 
+    marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
+    marker.pose.position.z = objectData.dimension.height/2
+    marker.lifetime = rospy.Duration(0.5)
+    return marker
+
+def evaluateObjectID_sim(objectData):
     marker = Marker()
     
     marker.header.frame_id = "/base_link"
@@ -102,6 +143,32 @@ def evaluateObjectID(objectData):
     marker.text = "ID:" + str(objectData.obj_id)
     return marker
 
+def evaluateObjectID_cam(objectData):
+    marker = Marker()
+    
+    marker.header.frame_id = "/base_link"
+    
+    marker.type = marker.TEXT_VIEW_FACING
+    
+    marker.action = marker.ADD
+    marker.scale.x = 2
+    marker.scale.y = 2
+    marker.scale.z = 1
+
+    marker.color.a = 0.5
+   
+    marker.color.r = 0.8
+    marker.color.g = 0.2
+    marker.color.b = 0.5
+    
+    marker.pose.orientation.w = 1.0
+    marker.pose.position.x = car_ego_x + objectData.geometric.x 
+    marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
+    marker.pose.position.z = objectData.dimension.height + 1
+    marker.lifetime = rospy.Duration(0.1)
+    marker.text = "ID:" + str(objectData.obj_id)
+    return marker
+
 
 def callback_simulation(data):
 
@@ -114,10 +181,10 @@ def callback_simulation(data):
 
 
     for i in range(len(data.obj_list)):
-        markerObj = evaluateObject(data.obj_list[i])
+        markerObj = evaluateObject_sim(data.obj_list[i])
         markerObj.id = i*2
         
-        markerID = evaluateObjectID(data.obj_list[i])
+        markerID = evaluateObjectID_sim(data.obj_list[i])
         
         markerID.id = i*2+1
         markerArray.markers.append(markerObj)
@@ -125,7 +192,31 @@ def callback_simulation(data):
 
     
     rospy.loginfo(markerArray)
-    publisher.publish(markerArray)
+    publisher_simulation.publish(markerArray)
+
+def callback_camera(data):
+
+    global car_ego_x
+    global car_ego_y 
+    
+    
+
+    markerArray = MarkerArray()
+
+
+    for i in range(len(data.obj_list)):
+        markerObj = evaluateObject_cam(data.obj_list[i])
+        markerObj.id = i*2
+        
+        markerID = evaluateObjectID_cam(data.obj_list[i])
+        
+        markerID.id = i*2+1
+        markerArray.markers.append(markerObj)
+        markerArray.markers.append(markerID)
+
+    
+    rospy.loginfo(markerArray)
+    publisher_camera.publish(markerArray)
     
    
 def callback_egovehicle(data):
@@ -158,6 +249,7 @@ def listener():
 
     #rospy.Subscriber("chatter", String, callback)
     rospy.Subscriber("simulation", ObjectsList, callback_simulation)
+    rospy.Subscriber("camera_calculation", ObjectsList, callback_camera)
     rospy.Subscriber("egovehicle", ObjectsList, callback_egovehicle)
 
     # spin() simply keeps python from exiting until this node is stopped

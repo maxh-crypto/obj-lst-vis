@@ -24,6 +24,7 @@ import re
 import sys
 import weakref
 import rospy 
+import time
 from object_list.msg import ObjectsList
 from object_list.msg import ObjectList
 from object_list.msg import Geometric as geo
@@ -175,10 +176,10 @@ class World(object):
 		
 		npc1_dim = Dimension(self.npc1)
 		#print(npc1_dim.length)
-		print(self.player.bounding_box.extent)
-		print(self.npc1.bounding_box.extent)
-		print(self.npc2.bounding_box.extent)
-		print(self.walker1.bounding_box.extent)
+#		print(self.player.bounding_box.extent)
+#		print(self.npc1.bounding_box.extent)
+#		print(self.npc2.bounding_box.extent)
+#		print(self.walker1.bounding_box.extent)
 			
 		# Set up the sensors.
 		self.collision_sensor = CollisionSensor(self.player, self.hud)
@@ -1028,10 +1029,10 @@ def game_loop(args):
 			if player_pos.x > 170.56:
 				world.walker1.apply_control(world.control)
 	
-			
-		###----Extract Ground Truth Data----####
-			Object_List_Talker(world,args)
-			Object_List_Talker_Player(world,args)
+
+		###----Extract Ground Truth Data----#### Show it in Terminal
+#			Object_List_Talker(world,args)
+#			Object_List_Talker_Player(world,args)
 			
 			#if args.ego_data:
 				#print("nice")
@@ -1106,7 +1107,7 @@ def main():
 	print(__doc__)
 
 	try:
-
+    
 		game_loop(args)
 
 	except KeyboardInterrupt:
