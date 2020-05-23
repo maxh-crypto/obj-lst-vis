@@ -41,6 +41,7 @@ class PlotWidget(QWidget):
         self.layout.addWidget(self.canvas)
         self.setLayout(self.layout)
         self.ax = self.canvas.figure.subplots()
+        self.label_dict = {}
         
     def plot(self, plotData, plotInfo):  
         '''
@@ -49,23 +50,35 @@ class PlotWidget(QWidget):
         '''
         t = plotData[0]
         values = plotData[1]
-        line, = self.ax.plot(t, values, '.')
+        
+        if self.lineCount == 0:
+            cur_ax = self.ax
+            self.label_dict[plotInfo['y_label']] = cur_ax
+        
+        elif plotInfo['y_label'] in self.label_dict: 
+            # there is already a axis with this label
+            # get this label
+            cur_ax = self.label_dict[plotInfo['y_label']]
+            
+        else: # there are already lines but none with the correct y_label
+            # create a new y_axis
+            cur_ax = self.ax.twinx()
+            # insert it into label_dict
+            self.label_dict[plotInfo['y_label']] = cur_ax
+            
+        
+        line, = cur_ax.plot(t, values, '.')
         
         line.set_label(plotInfo['label'])
-        self.ax.set_ylabel(plotInfo['y_label'])
-        self.ax.set_xlabel('time [ms]')
+        cur_ax.set_ylabel(plotInfo['y_label'])
+        cur_ax.set_xlabel('time [ms]')
         
-#         if plotInfo['bag'] == 2:
-#             line.set_linestyle('dashed')
+        cur_ax.legend()
         
-        self.ax.legend()
-        
-        # TODO: Unterscheidung bag1 oder bag2 -> durchgezogen oder dotted
-        # TODO: Unterscheidung objid -> Farbe
         # TODO: mehrere y-Achsen (axis)
         
-        self.ax.grid(b=True)
-        self.ax.figure.canvas.draw()
+        cur_ax.grid(b=True)
+        cur_ax.figure.canvas.draw()
         
         self.lineCount += 1
         self.linesList.append(line)

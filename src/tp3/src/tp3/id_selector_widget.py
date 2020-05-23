@@ -34,8 +34,11 @@ class IDSelectorWidget(QGroupBox):
         
         if bagFileName == "":
             return
+        try:
+            ids = Rosbag_Analysis.getObjectIDs(bagFileName)
+        except:
+            raise Exception("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
-        ids = Rosbag_Analysis.getObjectIDs(bagFileName)
         ids = map(str, ids) # convert list to strings
         self.idList.clear()
         self.idList.addItems(ids)
