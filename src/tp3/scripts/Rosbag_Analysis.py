@@ -114,24 +114,80 @@ class Rosbag_Analysis:
         if operation == "difference":
             array_result = np.subtract(values_gt, values_cam)
             
+        #standardabweichung !!!
+         
         return (timestamps_gt, array_result)
      ######################  
      
-     
-     
+
     @staticmethod
     #returns (timestamp_gt, values_gt, values_cam) 
     def getCalculationValues(bagfile1, bagfile2, obj_id_target_gt, category, attribute, IoU_threshold):
         
         bag_gt = rosbag.Bag(bagfile1)
         bag_cam = rosbag.Bag(bagfile2)
+        
+        all_frames_GT = []
+        all_frames_CAM = []
 		       
         startTime_gt = genpy.rostime.Time.from_sec(bag_gt.get_start_time())
         startTime_cam = genpy.rostime.Time.from_sec(bag_cam.get_start_time())
         
-        array_timestamps_gt = []
-        array_values_gt = []
-        array_values_cam = []
+        timestamps_CAM = []
+        values_GT = []
+        values_CAM = []
+        
+        # collect GT messages/frames
+        for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
+            all_frames_GT.append([t, msg])
+        
+        # collect CAM messages/frames
+        for topic, msg, t in bag_cam.read_messages(topics=[TOPIC]):
+            all_frames_CAM.append([t, msg])
+            
+        #time mapping: match GT frame to each CAM frame (once for all frames)
+        #mapped frames =  array of triples: (timestamp_CAM (normed), mapped_frame_GT, mapped_frame_CAM)
+        mapped_frames = Rosbag_Analysis.timeMapping(all_frames_GT, startTime_gt, all_frames_CAM, startTime_cam)
+ 
+        print('length mapped frames ' + str(len(mapped_frames)))   
+        
+        for frame in mapped_frames:
+        
+            objectsInFrame_GT = []
+            objectsInFrame_CAM = []
+            row_count = 0
+            
+            #collect all GT objects in frame
+            for object_gt in frame[1].obj_list:
+                objectsInFrame_GT.append(object_gt)
+                
+            #collect all CAM objects in frame
+            for object_cam in frame[2].obj_list:
+                objectsInFrame_CAM.append(object_cam)
+        
+            ###
+            #IoU testing - position mapping
+            evaluations = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
+            ###
+        
+            # analysing evaluation results
+            for row in evaluations:
+                row_count += 1
+                # TP (true positive) case - you got a match:
+                if (row[0] == 0) and (objectsInFrame_GT[row[1]].obj_id == obj_id_target_gt):
+                    
+                    timestamps_CAM.append(frame[0])
+                    
+                    if category == "": # branch with one level in object list tree (e.g. 'obj_id')
+                        values_GT.append(getattr(objectsInFrame_GT[row[1]], attribute))
+                        values_CAM.append(getattr(objectsInFrame_CAM[row_count], attribute)) # stimmt das ???
+                    else:
+                        values_GT.append(getattr(getattr(frame[1].obj_list[row[1]], category), attribute))
+                        values_CAM.append(getattr(getattr(objectsInFrame_CAM[row_count], category), attribute))
+
+         ############ TO DO ##################          
+                    
+                    
         
         # loop through GT messages/frames
         for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
@@ -226,7 +282,13 @@ class Rosbag_Analysis:
         startTime_gt = genpy.rostime.Time.from_sec(bag_gt.get_start_time())
         startTime_cam = genpy.rostime.Time.from_sec(bag_cam.get_start_time())
         
-        array_timestamps_gt = []
+        array_TP = []
+        array_IoU_values_TP = []
+        array_FP = []
+        array_FN = []
+        array_mm = []
+        array_precision = []
+        array_recall = []
         
         # collect GT messages/frames
         for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
@@ -264,14 +326,7 @@ class Rosbag_Analysis:
             count_FP = 0 
             count_mm = 0
             count_FN = 0
-           
-            array_TP = []
-            array_FP = []
-            array_FN = []
-            array_mm = []
-            array_precision = []
-            array_recall = []
-            IoU_value_TP = 0
+            sum_IoU_values = 0
             
             #collect all GT objects in frame
             for object_gt in frame[1].obj_list:
@@ -280,10 +335,9 @@ class Rosbag_Analysis:
             # collect all CAM objects in frame
             for object_cam in frame[2].obj_list:
                 objectsInFrame_CAM.append(object_cam)
-            print('length objects GT ' + str(len(objectsInFrame_GT)))     
-            print('length objects CAM ' + str(len(objectsInFrame_CAM)))              
+           
             ###
-            #IoU testing: each CAM object compared to list of GT objects
+            #IoU testing - position mapping
             evaluations = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
             ###
             
@@ -293,7 +347,7 @@ class Rosbag_Analysis:
                 # TP (true positive) case - you got a match:
                 if row[0] == 0:
                     count_TP += 1
-                    IoU_value_TP = row[2]
+                    sum_IoU_values += row[2]
                 
                 # FP (false positive) case:
                 elif row[0] == 1:
@@ -317,62 +371,60 @@ class Rosbag_Analysis:
             array_mm.append(count_mm)
             array_precision.append(count_TP / (count_TP + count_FP))
             array_recall.append(count_TP / (count_TP + count_FN))
-            
-            print(count_TP)
+            array_IoU_values_TP.append(sum_IoU_values)
             
         bag_gt.close()
         bag_cam.close()
                     #timestamps CAM
-        return (mapped_frames[0], array_TP, array_FP, array_FN, array_mm, array_precision, array_recall)
-        
-    '''
-    @staticmethod
-    def getmm(bagfile1, bagfile2, IoU_threshold):
-        
-        (timestamp, TP, FP, FN, mm) = getEvaluation(bagfile1, bagfile2, IoU_threshold)
-        
-        return (timestamp, mm)
-    '''
+        return (mapped_frames[0], array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)
+       
     
     @staticmethod
     def getTP(bagfile1, bagfile2, IoU_threshold):
         
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         return (timestamp, TP)
     
     @staticmethod
     def getFP(bagfile1, bagfile2, IoU_threshold):
         
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         return (timestamp, FP)
+        
+    @staticmethod
+    def getmm(bagfile1, bagfile2, IoU_threshold):
+        
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        
+        return (timestamp, mm)
     
     @staticmethod
     def getFN(bagfile1, bagfile2, IoU_threshold):
         
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         return (timestamp, FN)
     
     @staticmethod
     def getPrecision(bagfile1, bagfile2, IoU_threshold):
         
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         return (timestamp, precision)
     
     @staticmethod
     def getRecall(bagfile1, bagfile2, IoU_threshold):
     
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         return (timestamp, recall)
         
     @staticmethod
     def getFPPI(bagfile1, bagfile2, IoU_threshold):
             
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         FP_total = np.sum(FP)
         FPPI = FP_total / len(timestamp)  #len(timestamp) == nFrames_gt
@@ -382,7 +434,7 @@ class Rosbag_Analysis:
     @staticmethod
     def getMOTA(bagfile1, bagfile2, IoU_threshold):
         
-        (timestamp, TP, FP, FN, mm, precision, recall) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
             
         FP_total = np.sum(FP)
         FN_total = np.sum(FN)
@@ -390,11 +442,20 @@ class Rosbag_Analysis:
         count_objects_GT_total = Rosbag_Analysis.getObjectCountTotal(bagfile1)
 
         MOTA = 1 - ((FN_total + FP_total + mm_total) / count_objects_GT_total)
+        
+        return MOTA
     
-    #@staticmethod
-    #def get MOTP
-    
-
+    @staticmethod
+    def getMOTP(bagfile1, bagfile2, IoU_threshold):
+        
+        (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
+        
+        d_ti = np.sum(IoU_values_TP)
+        TP_total = np.sum(TP)
+        
+        MOTP = d_ti / TP_total
+        
+        return MOTP
 
 
    ### example method - DEPRECATED ###
