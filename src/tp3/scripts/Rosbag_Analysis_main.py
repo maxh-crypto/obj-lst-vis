@@ -6,19 +6,25 @@ import matplotlib.pyplot as py
 
 #BAGFILE = '../bagfiles/2020-05-13-15-10-05.bag'
 BAGFILE = '../bagfiles/Groundtruth_2020-5-16-15-1-4.bag'
+BAGFILE_GT = BAGFILE
+BAGFILE_CAM = BAGFILE
+#BAGFILE_GT= '../bagfiles/Groundtruth_2020-5-21-14-53-41.bag'
+#BAGFILE_GT = '../bagfiles/onlyTP1.bag'
+#BAGFILE_CAM = '../bagfiles/Camera_2020-5-21-14-53-40.bag'
+
 IoU_THRESHOLD = 0.8
-TOPIC = 'objectlist'
+#TOPIC = '/simulation'
 
 # Main function for calling rosbag analysis methods
 # --> is gonna be replaced by (or integrated) in GUI script 
 
-array_objectIDs = ra.Rosbag_Analysis.getObjectIDs(BAGFILE)
+array_objectIDs = ra.Rosbag_Analysis.getObjectIDs(BAGFILE_GT)
 print(array_objectIDs)
 
-gt_object_count = ra.Rosbag_Analysis.getObjectCountTotal(BAGFILE)
+gt_object_count = ra.Rosbag_Analysis.getObjectCountTotal(BAGFILE_GT)
 print(gt_object_count)
 
-bag = rosbag.Bag(BAGFILE)
+#bag = rosbag.Bag(BAGFILE)
 #for topic, msg, t in bag.read_messages(topics=[TOPIC]):
     #print(msg.obj_list[0].classification.car)
     #attributes = genpy.message.get_printable_message_args(msg.obj_list[0].classification)
@@ -51,7 +57,7 @@ bag = rosbag.Bag(BAGFILE)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 3, "geometric", "x", "difference", IoU_THRESHOLD)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 1, "", "obj_id", "difference")
 
-(timestamps, TP) = ra.Rosbag_Analysis.getTP(BAGFILE, BAGFILE, IoU_THRESHOLD)
+(timestamps, TP) = ra.Rosbag_Analysis.getTP(BAGFILE_GT, BAGFILE_CAM, IoU_THRESHOLD)
 print(TP)
 
 #plotting arrays

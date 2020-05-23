@@ -7,7 +7,11 @@ import DataEvaluation_module as de
 
 # These functions can be called by the file "Rosbag_Analysis_main.py" #
 
-TOPIC = 'objectlist'
+TOPIC_main = 'objectlist'
+TOPIC_GT = '/simulation'
+TOPIC_CAM = '/camera_calculation'
+
+TOPIC = TOPIC_main
 
 class Rosbag_Analysis:
   
@@ -50,8 +54,7 @@ class Rosbag_Analysis:
         
         bag = rosbag.Bag(bagfile)
         
-        startTimeRaw= bag.get_start_time()
-        startTime = genpy.rostime.Time.from_sec(startTimeRaw)
+        startTime = genpy.rostime.Time.from_sec(bag.get_start_time())
 
         array_values = []
         array_timestamps = []
@@ -83,7 +86,25 @@ class Rosbag_Analysis:
         return (array_timestamps, array_values)
     ######################      
     
-    
+    @staticmethod
+    def timeMapping(frames_GT, startTime_gt, frames_CAM, startTime_cam):    # frames = array of tuples of (timestamps, messages)
+        
+        mapped_frames = []
+        
+        for frame_CAM in frames_CAM:
+            latest_GT_frame = 0
+            time_CAM = frame_CAM[0] - startTime_cam
+            
+            for frame_GT in frames_GT:
+                time_GT = frame_GT[0] - startTime_gt
+                
+                if (time_GT > time_CAM):                
+                    mapped_frames.append([time_CAM, latest_GT_frame[1], frame_CAM[1]])
+                    break
+                else:
+                    latest_GT_frame = frame_GT
+        return mapped_frames # array of triples of (timestamp_CAM (normed), frame_GT, frame_CAM)
+                    
     @staticmethod
     def getAdvancedData(bagfile1, bagfile2, obj_id_target_gt, category, attribute, operation, IoU_threshold):
     
@@ -105,11 +126,8 @@ class Rosbag_Analysis:
         bag_gt = rosbag.Bag(bagfile1)
         bag_cam = rosbag.Bag(bagfile2)
 		       
-        startTimeRaw_gt= bag_gt.get_start_time()
-        startTime_gt = genpy.rostime.Time.from_sec(startTimeRaw_gt)
-        
-        startTimeRaw_cam= bag_cam.get_start_time()
-        startTime_cam = genpy.rostime.Time.from_sec(startTimeRaw_cam)
+        startTime_gt = genpy.rostime.Time.from_sec(bag_gt.get_start_time())
+        startTime_cam = genpy.rostime.Time.from_sec(bag_cam.get_start_time())
         
         array_timestamps_gt = []
         array_values_gt = []
@@ -201,23 +219,45 @@ class Rosbag_Analysis:
         
         bag_gt = rosbag.Bag(bagfile1)
         bag_cam = rosbag.Bag(bagfile2)
-		       
-        startTimeRaw_gt= bag_gt.get_start_time()
-        startTime_gt = genpy.rostime.Time.from_sec(startTimeRaw_gt)
+		
+        all_frames_GT = []
+        all_frames_CAM = []        
         
-        startTimeRaw_cam= bag_cam.get_start_time()
-        startTime_cam = genpy.rostime.Time.from_sec(startTimeRaw_cam)
+        startTime_gt = genpy.rostime.Time.from_sec(bag_gt.get_start_time())
+        startTime_cam = genpy.rostime.Time.from_sec(bag_cam.get_start_time())
         
         array_timestamps_gt = []
         
-        # loop through GT messages/frames
+        # collect GT messages/frames
         for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
-            bag_gt.read_messages()
-            timestamp_gt = (float)((t.__sub__(startTime_gt)).__str__()) / 1000000   #normed timestamp GT in ms
-            array_timestamps_gt.append(timestamp_gt)
+            all_frames_GT.append([t, msg])
+        
+        # collect CAM messages/frames
+        for topic, msg, t in bag_cam.read_messages(topics=[TOPIC]):
+            all_frames_CAM.append([t, msg])
+        
+        #time mapping: match GT frame to each CAM frame (once for all frames)
+        #mapped frames =  array of triples: (timestamp_CAM (normed), mapped_frame_GT, mapped_frame_CAM)
+        mapped_frames = Rosbag_Analysis.timeMapping(all_frames_GT, startTime_gt, all_frames_CAM, startTime_cam)
+        
+        ### test
+        # for row in mapped_frames:
+            #print('timestamp: ' + str(row[0]))
+            #print('********')
+            #print('object_GT: ' + str(row[1]))
+            #print('********')
+            #print('object_CAM: ' + str(row[2]))
+            #print('********')
+        #print(len(mapped_frames))
+        
+        # loop through GT messages/frames
+        for frame in mapped_frames:
+
+            #timestamp_gt = (float)((t.__sub__(startTime_gt)).__str__()) / 1000000   #normed timestamp GT in ms
+            #array_timestamps_gt.append(timestamp_gt)
             
-            array_objects_gt = []
-            array_objects_cam = []
+            objectsInFrame_GT = []
+            objectsInFrame_CAM = []
             
             count_TP = 0
             count_FP = 0 
@@ -231,55 +271,40 @@ class Rosbag_Analysis:
             array_precision = []
             array_recall = []
             
-            #collect all GT objects
-            for i in msg.obj_list:
-                array_objects_gt.append(i)
+            #collect all GT objects in frame
+            for object_gt in frame[1].obj_list:
+                objectsInFrame_GT.append(object_gt)
 
-            # finding concerning CAM object 
-            # loop through CAM messages/frames to find message concerning to GT frame (in time) 
-            for topic, msg, t in bag_cam.read_messages(topics=[TOPIC]):
-                bag_cam.read_messages()
-                timestamp_cam = (float)((t.__sub__(startTime_cam)).__str__()) / 1000000   #normed timestamp CAM in ms
-                
-                # time mapping: 
-                # cam message in range +/- 500 ms from gt message
-                if((timestamp_cam > (timestamp_gt - 500))
-                and (timestamp_cam < (timestamp_gt + 500))):
-                    
-                    # position mapping: 
-                    # loop through CAM objects in message --> proceed IoU evaluation
-                    for i in msg.obj_list:
-                        #collect all CAM objects
-                        array_objects_cam.append(i)
-                                        #index 0: timest.  #index 1: object
-                        #obj_cam = [timestamp_cam, i]
+            # collect all CAM objects in frame
+            for object_cam in frame[2].obj_list:
+                objectsInFrame_CAM.append(i)
                       
-                    ###
-                    #   IoU testing: each CAM object compared to list of GT objects
-                    (array_evaluations, array_indices_gt) = de.det_TP_FP_mm(array_objects_gt, array_objects_cam, IoU_threshold)
-                    ###
+                ###
+                #IoU testing: each CAM object compared to list of GT objects
+                (array_evaluations, array_indices_gt) = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
+                ###
+                
+                # analysing evaluation results
+                for row in array_evaluations:
+                
+                    # TP (true positive) case - you got a match:
+                    if row[0] == 0:
+                        count_TP += 1
                     
-                    # analysing evaluation results
-                    for row in array_evaluations:
+                    # FP (false positive) case:
+                    elif row[0] == 1:
+                        count_FP += 1
                     
-                        # TP (true positive) case - you got a match:
-                        if row[0] == 0:
-                            count_TP += 1
-                        
-                        # FP (false positive) case:
-                        elif row[0] == 1:
-                            count_FP += 1
-                        
-                        # mm (mismatch) case:
-                        elif row[0] == 2:
-                            count_mm += 1
-                  
-                    # test FN (false negative) case:                    
-                    (array_evaluation_FN) = de.isFN(array_objects_gt, array_objects_cam, IoU_threshold)
-                    
-                    for i in array_evaluation_FN:
-                        if i == True:
-                            count_FN += 1
+                    # mm (mismatch) case:
+                    elif row[0] == 2:
+                        count_mm += 1
+              
+                # test FN (false negative) case:                    
+                (array_evaluation_FN) = de.isFN(array_objects_gt, array_objects_cam, IoU_threshold)
+                
+                for i in array_evaluation_FN:
+                    if i == True:
+                        count_FN += 1
                     
                 # add values per GT frame
                 array_TP.append(count_TP)
