@@ -6,9 +6,6 @@
 import shapely.geometry
 import shapely.affinity
 import numpy as np
-from __builtin__ import False
-from pickle import FALSE
-
 
 def intersection(B_gt, B_pr):
     '''
