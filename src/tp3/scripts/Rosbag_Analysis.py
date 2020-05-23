@@ -251,6 +251,7 @@ class Rosbag_Analysis:
         #print(len(mapped_frames))
         
         # loop through GT messages/frames
+        print('length mapped frames ' + str(len(mapped_frames)))   
         for frame in mapped_frames:
 
             #timestamp_gt = (float)((t.__sub__(startTime_gt)).__str__()) / 1000000   #normed timestamp GT in ms
@@ -270,6 +271,7 @@ class Rosbag_Analysis:
             array_mm = []
             array_precision = []
             array_recall = []
+            IoU_value_TP = 0
             
             #collect all GT objects in frame
             for object_gt in frame[1].obj_list:
@@ -277,46 +279,51 @@ class Rosbag_Analysis:
 
             # collect all CAM objects in frame
             for object_cam in frame[2].obj_list:
-                objectsInFrame_CAM.append(i)
-                      
-                ###
-                #IoU testing: each CAM object compared to list of GT objects
-                (array_evaluations, array_indices_gt) = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
-                ###
+                objectsInFrame_CAM.append(object_cam)
+            print('length objects GT ' + str(len(objectsInFrame_GT)))     
+            print('length objects CAM ' + str(len(objectsInFrame_CAM)))              
+            ###
+            #IoU testing: each CAM object compared to list of GT objects
+            evaluations = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
+            ###
+            
+            # analysing evaluation results
+            for row in evaluations:
+            
+                # TP (true positive) case - you got a match:
+                if row[0] == 0:
+                    count_TP += 1
+                    IoU_value_TP = row[2]
                 
-                # analysing evaluation results
-                for row in array_evaluations:
+                # FP (false positive) case:
+                elif row[0] == 1:
+                    count_FP += 1
                 
-                    # TP (true positive) case - you got a match:
-                    if row[0] == 0:
-                        count_TP += 1
-                    
-                    # FP (false positive) case:
-                    elif row[0] == 1:
-                        count_FP += 1
-                    
-                    # mm (mismatch) case:
-                    elif row[0] == 2:
-                        count_mm += 1
-              
-                # test FN (false negative) case:                    
-                (array_evaluation_FN) = de.isFN(array_objects_gt, array_objects_cam, IoU_threshold)
+                # mm (mismatch) case:
+                elif row[0] == 2:
+                    count_mm += 1
+          
+            # test FN (false negative) case:                    
+            evaluations_FN = de.isFN(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
+            
+            for i in evaluations_FN:
+                if i == True:
+                    count_FN += 1
                 
-                for i in array_evaluation_FN:
-                    if i == True:
-                        count_FN += 1
-                    
-                # add values per GT frame
-                array_TP.append(count_TP)
-                array_FP.append(count_FP)
-                array_FN.append(count_FN) 
-                array_mm.append(count_mm)
-                array_precision.append(count_TP / (count_TP + count_FP))
-                array_recall.append(count_TP / (count_TP + count_FN))
+            # add values per GT frame
+            array_TP.append(count_TP)
+            array_FP.append(count_FP)
+            array_FN.append(count_FN) 
+            array_mm.append(count_mm)
+            array_precision.append(count_TP / (count_TP + count_FP))
+            array_recall.append(count_TP / (count_TP + count_FN))
+            
+            print(count_TP)
             
         bag_gt.close()
         bag_cam.close()
-        return (array_timestamps_gt, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall)
+                    #timestamps CAM
+        return (mapped_frames[0], array_TP, array_FP, array_FN, array_mm, array_precision, array_recall)
         
     '''
     @staticmethod
