@@ -90,11 +90,11 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
     
     res_list = []
     
+    row_idx = 0
+    
     for row in iou_mat: # loop through all B_pr
         
         res_triple = (1, None, 0) # the result for the current checked B_pr
-        
-        row_idx = np.where(iou_mat == row)[0][0]
         
         fp_detected = False 
         
@@ -115,7 +115,7 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
             # maybe flatten the list first: pos_idx_list.flatten()
             gt_idx = pos_idx_list[-1] # get the last index (highest value)
             cur_iou = row[gt_idx]
-            np.delete(pos_idx_list, -1) # remove it from the list
+            pos_idx_list = np.delete(pos_idx_list, -1) # remove it from the list
             
             # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
             ious_greater_idx_list = np.where(iou_mat[:, gt_idx] > cur_iou)[0]
@@ -142,6 +142,7 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
             break # if a tp is found get to the next B_pr
             
         res_list.append(res_triple)
+        row_idx += 1
     
     return res_list
                 

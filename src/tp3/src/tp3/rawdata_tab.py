@@ -59,17 +59,26 @@ class RawDataTab(QWidget):
     def btn1Clicked(self):
         self.selectedBag = 0
         self.idSelector.setTitle("3.Select GT-ObjectID")
-        self.idSelector.refreshList(self.bagFiles[0])
+        try: 
+            self.idSelector.refreshList(self.bagFiles[0])
+        except:
+            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
     def btn2Clicked(self):
         self.selectedBag = 1
         self.idSelector.setTitle("3.Select Cam-ObjectID")
-        self.idSelector.refreshList(self.bagFiles[1])
+        try: 
+            self.idSelector.refreshList(self.bagFiles[1])
+        except:
+            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
     def diffBtnClicked(self):
         self.selectedBag = 2
         self.idSelector.setTitle("3.Select GT-ObjectID")
-        self.idSelector.refreshList(self.bagFiles[0]) # gt objects are used
+        try: 
+            self.idSelector.refreshList(self.bagFiles[0])
+        except:
+            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
     def getPlotData(self):
         '''
