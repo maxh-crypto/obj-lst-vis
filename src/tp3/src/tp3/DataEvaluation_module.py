@@ -6,6 +6,8 @@
 import shapely.geometry
 import shapely.affinity
 import numpy as np
+from __builtin__ import False
+from pickle import FALSE
 
 
 def intersection(B_gt, B_pr):
@@ -85,60 +87,115 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
         if the case is TP there is a third return value
         which is the iou value between the B_pr of this line
         and the matched B_gt
-        if the case is not TP the thrid value is 0
+        if the case is not TP the thrid value is 0.0
     '''
     iou_mat = genIouMat(B_gt_list, B_pr_list)
     
     res_list = []
     
     for row in iou_mat: # loop through all B_pr
-        max_iou = np.max(row) # get the max iou for this B_pr
         
-        #### FP Determination ####
-        if max_iou < threshold: # FP case
-            res_list.append((1, None, 0))
-            continue
+        res_triple = (1, None, 0) # the result for the current checked B_pr
         
-        # max_iou >= threshold:
         row_idx = np.where(iou_mat == row)[0][0]
         
-        col_idx = np.where(row == max_iou)[0][0]
+        fp_detected = False 
         
-        # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
-        ious_greater_idx_list = np.where(iou_mat[:, col_idx] > max_iou)
-            
-        for idx in ious_greater:                
-            # new_row_idx = np.where(iou_mat[:, col_idx] == max_in_col)[0][0] # get the index of this B_pr
-            
-            if getClass(B_pr_list[idx]) == getClass(B_gt_list[col_idx]): 
-                # there is another B_pr which matches better to the found B_gt,
-                # the current B_gt is a FP                   
-                res_list.append((1, None, 0)) # append the index of the B_pr to the list
-                break # get out of the inner for loop
+        # get indices of all B_gt that have a greater iou than threshold
+        pos_idx_list = np.where(row >= threshold)[0] # index list is first part of tuple
         
+        if len(pos_idx_list) == 0:
+            # list is empty -> FP case
+            res_list.append((1, None, 0.0))
+            continue # go on with the next B_pr
+        
+        # else 
+        # sort the list
+        pos_idx_list.sort() # from lowest to highest iou
+        
+        # loop through the list:
+        while len(pos_idx_list > 0):
+            # maybe flatten the list first: pos_idx_list.flatten()
+            gt_idx = pos_idx_list[-1] # get the last index (highest value)
+            np.delete(pos_idx_list, -1) # remove it from the list
             
-        #### Mismatch Determination ####       
-        # there is no other B_pr for the found B_gt:
-        # compare the classes:
-        if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]): # mismatch found
-            # TODO?:
-            # should here be tested, if there is another iou value for this B_pr 
-            # which is also greater than threshold? -> B_pr can be a TP anyway
-            # get all iou values between threshold and max_iou -> other possible matches
-            # check every value starting with the highest if it is a tp 
-            # if this is the case the given B_pr is a tp, but matches with another B_gt
-            other_pos_matches_idx_list = np.where(row >= threshold and row < iou_max)
-            other_pos_matches_idx_list.sort()
-            # for idx in other_pos_matches_idx_list:
+            # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
+            ious_greater_idx_list = np.where(iou_mat[:, gt_idx] > max_iou)
                 
+            # check for FP case if there is another B_pr for the current B_gt    
+            for idx in ious_greater_idx_list:                
+                if getClass(B_pr_list[idx]) == getClass(B_gt_list[gt_idx]): 
+                    # there is another B_pr which matches better to the found B_gt,
+                    # the current B_gt is a FP -> no value set, because the default is FP
+                    fp_detected = True             
+                    break # get out of the inner for loop
+            
+            if fp_detected:
+                continue # go on with the next B_gt
+            
+            # check for a mismatch case
+            if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[gt_idx]): # mismatch found
+                res_triple = (2, None, 0.0)
+                # if there would be another B_gt that matches with this B_pr and is a TP 
+                # this result value would be overwritten
+                continue # go on with the next B_gt
                 
-            res_list.append((2, None, 0))
-            continue
+            res_triple = (0, gt_idx, row[gt_idx])
+            break # if a tp is found get to the next B_pr
+            
+        res_list.append(res_triple)
     
-        # otherwise the B_pr is a TP:
-        res_list.append((0, col_idx, max_iou))
-        
     return res_list
+                
+#         max_iou = np.max(row) # get the max iou for this B_pr
+#         
+#         #### FP Determination ####
+#         if max_iou < threshold: # FP case
+#             res_list.append((1, None, 0))
+#             continue
+#         
+#         # max_iou >= threshold:
+#         row_idx = np.where(iou_mat == row)[0][0]
+#         
+#         col_idx = np.where(row == max_iou)[0][0]
+#         
+#         # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
+#         ious_greater_idx_list = np.where(iou_mat[:, col_idx] > max_iou)
+#             
+#         for idx in ious_greater:                
+#             # new_row_idx = np.where(iou_mat[:, col_idx] == max_in_col)[0][0] # get the index of this B_pr
+#             
+#             if getClass(B_pr_list[idx]) == getClass(B_gt_list[col_idx]): 
+#                 # there is another B_pr which matches better to the found B_gt,
+#                 # the current B_gt is a FP                   
+#                 res_list.append((1, None, 0)) # append the index of the B_pr to the list
+#                 break # get out of the inner for loop
+#         
+#             
+#         #### Mismatch Determination ####       
+#         # there is no other B_pr for the found B_gt:
+#         # compare the classes:
+#         if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]): # mismatch found
+#             # TODO?:
+#             # should here be tested, if there is another iou value for this B_pr 
+#             # which is also greater than threshold? -> B_pr can be a TP anyway
+#             # get all iou values between threshold and max_iou -> other possible matches
+#             # check every value starting with the highest if it is a tp 
+#             # if this is the case the given B_pr is a tp, but matches with another B_gt
+#             other_pos_matches_idx_list = np.where(row >= threshold and row < iou_max)
+#             other_pos_matches_idx_list.sort()
+#             # run through every index in the list beginning with the iou
+#             # check whether it is a TP
+#             # for idx in other_pos_matches_idx_list:
+#                 
+#                 
+#             res_list.append((2, None, 0))
+#             continue
+#     
+#         # otherwise the B_pr is a TP:
+#         res_list.append((0, col_idx, max_iou))
+#         
+#     return res_list
     
     
 def isFN(B_gt_list, B_pr_list, threshold):
