@@ -110,14 +110,15 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
         # sort the list
         pos_idx_list.sort() # from lowest to highest iou
         
-        # loop through the list:
+        # loop through the list of B_gt:
         while len(pos_idx_list > 0):
             # maybe flatten the list first: pos_idx_list.flatten()
             gt_idx = pos_idx_list[-1] # get the last index (highest value)
+            cur_iou = row[gt_idx]
             np.delete(pos_idx_list, -1) # remove it from the list
             
             # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
-            ious_greater_idx_list = np.where(iou_mat[:, gt_idx] > max_iou)
+            ious_greater_idx_list = np.where(iou_mat[:, gt_idx] > cur_iou)[0]
                 
             # check for FP case if there is another B_pr for the current B_gt    
             for idx in ious_greater_idx_list:                

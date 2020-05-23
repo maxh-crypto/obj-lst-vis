@@ -8,8 +8,6 @@
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QWidget, QHBoxLayout)
 from operationSelector_box import OperationSelectorWidget
-# from id_selector_widget import IDSelectorWidget
-# from valueSelector_widget import ValueSelectorWidget
 from Rosbag_Analysis import Rosbag_Analysis
 from ThresholdSetter_box import ThresholdSetter
 
@@ -24,31 +22,14 @@ class CompareDataTab(QWidget):
         
         # widgets
         self.operationSelector = OperationSelectorWidget(self)
-#         self.operationSelector.selectionChanged.connect(self.operationChanged)
-#         self.valueSelector = ValueSelectorWidget(self)
-#         self.valueSelector.setEnabled(False)
-#         self.idSelector = IDSelectorWidget()
-#         self.idSelector.setEnabled(False)
-#         self.idSelector.refreshList(bagFiles[0])
         self.thresholdSetter = ThresholdSetter(self)
         
         # layout:
         layout = QHBoxLayout()
         layout.addWidget(self.operationSelector)
         layout.addWidget(self.thresholdSetter)
-#         layout.addWidget(self.valueSelector)
-#         layout.addWidget(self.idSelector)
         
         self.setLayout(layout)
-        
-        
-#     def operationChanged(self, operation):
-#         if operation == self.operationSelector.operations[0]:
-#             self.idSelector.setEnabled(True)
-#             self.valueSelector.setEnabled(True)
-#         else:
-#             self.idSelector.setEnabled(False)
-#             self.valueSelector.setEnabled(False)
             
             
     def getPlotData(self):
@@ -68,46 +49,56 @@ class CompareDataTab(QWidget):
         if operation == '':
             raise Exception("Please select an operation.")
         
-#         # operation "difference":
-#         if operation == self.operationSelector.operations[0]:
-#             selectedValue = self.valueSelector.getCatAndAtt()
-#             category = selectedValue['category']
-#             attribute = selectedValue['attribute']  
-#             
-#             # check whether category or attribute is empty
-#             # show error message when it is the case
-#             # and exit the function
-#             if attribute == "":
-#                 raise Exception("Please select a plottable attribute.") 
-#             
-#             try:
-#                 obj_id = self.idSelector.getID()
-#             except ValueError:
-#                 raise Exception("ObjectID is not a number! Insert valid ID.")
-#             
-#             plotInfo['label'] = operation + '.'
-#             plotInfo['label'] += 'obj' + str(obj_id) + '.'
-#             plotInfo['label'] += category + '.'
-#             plotInfo['label'] += attribute
-#             
-#             plotInfo['y_label'] = object_list_msg.units[attribute]
-#         
-#             try:
-#                 plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, operation)
-#             except ValueError:
-#                 raise Exception("Sorry, unexpected error occurred.")
+        plotInfo['label'] = operation + '@t=' + str(threshold)
+        plotInfo['y_label'] = 'cases'
             
         # operation "true positive"
-        if operation == self.operationSelector.operations[0]:
-            plotInfo['label'] = operation + '@t=' + str(threshold)
-            plotInfo['y_label'] = 'cases'
-            
+        if operation == self.operationSelector.operations[0]:  
+                      
             try:
                 plotData = Rosbag_Analysis.getTP(self.bagFiles[0], self.bagFiles[1], threshold)
             except ValueError:
                 raise Exception("Sorry, unexpected error occurred.")
             
-        # TODO: other operations
+        # operation "mismatch"
+        elif operation == self.operationSelector.operations[1]:
+                        
+            try:
+                plotData = Rosbag_Analysis.getmm(self.bagFiles[0], self.bagFiles[1], threshold)
+            except ValueError:
+                raise Exception("Sorry, unexpected error occurred.")
+            
+        # operation "false positive"
+        elif operation == self.operationSelector.operations[2]:
+                        
+            try:
+                plotData = Rosbag_Analysis.getFP(self.bagFiles[0], self.bagFiles[1], threshold)
+            except ValueError:
+                raise Exception("Sorry, unexpected error occurred.")
+            
+        # operation "false negative"
+        elif operation == self.operationSelector.operations[3]:
+                        
+            try:
+                plotData = Rosbag_Analysis.getFN(self.bagFiles[0], self.bagFiles[1], threshold)
+            except ValueError:
+                raise Exception("Sorry, unexpected error occurred.")
+            
+        # operation "precision"
+        elif operation == self.operationSelector.operations[4]:
+                        
+            try:
+                plotData = Rosbag_Analysis.getPrecision(self.bagFiles[0], self.bagFiles[1], threshold)
+            except ValueError:
+                raise Exception("Sorry, unexpected error occurred.")
+            
+        # operation "recall"
+        elif operation == self.operationSelector.operations[5]:
+                        
+            try:
+                plotData = Rosbag_Analysis.getRecall(self.bagFiles[0], self.bagFiles[1], threshold)
+            except ValueError:
+                raise Exception("Sorry, unexpected error occurred.")
         
         return plotData, plotInfo
         
