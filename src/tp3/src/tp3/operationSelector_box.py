@@ -12,9 +12,10 @@ class OperationSelectorWidget(QGroupBox):
     selectionChanged = QtCore.Signal(str)
     
     operations = [
-                  'false negative', 
-                  'false positive', 
                   'true positive', 
+                  'mismatch',
+                  'false positive', 
+                  'false negative', 
                   'precision',
                   'recall'
                   ]

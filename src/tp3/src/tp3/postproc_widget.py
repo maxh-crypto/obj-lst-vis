@@ -78,5 +78,10 @@ class PostProcMainWidget(QWidget):
             opens a new dialog that shows the data quality
         '''
         self.bagFiles = self.bagWidget.getBagFiles()
+        
+        if self.bagFiles[0] == "" or self.bagFiles[1] == "":
+            message_module.showMessage("Bag file missing! Please import bag file in the main interface.")  
+            return
+        
         qualityDialog = QualityDialog(self.bagFiles, self)
         qualityDialog.exec_()
