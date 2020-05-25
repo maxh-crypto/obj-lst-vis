@@ -5,8 +5,7 @@ import numpy as np
 import matplotlib.pyplot as py
 
 #BAGFILE = '../bagfiles/2020-05-13-15-10-05.bag'
-#BAGFILE = '../bagfiles/Groundtruth_2020-5-16-15-1-4.bag'
-BAGFILE = '../bagfiles/Domi_TP2.bag'
+BAGFILE = '../../../bagfiles/Groundtruth_2020-5-16-15-1-4.bag'
 BAGFILE_GT = BAGFILE
 BAGFILE_CAM = BAGFILE
 #BAGFILE_GT= '../bagfiles/Groundtruth_2020-5-21-14-53-41.bag'
@@ -58,15 +57,33 @@ print(gt_object_count)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 3, "geometric", "x", "difference", IoU_THRESHOLD)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 1, "", "obj_id", "difference")
 
-# (timestamps, FN) = ra.Rosbag_Analysis.getFN(BAGFILE_GT, BAGFILE_CAM, IoU_THRESHOLD)
-# print('False Negatives: ')
-# print(FN)
+(timestamp, TP, FP, FN, mm, precision, recall) = ra.Rosbag_Analysis.getEvaluation(BAGFILE_GT, BAGFILE_CAM, IoU_THRESHOLD)
+print("count of TP cases per frame")
+print(TP)
+print('')
 
-(timestamps, x_values) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE_GT, BAGFILE_CAM, 1, 'geometric', 'x', 'difference', IoU_THRESHOLD)
+print("count of FP cases per frame")
+print(FP)
+print('')
 
+print("count of mm cases per frame")
+print(mm)
+print('')
+
+print("count of FN cases per frame")
+print(FN)
+print('')
+
+print("precision per frame")
+print(precision)
+print('')
+
+print("recall per frame")
+print(recall)
+print('')
 
 #plotting arrays
-py.plot(timestamps, x_values , 'xb')
+#py.plot(timestamps, result , '-b')
 # py.plot(array_timestamps_2, array_values_2, '-r')
 # py.plot(array_timestamps_3, array_values_3, '-k')
-py.show()  
+#py.show()  

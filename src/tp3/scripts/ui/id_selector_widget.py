@@ -8,6 +8,7 @@
 
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import *
+from Rosbag_Analysis import Rosbag_Analysis
 
 class IDSelectorWidget(QGroupBox):
     
@@ -19,6 +20,7 @@ class IDSelectorWidget(QGroupBox):
         
         self.lineEdit = QLineEdit()
         self.idList = QListWidget()
+        self.idList.currentItemChanged.connect(self.idSelected)
         
         layout.addWidget(self.lineEdit)
         layout.addWidget(self.idList)
@@ -27,4 +29,27 @@ class IDSelectorWidget(QGroupBox):
     def getID(self):
         id = int(self.lineEdit.text())
         return id
+    
+    def refreshList(self, bagFileName):
+        
+        if bagFileName == "":
+            return
+        try:
+            ids = Rosbag_Analysis.getObjectIDs(bagFileName)
+        except:
+            raise Exception("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
+        
+        ids = map(str, ids) # convert list to strings
+        self.idList.clear()
+        self.idList.addItems(ids)
+        
+    def idSelected(self, curItem, prevItem):
+        '''
+            is called when list item is clicked
+            fills the lineEdit with the clicked id
+        '''
+        self.lineEdit.setText(curItem.text())
+        
+        
+        
         

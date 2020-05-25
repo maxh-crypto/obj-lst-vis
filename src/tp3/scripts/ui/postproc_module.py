@@ -3,8 +3,6 @@ import rospy
 import rospkg
 
 from qt_gui.plugin import Plugin
-# from python_qt_binding import loadUi
-# from python_qt_binding.QtWidgets import QWidget
 from postproc_widget import PostProcMainWidget
 
 class PostProcPlugin(Plugin):

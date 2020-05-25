@@ -14,6 +14,21 @@ obj_list_msg = {
     'features' : ['FL', 'FM', 'FR', 'MR', 'RR', 'RM', 'RL', 'ML']
     }
 
+units = {
+    'x' : 'distance[m]',
+    'y' : 'distance[m]',
+    'vx' : 'velocity[m/s]',
+    'vy' : 'velocity[m/s]',
+    'ax' : 'acceleration[m/s^2]',
+    'ay' : 'acceleration[m/s^2]',
+    'yaw' : 'angle[Deg]',
+    'yawrate' : 'angular frequency [Deg/m]',
+    'length' : 'dimension[m]',
+    'width' : 'dimension[m]',
+    'height' : 'dimension[m]',
+    }
+
+
     
     
     
