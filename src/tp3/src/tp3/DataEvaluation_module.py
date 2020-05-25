@@ -145,56 +145,6 @@ def det_TP_FP_mm(B_gt_list, B_pr_list, threshold):
         row_idx += 1
     
     return res_list
-                
-#         max_iou = np.max(row) # get the max iou for this B_pr
-#         
-#         #### FP Determination ####
-#         if max_iou < threshold: # FP case
-#             res_list.append((1, None, 0))
-#             continue
-#         
-#         # max_iou >= threshold:
-#         row_idx = np.where(iou_mat == row)[0][0]
-#         
-#         col_idx = np.where(row == max_iou)[0][0]
-#         
-#         # get a list of all indices for this B_gt that have a greater iou than the found max_iou            
-#         ious_greater_idx_list = np.where(iou_mat[:, col_idx] > max_iou)
-#             
-#         for idx in ious_greater:                
-#             # new_row_idx = np.where(iou_mat[:, col_idx] == max_in_col)[0][0] # get the index of this B_pr
-#             
-#             if getClass(B_pr_list[idx]) == getClass(B_gt_list[col_idx]): 
-#                 # there is another B_pr which matches better to the found B_gt,
-#                 # the current B_gt is a FP                   
-#                 res_list.append((1, None, 0)) # append the index of the B_pr to the list
-#                 break # get out of the inner for loop
-#         
-#             
-#         #### Mismatch Determination ####       
-#         # there is no other B_pr for the found B_gt:
-#         # compare the classes:
-#         if getClass(B_pr_list[row_idx]) != getClass(B_gt_list[col_idx]): # mismatch found
-#             # TODO?:
-#             # should here be tested, if there is another iou value for this B_pr 
-#             # which is also greater than threshold? -> B_pr can be a TP anyway
-#             # get all iou values between threshold and max_iou -> other possible matches
-#             # check every value starting with the highest if it is a tp 
-#             # if this is the case the given B_pr is a tp, but matches with another B_gt
-#             other_pos_matches_idx_list = np.where(row >= threshold and row < iou_max)
-#             other_pos_matches_idx_list.sort()
-#             # run through every index in the list beginning with the iou
-#             # check whether it is a TP
-#             # for idx in other_pos_matches_idx_list:
-#                 
-#                 
-#             res_list.append((2, None, 0))
-#             continue
-#     
-#         # otherwise the B_pr is a TP:
-#         res_list.append((0, col_idx, max_iou))
-#         
-#     return res_list
     
     
 def isFN(B_gt_list, B_pr_list, threshold):
@@ -213,7 +163,7 @@ def isFN(B_gt_list, B_pr_list, threshold):
     iou_mat = genIouMat(B_gt_list, B_pr_list)
     res_list = []
     
-    for col in iou_mat[:, 0]: # loop through the columns, means the B_gt objects
+    for col in iou_mat.T: # loop through the columns, means the B_gt objects
         
         max_iou = np.max(col)
         
