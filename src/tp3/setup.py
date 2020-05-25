@@ -2,8 +2,8 @@ from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
   
 d = generate_distutils_setup(
-    packages=['ui'],
-    package_dir={'': 'scripts'},
+    packages=['rqt_postproc'],
+    package_dir={'': 'scripts/ui'},
 )
 
 setup(**d)

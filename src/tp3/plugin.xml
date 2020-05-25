@@ -1,5 +1,5 @@
-<library path="scripts">
-  <class name="PostProcPlugin" type="tp3.postproc_module.PostProcPlugin" base_class_type="rqt_gui_py::Plugin">
+<library path="scripts"> <!-- The package relative path which gets added to sys.path -->
+  <class name="PostProcPlugin" type="ui.postproc_module.PostProcPlugin" base_class_type="rqt_gui_py::Plugin">
     <description>
       A rqt Plugin for performing postprocessing on object list message bag files
     </description>

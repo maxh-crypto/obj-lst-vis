@@ -2,7 +2,7 @@
 
 import sys
 
-from tp3.postproc_module import PostProcPlugin
+from ui.postproc_module import PostProcPlugin
 from rqt_gui.main import Main
 
 plugin = 'rqt_postproc'
