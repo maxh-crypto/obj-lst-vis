@@ -41,6 +41,9 @@ class CompareDataTab(QWidget):
             'y_label' : '',
             }
         
+        if self.bagFiles[0] == '' or self.bagFiles[1] == '':
+            raise Exception("Bag file missing. Please import two bag files in the main interface.")
+        
         threshold = self.thresholdSetter.getThreshold()
         
         # get operation

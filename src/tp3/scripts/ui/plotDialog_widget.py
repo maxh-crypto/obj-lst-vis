@@ -9,7 +9,6 @@ from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import QDialog, QTabWidget, QVBoxLayout, QPushButton, QMessageBox
 from rawdata_tab import RawDataTab
 from compareData_tab import CompareDataTab
-from Rosbag_Analysis import Rosbag_Analysis
 
 import message_module
 
