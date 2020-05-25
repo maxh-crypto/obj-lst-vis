@@ -197,6 +197,7 @@ class Rosbag_Analysis:
         
         mapped_frames = Rosbag_Analysis.getFrames(bagfile1, bagfile2)
         
+        array_timestamps = []
         array_TP = []
         array_IoU_values_TP = []
         array_FP = []
@@ -218,6 +219,8 @@ class Rosbag_Analysis:
             count_mm = 0
             count_FN = 0
             sum_IoU_values = 0
+            
+            array_timestamps.append(frame[0])
             
             #collect all GT objects in frame
             for object_gt in frame[1].obj_list:
@@ -265,7 +268,7 @@ class Rosbag_Analysis:
             array_IoU_values_TP.append(sum_IoU_values)
             
                    #timestamps CAM
-        return (mapped_frames[0], array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)
+        return (array_timestamps, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)
        
     
     @staticmethod
