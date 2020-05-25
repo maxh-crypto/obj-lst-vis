@@ -1,6 +1,5 @@
-from multiprocessing import sys
-
 import sys
+sys.path.append("../")
 import message_module
 
 from python_qt_binding import QtCore, QtGui
