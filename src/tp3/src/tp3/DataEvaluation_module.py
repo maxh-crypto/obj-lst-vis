@@ -168,9 +168,11 @@ def isFN(B_gt_list, B_pr_list, threshold):
         max_iou = np.max(col)
         
         if max_iou < threshold:
+            # there is no B_pr to this B_gt -> FN case
             res_list.append(True)
         
         else:
+            # there is at least one B_pr to this B_gt -> no FN case
             res_list.append(False)
     
     return res_list   
