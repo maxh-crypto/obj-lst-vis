@@ -5,7 +5,8 @@ import numpy as np
 import matplotlib.pyplot as py
 
 #BAGFILE = '../bagfiles/2020-05-13-15-10-05.bag'
-BAGFILE = '../bagfiles/Groundtruth_2020-5-16-15-1-4.bag'
+#BAGFILE = '../bagfiles/Groundtruth_2020-5-16-15-1-4.bag'
+BAGFILE = '../bagfiles/Domi_TP2.bag'
 BAGFILE_GT = BAGFILE
 BAGFILE_CAM = BAGFILE
 #BAGFILE_GT= '../bagfiles/Groundtruth_2020-5-21-14-53-41.bag'
@@ -57,11 +58,15 @@ print(gt_object_count)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 3, "geometric", "x", "difference", IoU_THRESHOLD)
 #(timestamps, result) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE, BAGFILE, 1, "", "obj_id", "difference")
 
-(timestamps, TP) = ra.Rosbag_Analysis.getTP(BAGFILE_GT, BAGFILE_CAM, IoU_THRESHOLD)
-print(TP)
+# (timestamps, FN) = ra.Rosbag_Analysis.getFN(BAGFILE_GT, BAGFILE_CAM, IoU_THRESHOLD)
+# print('False Negatives: ')
+# print(FN)
+
+(timestamps, x_values) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE_GT, BAGFILE_CAM, 1, 'geometric', 'x', 'difference', IoU_THRESHOLD)
+
 
 #plotting arrays
-#py.plot(timestamps, result , '-b')
+py.plot(timestamps, x_values , 'xb')
 # py.plot(array_timestamps_2, array_values_2, '-r')
 # py.plot(array_timestamps_3, array_values_3, '-k')
-#py.show()  
+py.show()  
