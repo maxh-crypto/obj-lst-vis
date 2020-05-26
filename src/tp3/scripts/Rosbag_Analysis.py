@@ -9,7 +9,7 @@ TOPIC_main = 'objectlist'
 TOPIC_GT = '/simulation'
 TOPIC_CAM = '/camera_calculation'
 
-TOPIC = TOPIC_CAM
+TOPIC = TOPIC_main
 
 class Rosbag_Analysis:
   
