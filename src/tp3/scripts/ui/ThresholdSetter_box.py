@@ -21,4 +21,4 @@ class ThresholdSetter(QGroupBox):
         self.setLayout(self.layout)
         
     def getThreshold(self):
-        return self.spinBox.value
+        return self.spinBox.value()

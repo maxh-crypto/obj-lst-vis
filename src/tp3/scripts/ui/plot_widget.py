@@ -41,7 +41,6 @@ class PlotWidget(QWidget):
         self.layout.addWidget(self.canvas)
         self.setLayout(self.layout)
         self.ax = self.canvas.figure.subplots()
-        self.label_dict = {}
         
     def plot(self, plotData, plotInfo):  
         '''
