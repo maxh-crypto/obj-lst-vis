@@ -22,8 +22,8 @@ IoU_THRESHOLD = 0.8
 array_objectIDs = ra.Rosbag_Analysis.getObjectIDs(BAGFILE_GT)
 print(array_objectIDs)
 
-gt_object_count = ra.Rosbag_Analysis.getObjectCountTotal(BAGFILE_GT)
-print(gt_object_count)
+# gt_object_count = ra.Rosbag_Analysis.getObjectCountTotal(BAGFILE_GT)
+# print(gt_object_count)
 
 #bag = rosbag.Bag(BAGFILE)
 #for topic, msg, t in bag.read_messages(topics=[TOPIC]):
@@ -36,7 +36,7 @@ print(gt_object_count)
 # # generic implementation (in work) 
                                                                                                             # #bag file   #object id    #category      #attribute
 #(array_timestamps_1, array_values_1) = ra.Rosbag_Analysis.getRawData(BAGFILE, 1, "", "obj_id")
-# (array_timestamps_2, array_values_2) = ra.Rosbag_Analysis.getRawData(BAGFILE, 2, "geometric", "x")
+(array_timestamps_2, array_values_2) = ra.Rosbag_Analysis.getRawData(BAGFILE, 2, "geometric", "x")
 # (array_timestamps_3, array_values_3) = ra.Rosbag_Analysis.getRawData(BAGFILE, 3, "geometric", "x")
 
 # ### for showing the arrays
@@ -49,9 +49,9 @@ print(gt_object_count)
 
 # #plotting arrays
 #py.plot(array_timestamps_1, array_values_1, '-b')
-# py.plot(array_timestamps_2, array_values_2, '-r')
+#py.plot(array_timestamps_2, array_values_2, 'xr')
 # py.plot(array_timestamps_3, array_values_3, '-k')
-# py.show()     
+#py.show()     
 
 ######################## get Advanced Data ############################
 
@@ -63,10 +63,12 @@ print(gt_object_count)
 # print(FN)
 
 (timestamps, x_values) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE_GT, BAGFILE_CAM, 1, 'geometric', 'x', 'difference', IoU_THRESHOLD)
+(timestamps_objects, objectCounts) = ra.Rosbag_Analysis.getObjectCountPerFrame(BAGFILE_GT)
 
 
 #plotting arrays
-py.plot(timestamps, x_values , 'xb')
+py.plot(timestamps_objects, objectCounts , 'xb')
+#py.plot(timestamps, x_values , 'xr')
 # py.plot(array_timestamps_2, array_values_2, '-r')
 # py.plot(array_timestamps_3, array_values_3, '-k')
 py.show()  
