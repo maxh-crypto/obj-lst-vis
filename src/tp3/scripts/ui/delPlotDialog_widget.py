@@ -9,7 +9,6 @@ import message_module
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QDialog, QListWidget, 
                                         QVBoxLayout, QPushButton)
-from matplotlib.artist import Artist
 
 class DelPlotDialog(QDialog):
 
@@ -44,7 +43,11 @@ class DelPlotDialog(QDialog):
             self.linesListWidget.addItem(label)
             
     def btnPressed(self):
-        # TODO: remove line from list and refresh the widget
+        
+        if self.linesListWidget.count() == 0:
+            # empty list
+            return
+        
         try:
             lineNr = self.linesListWidget.currentRow()
         except:

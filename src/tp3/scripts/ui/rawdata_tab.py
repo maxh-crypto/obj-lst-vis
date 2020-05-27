@@ -7,10 +7,12 @@
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QWidget, QGridLayout, 
                                          QVBoxLayout, QPushButton,
-                                         QRadioButton, QFrame, QGroupBox)
+                                         QRadioButton, QFrame, QGroupBox,
+                                         QDoubleSpinBox)
 
 from valueSelector_widget import ValueSelectorWidget
 from id_selector_widget import IDSelectorWidget
+from rawDataSelector_box import RawDataSelector
 from Rosbag_Analysis import Rosbag_Analysis
 import object_list_msg 
 import message_module
@@ -23,12 +25,13 @@ class RawDataTab(QWidget):
         self.layout = QGridLayout()
     
         self.bagFiles = bagFiles
-        self.selectedBag = 3 # no bag is selected
+        self.selectedSource = 3 # no bag is selected
         self.selectedValue = ('', '') # contains value as a tupel like ('<message>', '<value>')      
         
         # init the widgets
-        self.bagSelector = self.initBagSelector()
-        self.layout.addWidget(self.bagSelector, 0, 0)
+        self.sourceSelector = RawDataSelector(self)
+        self.sourceSelector.dataSourceChanged.connect(self.sourceChanged)
+        self.layout.addWidget(self.sourceSelector, 0, 0)
         self.valueWidget = ValueSelectorWidget()
         self.layout.addWidget(self.valueWidget, 0, 1)
         self.idSelector = IDSelectorWidget()
@@ -36,50 +39,36 @@ class RawDataTab(QWidget):
         
         self.setLayout(self.layout)
         
-    def initBagSelector(self):
+         
+    def sourceChanged(self, source):
         '''
-            determines which of the two bag file 
-            should be shown in the plot
-        '''
-        bagSelector = QGroupBox('1.Select Bag or diff.')
-        bagSelectorLayout = QVBoxLayout()
-        bag1RadioBtn = QRadioButton('ground truth')
-        bag1RadioBtn.clicked.connect(self.btn1Clicked)
-        bag2RadioBtn = QRadioButton('camera')
-        bag2RadioBtn.clicked.connect(self.btn2Clicked)
-        diffBtn = QRadioButton('diff. (both)')
-        diffBtn.clicked.connect(self.diffBtnClicked)
-        bagSelectorLayout.addWidget(bag1RadioBtn)
-        bagSelectorLayout.addWidget(bag2RadioBtn)
-        bagSelectorLayout.addWidget(diffBtn)
-        bagSelector.setLayout(bagSelectorLayout)
+            if the source in rawDataSelector is changed
+            this slot is called
+        '''        
+        self.selectedSource = source
         
-        return bagSelector
+        if source == 0: # ground truth is selected
+            self.idSelector.setTitle("3.Select GT-ObjectID")
+            try: 
+                self.idSelector.refreshList(self.bagFiles[0])
+            except:
+                message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
+        
+        elif source == 1: # camera is selected
+            self.idSelector.setTitle("3.Select Cam-ObjectID")
+            try: 
+                self.idSelector.refreshList(self.bagFiles[1])
+            except:
+                message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
+                
+        else: # difference is selected
+            self.idSelector.setTitle("3.Select GT-ObjectID")
+            try: 
+                self.idSelector.refreshList(self.bagFiles[0])
+            except:
+                message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
+                
     
-    def btn1Clicked(self):
-        self.selectedBag = 0
-        self.idSelector.setTitle("3.Select GT-ObjectID")
-        try: 
-            self.idSelector.refreshList(self.bagFiles[0])
-        except:
-            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
-        
-    def btn2Clicked(self):
-        self.selectedBag = 1
-        self.idSelector.setTitle("3.Select Cam-ObjectID")
-        try: 
-            self.idSelector.refreshList(self.bagFiles[1])
-        except:
-            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
-        
-    def diffBtnClicked(self):
-        self.selectedBag = 2
-        self.idSelector.setTitle("3.Select GT-ObjectID")
-        try: 
-            self.idSelector.refreshList(self.bagFiles[0])
-        except:
-            message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
-        
     def getPlotData(self):
         '''
             gets the raw data according to the selected parameters
@@ -105,10 +94,10 @@ class RawDataTab(QWidget):
         except ValueError:
             raise Exception("ObjectID is not a number! Insert valid ID.")
         
-        if self.selectedBag < 2: # a single bag should be analysed
+        if self.selectedSource < 2: # a single bag should be analysed
             
             
-            bagfile = self.bagFiles[self.selectedBag]
+            bagfile = self.bagFiles[self.selectedSource]
             if bagfile == "":
                 raise Exception("no bag file loaded! Please import bag file in the main interface.")
                         
@@ -117,36 +106,36 @@ class RawDataTab(QWidget):
             except:
                 raise Exception("Sorry, unexpected error occurred.")
             
-            bag_id = self.selectedBag + 1
-            plotInfo['label'] = 'bag' + str(bag_id) + '.'
-            plotInfo['label'] += 'obj' + str(obj_id) + '.'
-            plotInfo['label'] += category + '.'
-            plotInfo['label'] += attribute
+            bag_id = self.selectedSource + 1
             
-            plotInfo['y_label'] = object_list_msg.units[attribute]
-            
+            plotInfo['label'] = 'bag' + str(bag_id) + '.'            
             plotInfo['bag'] = bag_id
         
-        elif self.selectedBag == 2: # difference is selected
+        elif self.selectedSource == 2: # difference is selected
             
             for bag in self.bagFiles:
                 if bag == "":
                     raise Exception("Bag file missing! Please import bag file in the main interface.")
+                
+            threshold = self.sourceSelector.getThreshold()
             
             try:
-                plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, 'difference')
+                plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, 'difference', threshold)
             except ValueError:
                 raise Exception("Sorry, unexpected error occurred.")
             
-            plotInfo['label'] = operation + '.'
-            plotInfo['label'] += 'obj' + str(obj_id) + '.'
-            plotInfo['label'] += category + '.'
-            plotInfo['label'] += attribute
-            
-            plotInfo['y_label'] = object_list_msg.units[attribute]
+            plotInfo['label'] = 'difference' + '.'            
+            plotInfo['y_label'] = object_list_msg.values_units[attribute]
         
         else: # no bag file is selected
             raise Exception("Please select a bag file or difference.")
+        
+        plotInfo['label'] += 'obj' + str(obj_id) + '.'
+        plotInfo['label'] += category + '.'
+        plotInfo['label'] += attribute
+        plotInfo['label'] += object_list_msg.units[attribute]
+        
+        plotInfo['y_label'] = object_list_msg.values_units[attribute]
         
         return plotData, plotInfo
     

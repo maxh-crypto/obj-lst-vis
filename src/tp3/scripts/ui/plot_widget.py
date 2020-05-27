@@ -48,46 +48,35 @@ class PlotWidget(QWidget):
             plots the given data into the figure
         '''
         t = plotData[0]
-        values = plotData[1]
+        values = plotData[1]            
         
-        if self.lineCount == 0:
-            cur_ax = self.ax
-            self.label_dict[plotInfo['y_label']] = cur_ax
-        
-        elif plotInfo['y_label'] in self.label_dict: 
-            # there is already a axis with this label
-            # get this label
-            cur_ax = self.label_dict[plotInfo['y_label']]
-            
-        else: # there are already lines but none with the correct y_label
-            # create a new y_axis
-            cur_ax = self.ax.twinx()
-            # insert it into label_dict
-            self.label_dict[plotInfo['y_label']] = cur_ax
-            
-        
-        line, = cur_ax.plot(t, values, '.')
+        line, = self.ax.plot(t, values, '.')
         
         line.set_label(plotInfo['label'])
-        cur_ax.set_ylabel(plotInfo['y_label'])
-        cur_ax.set_xlabel('time [ms]')
+        # self.ax.set_ylabel(plotInfo['y_label'])
+        self.ax.set_xlabel('time [ms]')
         
-        cur_ax.legend()
+        self.ax.legend()
         
-        # TODO: mehrere y-Achsen (axis)
-        
-        cur_ax.grid(b=True)
-        cur_ax.figure.canvas.draw()
+        self.ax.grid(b=True)
+        self.ax.figure.canvas.draw()
         
         self.lineCount += 1
         self.linesList.append(line)
         
+        
     def deleteGraph(self, lineNr):
-        line = self.linesList.pop(lineNr)
-        line.remove()
+        '''
+            deletes the specified line in the figure
+        '''
+        line = self.linesList[lineNr]
+        self.linesList.remove(line)
+        self.ax.lines.remove(line)
+        del(line)
         self.lineCount -= 1
-        self.ax.figure.canvas.draw()
         self.ax.legend()
+        self.ax.figure.canvas.draw()
+        
         
     def getLines(self):
         '''
