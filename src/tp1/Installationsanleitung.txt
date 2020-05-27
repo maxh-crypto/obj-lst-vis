@@ -1,0 +1,327 @@
+ZUERST DIE GANZE ANLEITUNG LESEN!
+
+Remote Zugriff auf Carissma Rechner "CARLA-SPSS20"
+---------------------------------------------------------------------------------------------
+1. Bei TeamViewer unter dem Reiter Remote Management folgende E-Mailadresse eingeben: 
+	E-Mail: studentenprojektthiss20@gmail.com
+	Passwort: carissmaHiL
+2. Im Anschluss unter Gmail mit den gleichen Daten anmelden und den Link bestätigen
+3. Gegebenenfalls nochmals unter Remote Management anmelden und dann auf den Reiter Computer
+	& Kontakte wechseln. Dort den PC mit Doppelklick auswählen.
+4. Zum beenden ganz oben links auf das x drücken
+		
+Anmeldedaten für Ubuntu: Benutzer: student
+			 Passwort: HiL
+
+! Neustart habe ich noch nicht ausprobiert!
+---------------------------------------------------------------------------------------------
+Installationsanleitung: 
+			1. carla-simulator
+			2. python3.5 und pip3
+			3. ros-catkin py3.5
+			4. catkin_ws py3
+			5. Environment Settings
+			6. carla-ros-bridge Aufruf
+			7. yolo 2d
+			8. rviz
+			9. packages post processing
+			----------------------------
+			- Arbeiten mit git
+			- rosbag erstellen
+			- Befehle
+			- Vulkandrivers (nur AMD)
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+Anmerkung:
+
+Die genaue Reihenfolge kann je nach System und Installationsstand etwas abweichen!
+Bitte nach jedem Schritt überprüfen, ob alle Änderungen auch übernommen wurden!
+
+Sofern py3.5, Carla, ros, rosbridge und catkin bereits für py2.7 installiert waren und beim
+Ausführen eines py3.5 files viele Import Errors und Fehler auftreten, ist die einfachste
+Variante alles zu löschen und die Anleitung von oben nach unten abzuarbeiten.
+Ubuntu muss NICHT neut Installiert werden!
+
+Bei einer falschen Reihenfolge werden Daten überschrieben/gelöscht. Deshalb im Terminal immer
+genau nachlesen was im nächsten Schritt entfernt wird! 
+
+---------------------------------------------------------------------------------------------
+1.Schritt: carla-simulator installieren
+---------------------------------------------------------------------------------------------
+Entweder Variante 1.1 oder 1.2 ausführen.
+
+1.1 Carla war noch nicht installiert:
+
+	Deb package installation mit diesem Link für Version 9.8 versuchen:
+	https://carla.org/2020/03/09/release-0.9.8/
+	pip3 install --user pygame numpy verwenden (nicht expliziet geprüft,
+	sollte auch nur mit pip funktionieren, siehe weiterer Verlauf)
+	./ImportAssets.sh muss unter cd /opt/carla-simulator ausgeführt werden
+
+	Tritt bei apt-get install carla der Fehler auf, dass die source
+	nicht mehr verfügbar ist muss die Deb Version 9.9 mit diesem Link
+	https://carla.readthedocs.io/en/latest/start_quickstart/
+	installiert werden.
+	Wieder auf ImportAssets achten wie bereits unter 9.8 beschrieben.
+
+
+1.2 Carla 9.9/9.8 war bereits auf dem Rechner installiert:
+
+	Sofern carla 9.9 bereits auf dem Rechner installiert war, kann kann man
+	die carla 0.9.9 soure in sources.list deaktivieren (eine 9.8 source sollte
+	in der Liste Angezeigt werden):
+
+	vi /etc/apt/sources.list
+	und dann folgendes Auskommentieren:
+
+	#deb [arch=amd64] http://dist.carla.org/carla-0.9.9/ all main
+	und anschließend speichern
+
+	apt update
+	apt search carla
+		> es sollte carla-simulator 0.9.8 angezeigt werden
+	apt install carla-simulator
+	cd /opt/carla-simulator
+	./ImportAssets.sh
+
+
+Carla ist nach ImportAssets korrekt installiert. Bitt keine weiteren Schritte machen.
+Kommt es während der installation zu einem Fehler neu starten.
+
+--------------------------------------------------------------------------------------------
+2. Schritt: python3.5 und pip3 installieren und auf py3.5 umstellen
+--------------------------------------------------------------------------------------------
+Ziel: Durch die python3.5 installation und die nachfolgenden Abänderungen bezieht sich
+pip/pip3 nichtmehr auf py2.7/py3.6 sondern auf py3.5
+
+2.1 python3.5 installieren:
+
+	add-apt-repository ppa:deadsnakes/ppa
+	apt update
+	apt install python3.5
+	apt install python3-pip
+
+2.2 pip und pip3 nun auf python3.5 umstellen (wenn nicht vorhanden zuerst installieren):
+
+	sudo su
+	vi /usr/bin/pip
+	in der ersten Zeile einsetzen: #!/usr/bin/python3.5
+	:wq       ->zum speichern
+
+	vi /usr/bin/pip3
+	in der ersten Zeile einsetzen: #!/usr/bin/python3.5
+	:wq       ->zum speichern
+
+
+	Überprüfen ob  pip und pip3 richtigg aufgerufen wird:
+	pip -V
+	-> in Klammern sollte Pthon3.5 angezeigt werden
+	pip3 -V
+	-> in Klammern sollte Python3.5 angezeigt werden
+
+	Falls immernoch py2.7 und 3.7 aufgerufen wird bitte Environment Settings prüfen
+	(siehe unten)
+
+2.3 numpy und networkx für python3.5 installieren:
+
+	pip3 install --user pygame numpy networkx
+	pip install --user pygame numpy networkx
+
+--------------------------------------------------------------------------------------------
+3.Schritt: ros-catkin installation für Python3.5
+--------------------------------------------------------------------------------------------
+3.1 pkg module für catkin:
+	Da Ros bei dieser installation gelöscht wird, muss ros im Anschluss neu installiert
+	werden.
+
+	apt install python3-catkin-pkg python3-catkin-pkg-modules
+
+3.2 nun diese Anleitung für Ros:
+
+	http://wiki.ros.org/melodic/Installation/Ubuntu
+
+	Sofern ros bereits installiert war reicht
+	apt install ros-melodic-desktop-full
+	aus, da die Keys noch vorhanden sind
+
+3.3 carla-ros-bridge installieren:
+
+	https://carla.org/2020/03/09/release-0.9.8/
+	
+	Nach sudo apt install carla-ros-bridge-melodic aufhören
+	
+-------------------------------------------------------------------------------------------
+4. Schritt: catkin_ws für python3 erstellen und git
+-------------------------------------------------------------------------------------------
+4.1 catkin_ws:
+	source /opt/ros/melodic/setup.bash
+	mkdir -p ~/catkin_ws/src
+	cd ~/catkin_ws/
+	catkin_make   >warscheinlich  nicht  nötig bzw. vllt. Fehler beim ausführen
+	catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
+	source devel/setup.bash
+
+	überprüfen ob die Ordner angelegt wurden.
+
+4.2 git workspace anlegen:
+	apt-get install git
+	auf github gehen und link des repos kopieren (maxh-crypto / obj-lst-vis)
+	git clone https://github.com/maxh-crypto/obj-lst-vis.git
+	cd obj-lst-vis
+	git checkout -b origin <your-branch-name>  
+	catkin_make
+
+-------------------------------------------------------------------------------------------	
+5. Schritt: Environment Settings
+-------------------------------------------------------------------------------------------
+	vi ~/.bashrc des Users öffnen (Oder in Editor unter /home/benutzer
+	falls nicht Sichtbar Strg + h) und diese Sources einfügen.
+	Gegebenenfalls die Verzeichnisse entsprechend anpassen.
+
+	source /opt/ros/melodic/setup.bash
+	source /opt/carla-ros-bridge/melodic/setup.bash
+	source ~/catkin_ws/devel/setup.bash
+	export CARLA_ROOT=/opt/carla-simulator
+	export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla/dist/carla-0.9.8-py3.5-linux-x86_64.egg:${CARLA_ROOT}/PythonAPI/carla/agents:${CARLA_ROOT}/PythonAPI/carla
+	export ROS_PYTHON_VERSION=3
+
+
+Der path muss nach dem abändern des Files "carla-0.9.8-py3.5-linux-x86_64.egg" lauten,
+damit python3.5 eingebunden ist. Carla Version auch prüfen.
+
+	nach den Änderungen mit dem Editor:
+	. ~/.bashrc neu laden
+
+	Prüfen ob alles übernommen wurde mit: (sofern bereits ein Catkin_ws vorhanden)
+	cd ~/catkin_ws/
+	cat ../.bashrc
+
+-------------------------------------------------------------------------------------------
+6. Schritt: carla-ros-bridge erster Aufruf
+-------------------------------------------------------------------------------------------
+Der erste Test ob alles Vorhanden ist, oder noch Pakete installiert werden müssen.
+Gegebenenfalls ist die Ordnerstruktur (Terminal3 3) je nach catkin_ws anzupassen.
+Im Python Skript muss in der ersten Zeile python3.5 stehen.
+
+	Terminal 1: Carla starten: cd /opt/carla-simulator/bin/
+	            ./CarlaUE4.sh
+
+	Terminal 2: roscore
+
+	Terminal 3: cd ~/catkin_ws/
+	   	    catkin_make
+	   	    source devel/setup.bash
+	   	    chmod +x src/tp1/scripts/carlaGT.py (optional wenn nicht ausführbar)
+	   	    rosrun object_list ../tp1/scripts/carlaGT.py
+
+Sollte ein Paket fehlen:
+------------------------
+	pip3 install <paketname>
+	In meinem Fall hat hier nur networkx gefehlt.
+	(Carla 9.9, Ros und Rosbridge war vorher aber bereits für py2.7 installiert)
+
+	Sollte es zu import Carla fehlern kommen hier prüfen
+	/opt/carla-simulator/PythonAPI/carla/dist
+	ob ein py3.5 egg file vorhanden ist. Falls nicht Schritt 2 und 5 prüfen.
+
+FERTIG!
+
+Zusatz nicht 100% geprüft!
+--------------------------
+Wenn bei pip3 -V immer python3.6 aufgerufen wird bzw. beim ausführen noch immer numpy oder
+pygame Fehler auftreten kann mit python3.5 $(which pip3) install pygame bzw. numpy networkx
+versucht werden die Pakete zu installieren.
+
+-------------------------------------------------------------------------------------------
+7. Schritt: yolo 2d
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+8. Schritt: rviz
+-------------------------------------------------------------------------------------------
+
+RVIZ ist in der Vollversion von ROS melodic enthalten und wurde somit bereits in 
+Schritt 3.2 installiert.
+
+-------------------------------------------------------------------------------------------
+9. Schritt: packages post processing (läuft mit Python 2)
+-------------------------------------------------------------------------------------------
+
+Für das post processing müssen noch folgende packages installiert werden:
+
+	pip install genpy
+	sudo apt-get install python-shapely
+
+
+-------------------------------------------------------------------------------------------
+Arbeiten mit Git (hier bezogen auf TP1)
+––––––––––––-------------------------------------------------------------------------------
+Git von online Repo branch aktualisieren wenn sts3170 Änderungen gemacht/aktualisiert hat
+(Konflikte möglich)
+	cd ~/catkin_ws/
+	git pull
+
+Arbeiten mit Branches:
+
+	git checkout "BRANCHNAME"  -> wechselt in den neuen Branch
+	dann Änderungen programmieren
+	cd ~/catkin_ws/
+	git add .
+	git commit -m "mein text"
+	git push --set-upstream origin "BRANCHNAME"  ->in meine branch hochladen
+	in git online gehen
+		-> pull request erstellen in sts3170 -> reviewer zuweisen
+
+Wird der branch durch sts3170 in den Master gemerged, muss lokal master mit git pull
+aktualisiert werden.
+
+lokalen branch löschen nachdem in Master gemerged wurde:
+	git checkout master
+	git branch -d "BRANCHNAME"
+
+Meinen Lokalen branch mit sts3170 Master aktualisieren:
+	git pull origin master
+
+-------------------------------------------------------------------------------------------
+rosbag erstellen
+-------------------------------------------------------------------------------------------
+Terminal 1:  roscore
+Terminal 2:  cd ~/Schreibtisch/rosbags  ->Zuerst Ordner für die Bags anlegen
+	     rosbag record -a   !ABER NOCH NICHT ENTER DRÜCKEN!
+Terminal 3:  Carla starten: cd /opt/carla-simulator/bin/
+		./CarlaUE4.sh
+Terminal 4:  rosrun object_list ../tp1/scripts/carlaGT.py  -> je nach Spript anpassen
+
+Carla startet jetzt den Skript und im Terminal 2 schnell enter drücken.
+Mit str c Aufnahme beenden.
+
+Mit rosbag info <name von rosbag> kann man sich sachen im back anzeigen lassen und
+eingeben von rqt
+
+-------------------------------------------------------------------------------------------
+Befehle:
+-------------------------------------------------------------------------------------------
+cd /   -> geht immer ins Hauptverzeichnis der Festplatte zurück
+cd ~   -> Benutzerverzeichnis
+cd ..  -> Ein Ordner zurück
+ll     -> Ordnerinhalt in Langausgabe anzeigen
+ls -lhtr -> Ornderinhalt in Langausgabe sortiert nach Änderungsdatum
+
+Zu drwxr-xr-x: d -> directory, rwx = 7, lesen, schreiben, ausführen r-x = 5 ausführen und lesen
+Die ersten 3 beziehen sich auf den Besitzer (phk3601, root, ...)
+Die nächsten 3 beziehen sich auf die Gruppe (phk3601, root, ...)
+Die letzen 3 beziehen sich auf alle anderen User im System
+!!NIEMALS!! chmod 777
+
+--------------------------------------------------------------------------------------------
+Vulkandrivers (nur für AMD Grafikkarte) installieren:
+--------------------------------------------------------------------------------------------
+https://linuxconfig.org/install-and-test-vulkan-on-linux
+add-apt-repository ppa:oibaf/graphics-drivers
+apt update
+install libvulkan1 mesa-vulkan-drivers vulkan-utils freeglut3-dev mesa-utils
+-------------------------------------------------------------------------------------------

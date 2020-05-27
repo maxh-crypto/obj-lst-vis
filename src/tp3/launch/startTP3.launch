@@ -1,0 +1,23 @@
+<launch>
+
+  <arg name="model" default="$(find tp3)/urdf/prius.urdf"/>
+  <arg name="gui" default="false" />
+  <arg name="rvizconfig" default="$(find tp3)/rviz/urdf.rviz" />
+  <arg name="groundtruth" default="false" />
+  <arg name="camera" default="false" />
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+
+  <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <node pkg="tp3" name="Objekt_Visualization" type="Objektlist_Visualization.py"/>
+    
+  <node if="$(arg groundtruth)" pkg="tp3" name="RecordGroundtruth" type="RecordGroundtruth.py"/>
+  <node if="$(arg camera)" pkg="tp3" name="RecordCamera" type="RecordCamera.py"/>
+    
+  <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/TP1TP2.bag" />
+   
+</launch>

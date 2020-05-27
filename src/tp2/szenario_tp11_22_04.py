@@ -11,7 +11,7 @@
 """
 
 from __future__ import print_function
-
+    
 import argparse
 import collections
 import datetime
@@ -82,7 +82,7 @@ def get_actor_display_name(actor, truncate=250):
 # ==============================================================================
 # -- World ---------------------------------------------------------------
 # ==============================================================================
-
+    
 class World(object):
     def __init__(self, carla_world, hud, actor_filter):
         self.world = carla_world
@@ -90,10 +90,10 @@ class World(object):
         self.hud = hud
         self.player = None
         self.npc1 = None
-	self.npc2 = None
-	self.player_position = carla.Location()
-	self.npc1_position = carla.Location()
-	self.npc2_position = carla.Location()
+        self.npc2 = None
+        self.player_position = carla.Location()
+        self.npc1_position = carla.Location()
+        self.npc2_position = carla.Location()
         self.walker1 = None
         self.collision_sensor = None
         self.lane_invasion_sensor = None
@@ -108,16 +108,16 @@ class World(object):
         self.recording_start = 0
         
 
-	
+    
     def restart(self):
         # Keep same camera config if the camera manager exists.
         cam_index = self.camera_manager.index if self.camera_manager is not None else 0
         cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 0
         # Get a blueprint.
 
-	blueprint = self.world.get_blueprint_library().filter(self._actor_filter)
-	
-	blueprintPlayer = blueprint[8]
+        blueprint = self.world.get_blueprint_library().filter(self._actor_filter)
+    
+        blueprintPlayer = blueprint[8]
         blueprintNpc1 = blueprint[1]
         blueprintNpc2 = blueprint[14]
 
@@ -130,47 +130,47 @@ class World(object):
 
         while self.player is None:
             spawn_points = self.map.get_spawn_points() 
-	    #spawn_point = random.choice(spawn_points) if spawn_points else carla.Transform()
+        #spawn_point = random.choice(spawn_points) if spawn_points else carla.Transform()
             spawn_point = carla.Transform(carla.Location(x=119.600000, y=8.330196, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
             self.player = self.world.spawn_actor(blueprintPlayer, spawn_point)
             self.player.set_velocity(carla.Vector3D(x=11.111111, y=0.000000, z=0.000000)) #40kmh
        
-	    # Spawn the npc cars
+        # Spawn the npc cars
             spawn_point = carla.Transform(carla.Location(x=219.600000, y=12.800000, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
             self.npc1 = self.world.try_spawn_actor(blueprintNpc1, spawn_point)
             #self.npc1.set_velocity(carla.Vector3D(x=4.000000, y=0.000000, z=0.000000))
             spawn_point = carla.Transform(carla.Location(x=214.123000, y=12.883151, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
             self.npc2 = self.world.spawn_actor(blueprintNpc2, spawn_point)
        
-	    # Spawn the walker
-	    walker_controller_bp = self.world.get_blueprint_library().find('controller.ai.walker')
-	    blueprintsWalkers = self.world.get_blueprint_library().filter("walker.*")
+        # Spawn the walker
+            walker_controller_bp = self.world.get_blueprint_library().find('controller.ai.walker')
+            blueprintsWalkers = self.world.get_blueprint_library().filter("walker.*")
             blueprintsWalkers = blueprintsWalkers[0]
             if blueprintsWalkers.has_attribute('is_invincible'):
                 blueprintsWalkers.set_attribute('is_invincible', 'false')
-	    spawn_point = carla.Transform(carla.Location(x=223.013613, y=15.755237, z=2.063102), carla.Rotation(pitch=0.000000, yaw=270.855823, roll=0.000000))
-	    self.walker1 = self.world.spawn_actor(blueprintsWalkers, spawn_point)
+            spawn_point = carla.Transform(carla.Location(x=223.013613, y=15.755237, z=2.063102), carla.Rotation(pitch=0.000000, yaw=270.855823, roll=0.000000))
+            self.walker1 = self.world.spawn_actor(blueprintsWalkers, spawn_point)
 
             self.world.wait_for_tick()
             
-   	    # Set up walker control by AI (not used in this scenario)
+           # Set up walker control by AI (not used in this scenario)
             #self.walker1.controller = self.world.spawn_actor(walker_controller_bp, carla.Transform(), self.walker1)
-	    #self.walker1.controller.start()
+        #self.walker1.controller.start()
             #self.walker1.controller.go_to_location(carla.Location(x=151.516594, y=49.308423, z=1.863102))
-	    #self.walker1.controller.set_max_speed(1.6)
-	    
+        #self.walker1.controller.set_max_speed(1.6)
+        
             # Set up walker control by direct input 
-	    self.control = carla.WalkerControl()
+            self.control = carla.WalkerControl()
             self.control.speed = 1.39
             self.control.direction = carla.Vector3D(x=0.000000, y=-1.000000, z=0.000000)
 
-		
+        
             npc1_dim = Dimension(self.npc1)
-	    #print(npc1_dim.length)
-	    print(self.player.bounding_box.extent)
-	    print(self.npc1.bounding_box.extent)
-	    print(self.npc2.bounding_box.extent)
-	    print(self.walker1.bounding_box.extent)
+            #print(npc1_dim.length)
+            print(self.player.bounding_box.extent)
+            print(self.npc1.bounding_box.extent)
+            print(self.npc2.bounding_box.extent)
+            print(self.walker1.bounding_box.extent)
             
         # Set up the sensors.
         self.collision_sensor = CollisionSensor(self.player, self.hud)
@@ -203,107 +203,107 @@ class World(object):
     
     
     def position(self,actor):   #work in progress (not functional)
-	
+    
         FR = actor.bounding_box.extent
         FR.x = 0
         FR.z = 0
-	FR = FR + (actor.get_location() - self.player.get_location())
- 	if FR.x>0 and FR.y<0:
-	    FRbool = 1
-	else:
-	    FRbool = 0
-	
-	FM = actor.bounding_box.extent
+        FR = FR + (actor.get_location() - self.player.get_location())
+        if FR.x>0 and FR.y<0:
+            FRbool = 1
+        else:
+            FRbool = 0
+    
+        FM = actor.bounding_box.extent
         FM.x = 0
         FM.z = 0 
         FM.y = 0
-	FM = FM + (actor.get_location() - self.player.get_location())
-	if FM.x>0 and FM.y>0:
-	    FMbool = 1
-	else:
-	    FMbool = 0
-	
-	FL = actor.bounding_box.extent
+        FM = FM + (actor.get_location() - self.player.get_location())
+        if FM.x>0 and FM.y>0:
+            FMbool = 1
+        else:
+            FMbool = 0
+    
+        FL = actor.bounding_box.extent
         FL.x = 0
         FL.z = 0
         FL.y = -FL.y
-	FL = FL + (actor.get_location() - self.player.get_location())
- 	if FL.x>0 and FL.y>0:
-	    FLbool = 1
-	else:
-	    FLbool = 0
-		
-	MR = actor.bounding_box.extent
+        FL = FL + (actor.get_location() - self.player.get_location())
+        if FL.x>0 and FL.y>0:
+            FLbool = 1
+        else:
+            FLbool = 0
+        
+        MR = actor.bounding_box.extent
         MR.x = -MR.x
         MR.z = 0
- 	MR = MR + (actor.get_location() - self.player.get_location())
- 	if MR.x>0 and MR.y>0:
-	    MRbool = 1
-	else:
-	    MRbool = 0
-	
-	MM = actor.bounding_box.extent
+        MR = MR + (actor.get_location() - self.player.get_location())
+        if MR.x>0 and MR.y>0:
+            MRbool = 1
+        else:
+            MRbool = 0
+    
+        MM = actor.bounding_box.extent
         MM.x = -MR.x
         MM.z = 0
         MM.y = 0
-	MM = MM + (actor.get_location() - self.player.get_location())
- 	if MM.x>0 and MM.y>0:
-	    MMbool = 1
-	else:
-	    MMbool = 0
-	
-	ML = actor.bounding_box.extent
+        MM = MM + (actor.get_location() - self.player.get_location())
+        if MM.x>0 and MM.y>0:
+            MMbool = 1
+        else:
+            MMbool = 0
+    
+        ML = actor.bounding_box.extent
         ML.x = -MR.x
         ML.z = 0
         ML.y = -ML.y
-	ML = ML + (actor.get_location() - self.player.get_location())	
- 	if ML.x>0 and ML.y>0:
-	    MLbool = 1
-	else:
-	    MLbool = 0
-	
-	RR = actor.bounding_box.extent
+        ML = ML + (actor.get_location() - self.player.get_location())    
+        if ML.x>0 and ML.y>0:
+            MLbool = 1
+        else:
+            MLbool = 0
+    
+        RR = actor.bounding_box.extent
         RR.x = -2*RR.x
         RR.z = 0
- 	RR = RR + (actor.get_location() - self.player.get_location())        
- 	if RR.x>0 and RR.y>0:
-	    RRbool = 1
-	else:
-	    RRbool = 0
-	
-	RM = actor.bounding_box.extent
+        RR = RR + (actor.get_location() - self.player.get_location())        
+        if RR.x>0 and RR.y>0:
+            RRbool = 1
+        else:
+            RRbool = 0
+    
+        RM = actor.bounding_box.extent
         RM.x = -2*RM.x
         RM.z = 0
-	RM.y = 0
-	RM = RM + (actor.get_location() - self.player.get_location())
- 	if RM.x>0 and RM.y>0:
-	    RMbool = 1
-	else:
-	    RMbool = 0
-	
-	RL = actor.bounding_box.extent
+        RM.y = 0
+        RM = RM + (actor.get_location() - self.player.get_location())
+        if RM.x>0 and RM.y>0:
+            RMbool = 1
+        else:
+            RMbool = 0
+    
+        RL = actor.bounding_box.extent
         RL.x = -2*RL.x
         RL.z = 0
- 	RL.y = -RL.y
-	RL = RL + (actor.get_location() - self.player.get_location())	
- 	if RL.x>0 and RL.y>0:
-	    RLbool = 1
-	else:
-	    RLbool = 0
-	
-	fet = Feature(FRbool,FMbool,FLbool,MRbool,MMbool,MLbool,RRbool,RMbool,RLbool)
+        RL.y = -RL.y
+        RL = RL + (actor.get_location() - self.player.get_location())    
+        if RL.x>0 and RL.y>0:
+            RLbool = 1
+        else:
+            RLbool = 0
+    
+        fet = Feature(FRbool,FMbool,FLbool,MRbool,MMbool,MLbool,RRbool,RMbool,RLbool)
 
- 	
-	
-	return fet
+     
+    
+        return fet
 
 
     def ground_truth(self):
         actors = [
-	    self.npc1,
-	    self.npc2,
+        self.npc1,
+        self.npc2,
             self.walker1]
-	self.npc1_loc = self.player.get_location() - self.npc1.get_location()
+        self.npc1_loc = self.player.get_location() - self.npc1.get_location()
         self.npc2_loc = self.player.get_location() - self.npc2.get_location()
         self.walker1_loc = self.player.get_location() - self.walker1.get_location()
         
@@ -315,8 +315,8 @@ class World(object):
             self.lane_invasion_sensor.sensor,
             self.gnss_sensor.sensor,
             self.player,
-	    self.npc1,
-	    self.npc2,
+            self.npc1,
+            self.npc2,
             self.walker1]
         for actor in actors:
             if actor is not None:
@@ -325,20 +325,20 @@ class World(object):
 class Feature(object):
     def __init__(self,FR,FM,FL,MR,MM,ML,RR,RM,RL):
         self.FR = FR
-	self.FM = FM
-	self.FL = FL
-	self.MR = MR
-	self.MM = MM
-	self.ML = ML
-	self.RR = RR
-	self.RM = RM
-	self.RL = RL
+        self.FM = FM
+        self.FL = FL
+        self.MR = MR
+        self.MM = MM
+        self.ML = ML
+        self.RR = RR
+        self.RM = RM
+        self.RL = RL
 
 class Dimension:
     def __init__(self,actor):
         self.length = actor.bounding_box.extent.x *2
-	self.height = actor.bounding_box.extent.z *2
-	self.width = actor.bounding_box.extent.y *2
+        self.height = actor.bounding_box.extent.z *2
+        self.width = actor.bounding_box.extent.y *2
 
 
 # ==============================================================================
@@ -795,17 +795,17 @@ def game_loop(args):
             player_pos = world.player.get_location()  
             if player_pos.x > 219:
                 world.player.set_velocity(carla.Vector3D(x=0.000000, y=0.000000, z=0.000000))
-	    else:
-		world.player.set_velocity(carla.Vector3D(x=11.10987162, y=0.165959, z=0.000000))
-	    
+            else:
+                world.player.set_velocity(carla.Vector3D(x=11.10987162, y=0.165959, z=0.000000))
+        
 
             
-	    if player_pos.x > 170.56:
-                	    
-	        world.walker1.apply_control(world.control)
-	
+        if player_pos.x > 170.56:
+                        
+            world.walker1.apply_control(world.control)
+    
             
-	    #control.agent.run_step()
+        #control.agent.run_step()
             #control.manual_gear_shift = False
             #world.player.apply_control(control)
 
