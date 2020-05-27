@@ -18,6 +18,6 @@
   <node if="$(arg groundtruth)" pkg="tp3" name="RecordGroundtruth" type="RecordGroundtruth.py"/>
   <node if="$(arg camera)" pkg="tp3" name="RecordCamera" type="RecordCamera.py"/>
     
-  <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/TP1TP2.bag" />
+  <node pkg="rosbag" name = "data_play" type ="play" args="-l $(find tp3)/bagfiles/ROSBag_camera_calculation_egovehicle_simulation.bag" />
    
 </launch>
