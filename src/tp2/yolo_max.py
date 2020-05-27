@@ -56,6 +56,10 @@ configPath = os.path.sep.join([args["yolo"], "yolov3.cfg"])
 print("[INFO] loading YOLO from disk...")
 net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
 
+def arrayofdepthcamera(imagedepth):
+    global depthimage
+    depthimage = imagedepth
+
 def yoloVariables(x, y, z):
     global objCoordinates
     global objConfidence
@@ -72,9 +76,9 @@ def distance(number1):
     global objDistance
     objDistance = number1
 
-def bwframe(bwframe):
-    global frame23
-    frame23 = bwframe
+#def bwframe(bwframe):
+    #global frame23
+    #frame23 = bwframe
 
 def count(a):
     global counter
@@ -91,6 +95,18 @@ def process2(c):
 def process3(d):
     global step3
     step3 = d
+
+def getdepth(array):
+    if type(array) == int:
+        distance(0)
+    else:
+        yhalf = array[0] + (array[2] * 0.5)
+        xhalf = array[1] + (array[3] * 0.5)
+
+        pixel = depthimage[int(xhalf),int(yhalf)]
+        normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
+        in_meters = 1000 * normalized
+        distance(in_meters)
 
 def myprocess(image):
 
@@ -193,10 +209,7 @@ def yolostart(imagevariable):
                         k[i]=[confidences[i]]
                         yoloVariables(j, k, s)
 
-                        forblackwhiteframe = frame[(boxes[i][0]):(boxes[i][0]+boxes[i][2]), (boxes[i][1]):(boxes[i][1]+boxes[i][3])]
-                        frameingrey = cv2.cvtColor(forblackwhiteframe, cv2.COLOR_BGR2GRAY)
-                        blackwhite = cv2.adaptiveThreshold(frameingrey, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
-                        bwframe(blackwhite)
+                        
 
                         process2(1)
 
@@ -220,26 +233,20 @@ def depthAlgo(image2):
         array = np.array(image2.raw_data)
         i = array.reshape(IM_HEIGTH,IM_WIDTH,4)
         i2 = i[:,:,:3]
-        pixel = i2[398,344] #400,400
-        #print(frame23)
-        #distance_in_middle = 0
-        #count_steps = 0
-        #for width in range(b1[0][0],(b1[0][0]+b1[2][0])):
-        #    for length in range(b1[1][0],(b1[1][0]+b1[3][0])):
-        #        poi = frame23[width,length]
-        #        if poi == [0,0,0]:
-        #            # Entfernung aus GBR (nicht RGB!) Daten berechnen
-        #            normalized = (poi[2] + poi[1] * 256 + poi[0] * 256 * 256) / (256 * 256 * 256 - 1)
-        #            in_meters = 1000 * normalized
-        #            distance_in_middle += in_meters
-        #            count_steps+=1
-        #dist(distance_in_middle/(count_steps))
+        #pixel = i2[398,344]
+        arrayofdepthcamera(i2)
+
+
+            
+        
+        
+        #normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
+        #in_meters = 1000 * normalized
+        #distance(in_meters)
 
 
         # Entfernung aus GBR (nicht RGB!) Daten berechnen
-        normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
-        in_meters = 1000 * normalized
-        distance(in_meters)
+        
 
         process2(0)
         process3(1)
@@ -320,6 +327,7 @@ try:
         if step3 == 1:
             if counter > 1:
                 for i in range(objNumber):
+                    getdepth(objCoordinates[i])
                     print(objDetectionName[i], "at", objCoordinates[i], "Distance:", objDistance, "Confidence", objConfidence[i])
 
                 process3(0)
