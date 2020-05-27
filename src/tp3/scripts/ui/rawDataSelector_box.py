@@ -21,29 +21,29 @@ class RawDataSelector(QGroupBox):
         # Init the components
         self.bag1RadioBtn = QRadioButton('ground truth')
         self.bag2RadioBtn = QRadioButton('camera')
-        self.diffBtn = QRadioButton('diff. (gt - cam)')
-        self.thresholdLabel = QLabel("Threshold:")
-        self.thresholdLabel.setEnabled(False)
-        self.thresholdSetter = QDoubleSpinBox()
-        self.thresholdSetter.setDecimals(2)
-        self.thresholdSetter.setMaximum(1.0)
-        self.thresholdSetter.setSingleStep(0.1)
-        self.thresholdSetter.setValue(0.5)
-        self.thresholdSetter.setEnabled(False)
+#         self.diffBtn = QRadioButton('diff. (gt - cam)')
+#         self.thresholdLabel = QLabel("Threshold:")
+#         self.thresholdLabel.setEnabled(False)
+#         self.thresholdSetter = QDoubleSpinBox()
+#         self.thresholdSetter.setDecimals(2)
+#         self.thresholdSetter.setMaximum(1.0)
+#         self.thresholdSetter.setSingleStep(0.1)
+#         self.thresholdSetter.setValue(0.5)
+#         self.thresholdSetter.setEnabled(False)
         
         # connect the signals to the slots
         self.bag1RadioBtn.clicked.connect(self.btn1Clicked)
         self.bag2RadioBtn.clicked.connect(self.btn2Clicked)
-        self.diffBtn.clicked.connect(self.diffBtnClicked)
+#         self.diffBtn.clicked.connect(self.diffBtnClicked)
         
         # layout
         layout = QVBoxLayout()
         layout.addWidget(self.bag1RadioBtn)
         layout.addWidget(self.bag2RadioBtn)
-        layout.addWidget(self.diffBtn)
-        self.thresholdLabel.setMaximumHeight(15)     
-        layout.addWidget(self.thresholdLabel)
-        layout.addWidget(self.thresholdSetter)
+#         layout.addWidget(self.diffBtn)
+#         self.thresholdLabel.setMaximumHeight(15)     
+#         layout.addWidget(self.thresholdLabel)
+#         layout.addWidget(self.thresholdSetter)
         self.setLayout(layout)
         
     
@@ -51,8 +51,8 @@ class RawDataSelector(QGroupBox):
         '''
             "ground truth" is selected
         '''
-        self.thresholdLabel.setEnabled(False) 
-        self.thresholdSetter.setEnabled(False)
+#         self.thresholdLabel.setEnabled(False) 
+#         self.thresholdSetter.setEnabled(False)
         self.dataSourceChanged.emit(0)   
         
         
@@ -60,22 +60,22 @@ class RawDataSelector(QGroupBox):
         '''
             "camera" is selected
         '''
-        self.thresholdLabel.setEnabled(False)
-        self.thresholdSetter.setEnabled(False) 
+#         self.thresholdLabel.setEnabled(False)
+#         self.thresholdSetter.setEnabled(False) 
         self.dataSourceChanged.emit(1)   
             
         
-    def diffBtnClicked(self):
-        '''
-            "difference" is selected
-        '''
-        self.thresholdLabel.setEnabled(True)
-        self.thresholdSetter.setEnabled(True) 
-        self.dataSourceChanged.emit(2)   
+#     def diffBtnClicked(self):
+#         '''
+#             "difference" is selected
+#         '''
+#         self.thresholdLabel.setEnabled(True)
+#         self.thresholdSetter.setEnabled(True) 
+#         self.dataSourceChanged.emit(2)   
         
-            
-    def getThreshold(self):
-        return self.thresholdSetter.value()
+#             
+#     def getThreshold(self):
+#         return self.thresholdSetter.value()
     
     
     
