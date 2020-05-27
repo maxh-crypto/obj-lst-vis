@@ -9,7 +9,7 @@ TOPIC_main = 'objectlist'
 TOPIC_GT = '/simulation'
 TOPIC_CAM = '/camera_calculation'
 
-TOPIC = TOPIC_CAM
+TOPIC = TOPIC_main
 
 class Rosbag_Analysis:
   
@@ -27,7 +27,27 @@ class Rosbag_Analysis:
         return_array = np.sort(array_ids)
         bag.close()
         return return_array
+      
+    @staticmethod
+    def getObjectCountPerFrame(bagfile):
+        bag = rosbag.Bag(bagfile)
+        array_objectCounts = []
+        array_time = []
         
+        startTime = genpy.rostime.Time.from_sec(bag.get_start_time())
+        
+        for topic, msg, t in bag.read_messages(topics=[TOPIC]):
+            count_objectsFrame = 0
+            time = (float)((t.__sub__(startTime)).__str__()) / 1000000
+            
+            for i in msg.obj_list:
+                count_objectsFrame += 1
+                
+            array_time.append(time) 
+            array_objectCounts.append(count_objectsFrame)
+        
+        return (array_time, array_objectCounts)    
+      
     ### method for getting count of objects contained in rosbag summed up over all messages ###
     @staticmethod
     def getObjectCountTotal(bagfile):
@@ -55,9 +75,10 @@ class Rosbag_Analysis:
 
         # loop through all messages in bagfile
         for topic, msg, t in bag.read_messages(topics=[TOPIC]):
-            bag.read_messages()
             index_counter = 0
             obj_id_index = 99
+            
+            time = (float)((t.__sub__(startTime)).__str__()) / 1000000
             
             # loop through all objects in message
             # to find array index of target object ID
@@ -67,14 +88,9 @@ class Rosbag_Analysis:
                         array_values.append(getattr(msg.obj_list[index_counter], attribute))
                     else:
                         array_values.append(getattr(getattr(msg.obj_list[index_counter], category), attribute))
-                    array_timestamps.append((float)((t.__sub__(startTime)).__str__()) / 1000000)  #timestamp in milli seconds
+                    array_timestamps.append(time)  #timestamp in milli seconds
                     break
                 else: index_counter += 1
-                    
-            #if obj_id_index == 99:  # id not found in message # insert value '0' if object ID can be found in message
-                #array_values.append(0)
-                #array_timestamps.append((float)((t.__sub__(startTime)).__str__()) / 1000000)  #appends timestamp in milli seconds
-                #break
         
         bag.close()
         return (array_timestamps, array_values)
@@ -83,28 +99,28 @@ class Rosbag_Analysis:
     @staticmethod
     def getAdvancedData(bagfile1, bagfile2, obj_id_target_gt, category, attribute, operation, IoU_threshold):
     
-        (timestamps_gt, values_gt, values_cam) = Rosbag_Analysis.getCalculationValues(bagfile1, bagfile2, obj_id_target_gt, category, attribute, IoU_threshold)
+        (timestamps, values_gt, values_cam) = Rosbag_Analysis.getCalculationValues(bagfile1, bagfile2, obj_id_target_gt, category, attribute, IoU_threshold)
         
         ### operation ###
         if operation == "difference":
             array_result = np.subtract(values_gt, values_cam)
             
         #standardabweichung !!!
-         
-        return (timestamps_gt, array_result)
+
+        return (timestamps, array_result)
      ######################  
    
     @staticmethod
-    def timeMapping(frames_GT, startTime_gt, frames_CAM, startTime_cam):    # frames = array of tuples of (timestamps, messages)
+    def timeMapping(frames_GT, frames_CAM):    # frames = array of tuples of (timestamps, messages)
         
         mapped_frames = []
         
         for frame_CAM in frames_CAM:
             latest_GT_frame = 0
-            time_CAM = frame_CAM[0] - startTime_cam
+            time_CAM = frame_CAM[0]
             
             for frame_GT in frames_GT:
-                time_GT = frame_GT[0] - startTime_gt
+                time_GT = frame_GT[0]
                 
                 if (time_GT > time_CAM):                
                     mapped_frames.append([time_CAM, latest_GT_frame[1], frame_CAM[1]])
@@ -122,28 +138,28 @@ class Rosbag_Analysis:
         all_frames_GT = []
         all_frames_CAM = []
         
-        startTime_gt = (bag_gt.get_start_time()) / 1000000
-        startTime_cam = (bag_cam.get_start_time()) / 1000000
+        #time
+        startTime_gt = genpy.rostime.Time.from_sec(bag_gt.get_start_time())
+        startTime_cam = genpy.rostime.Time.from_sec(bag_cam.get_start_time())
         
          # collect GT messages/frames
         for topic, msg, t in bag_gt.read_messages(topics=[TOPIC]):
-            time = (float)(t.__str__()) / 1000000
-            all_frames_GT.append([time - startTime_gt, msg])
+            time = (float)((t.__sub__(startTime_gt)).__str__()) / 1000000
+            all_frames_GT.append([time, msg])
         
         # collect CAM messages/frames
         for topic, msg, t in bag_cam.read_messages(topics=[TOPIC]):
-            time = (float)(t.__str__()) / 1000000
-            all_frames_CAM.append([time - startTime_cam, msg])
+            time = (float)((t.__sub__(startTime_cam)).__str__()) / 1000000
+            all_frames_CAM.append([time, msg])
         
         #time mapping: match GT frame to each CAM frame (once for all frames)
         #mapped frames =  array of triples: (timestamp_CAM (normed), mapped_frame_GT, mapped_frame_CAM)
-        mapped_frames = Rosbag_Analysis.timeMapping(all_frames_GT, startTime_gt, all_frames_CAM, startTime_cam)
+        mapped_frames = Rosbag_Analysis.timeMapping(all_frames_GT, all_frames_CAM)
         
         bag_gt.close()
         bag_cam.close()
         return mapped_frames
         
-   
     @staticmethod
     def getCalculationValues(bagfile1, bagfile2, obj_id_target_gt, category, attribute, IoU_threshold):
         
@@ -184,7 +200,7 @@ class Rosbag_Analysis:
                     
                     if category == "": # branch with one level in object list tree (e.g. 'obj_id')
                         values_GT.append(getattr(objectsInFrame_GT[row[1]], attribute))
-                        values_CAM.append(getattr(objectsInFrame_CAM[row_count], attribute)) # stimmt das ???
+                        values_CAM.append(getattr(objectsInFrame_CAM[row_count], attribute))
                     else:
                         values_GT.append(getattr(getattr(frame[1].obj_list[row[1]], category), attribute))
                         values_CAM.append(getattr(getattr(objectsInFrame_CAM[row_count], category), attribute))
@@ -205,10 +221,7 @@ class Rosbag_Analysis:
         array_mm = []
         array_precision = []
         array_recall = []
-        
-        # loop through GT messages/frames
-        print('length mapped frames ' + str(len(mapped_frames)))   
-        
+             
         for frame in mapped_frames:
         
             objectsInFrame_GT = []
@@ -268,8 +281,7 @@ class Rosbag_Analysis:
             array_IoU_values_TP.append(sum_IoU_values)
             
                    #timestamps CAM
-        return (array_timestamps, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)
-       
+        return (array_timestamps, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)     
     
     @staticmethod
     def getTP(bagfile1, bagfile2, IoU_threshold):
@@ -350,7 +362,7 @@ class Rosbag_Analysis:
         return MOTP
 
 
-   ### example method - DEPRECATED ###
+    ### example method - DEPRECATED ###
     ### get all x values of object 1 ( = index 1) ###
     ### following method is deprecated ###
     

@@ -9,9 +9,10 @@ from object_list_msg import obj_list_msg
 
 class ValueSelectorWidget(QGroupBox):
     
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, hasObjCnt=True):
         super(ValueSelectorWidget, self).__init__()
         self.parent = parent
+        self.hasObjCnt = hasObjCnt
         
         self.layout = QVBoxLayout()
         self.setTitle('2.Select Value')
@@ -31,6 +32,12 @@ class ValueSelectorWidget(QGroupBox):
             for att in obj_list_msg[key]:
                 attribute = QTreeWidgetItem(category)
                 attribute.setText(0, att)
+        
+        if self.hasObjCnt:        
+            # add object_count
+            category = QTreeWidgetItem(self.valueTreeWidget)
+            category.setText(0, 'object_count')
+    
             
     def getAttribute(self):
         currentItem = self.valueTreeWidget.currentItem()
@@ -52,7 +59,8 @@ class ValueSelectorWidget(QGroupBox):
             selectedAttribute = currentItem.text(0)
             if (selectedAttribute == "prop_existence" or 
             selectedAttribute == "prop_mov" or
-            selectedAttribute == "obj_id"):
+            selectedAttribute == "obj_id" or
+            selectedAttribute == "object_count"):
                 selectedCategory = ""
             else:
                 selectedCategory = currentItem.parent().text(0)

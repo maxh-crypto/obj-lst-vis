@@ -61,13 +61,13 @@ class QualityDialog(QDialog):
         
         threshold = self.spinBox.value()
         
-        fppi = Rosbag_Analysis.getFPPI()
+        fppi = Rosbag_Analysis.getFPPI(self.bagFiles[0], self.bagFiles[1], threshold)
         self.fppiLbl.setText("FPPI = " + str(fppi))
         
-        mota = Rosbag_Analysis.getMOTA()
+        mota = Rosbag_Analysis.getMOTA(self.bagFiles[0], self.bagFiles[1], threshold)
         self.motaLbl.setText("MOTA = " + str(mota))
         
-        motp = Rosbag_Analysis.getMOTP()
+        motp = Rosbag_Analysis.getMOTP(self.bagFiles[0], self.bagFiles[1], threshold)
         self.motpLbl.setText("MOTP = " + str(motp))
         
         
