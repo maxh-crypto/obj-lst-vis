@@ -6,10 +6,9 @@
     and a list of all possible IDs, that appear in the selected bag
 '''
 
-from python_qt_binding import QtCore, QtGui, Qt
+from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import *
 from Rosbag_Analysis import Rosbag_Analysis
-from __builtin__ import None
 
 class IDSelectorWidget(QGroupBox):
     
