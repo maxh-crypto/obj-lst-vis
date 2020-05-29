@@ -6,7 +6,7 @@
 obj_list_msg = {
     'obj_id' : [],
     'geometric' : ['x', 'y', 'vx', 'vy', 'ax', 'ay', 'yaw', 'yawrate'],
-    'covariance' : [],
+#     'covariance' : [],
     'dimension' : ['length', 'width', 'height'],
     'prop_existence' : [],
     'prop_mov' : [],
