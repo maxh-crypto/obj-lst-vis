@@ -21,7 +21,7 @@ class DelPlotDialog(QDialog):
         
         # init the components:
         self.setWindowTitle("Delete Graph")
-        self.resize(300, 400)
+        self.resize(300, 200)
         self.linesListWidget = QListWidget(self)
         self.refreshList(self.linesList)
         self.__btn = QPushButton("Delete")

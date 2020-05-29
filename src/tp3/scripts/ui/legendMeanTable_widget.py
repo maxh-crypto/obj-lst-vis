@@ -14,15 +14,34 @@ class LegendInfoTable(QTableWidget):
         self.parent = parent
         
         # init the components:
-        self.setHorizontalHeaderLabels(['Graph', 'Mean', 'Standard Deviation'])
+        self.setHorizontalHeaderLabels(['Graph', 'Mean', 'Std Deviation'])
+        self.setColumnWidth(0, 300)
+        self.setColumnWidth(1, 100)
+        self.setColumnWidth(2, 100)
         
         
-    def addLine(self, label, mean, deviation):
-        rowIdx = self.rowCount()
+    def addRow(self, label, c_rgba, mean, deviation):
+        rowIdx = self.rowCount() - 1
         self.insertRow(rowIdx)
-        self.setItem(rowIdx, 0, QTableWidgetItem(label))
-        self.setItem(rowIdx, 1, QTableWidgetItem(str(mean)))
-        self.setItem(rowIdx, 2, QTableWidgetItem(str(deviation)))        
+        # create QColor
+        color = QtGui.QColor.fromRgbF(c_rgba[0], c_rgba[1], c_rgba[2], c_rgba[3])        
+        # create QBrush with color
+        brush = QtGui.QBrush(color)
+        
+        # legend item
+        leg_item = QTableWidgetItem(label)
+        leg_item.setBackground(brush)        
+        self.setItem(rowIdx, 0, leg_item)
+        
+        # mean item
+        mean_item = QTableWidgetItem(str(mean))
+        mean_item.setBackground(brush)
+        self.setItem(rowIdx, 1, mean_item)
+        
+        # deviation item
+        dev_item = QTableWidgetItem(str(deviation))
+        dev_item.setBackground(brush)
+        self.setItem(rowIdx, 2, dev_item)        
     
     
     def delLine(self, lineNr):

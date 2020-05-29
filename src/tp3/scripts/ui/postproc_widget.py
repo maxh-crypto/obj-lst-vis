@@ -9,7 +9,7 @@ from plot_widget import PlotWidget, MAX_LINES
 from plotDialog_widget import PlotDialogWidget
 from delPlotDialog_widget import DelPlotDialog
 from QualityDialog_widget import QualityDialog
-from legendMeanTable_widget import LegendInfoTable
+
 
 class PostProcMainWidget(QWidget):
     '''
@@ -24,7 +24,6 @@ class PostProcMainWidget(QWidget):
         self.bagWidget = BagWidget()
         self.bagFiles = self.bagWidget.getBagFiles()
         self.plotWidget = PlotWidget(self.bagFiles)
-        self.legendInfoWidget = LegendInfoTable(self)
         self.__addPlotBtn = QPushButton("Add new Graph")
         self.__delPlotBtn = QPushButton("Delete Graph")
         self.__qualityBtn = QPushButton("Compute Data Quality")
@@ -38,9 +37,6 @@ class PostProcMainWidget(QWidget):
         layout = QGridLayout()
         # (rowIndex, rowStretch)
         layout.setRowStretch(0, 0) # controls behavior when changing the window size
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(1, 1)
-        layout.setColumnStretch(2, 1)
         # (widget, fromRow, fromColumn, rowSpan, columnSpan)
         layout.addWidget(self.bagWidget, 0, 0, 1, 3)  
         layout.setRowStretch(1, 0)
@@ -50,8 +46,7 @@ class PostProcMainWidget(QWidget):
         layout.addWidget(self.__qualityBtn, 1, 2, 1, 1)
         
         layout.setRowStretch(2, 1)
-        layout.addWidget(self.plotWidget, 2, 0, 2, 2)
-        layout.addWidget(self.legendInfoWidget, 3, 2, 1, 1)
+        layout.addWidget(self.plotWidget, 2, 0, 1, 3)
         
         self.setLayout(layout)
         

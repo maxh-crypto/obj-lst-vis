@@ -6,9 +6,10 @@
     and a list of all possible IDs, that appear in the selected bag
 '''
 
-from python_qt_binding import QtCore, QtGui
+from python_qt_binding import QtCore, QtGui, Qt
 from python_qt_binding.QtWidgets import *
 from Rosbag_Analysis import Rosbag_Analysis
+from __builtin__ import None
 
 class IDSelectorWidget(QGroupBox):
     
@@ -28,6 +29,10 @@ class IDSelectorWidget(QGroupBox):
         
     def getID(self):
         id = int(self.lineEdit.text())
+        
+#         if self.idList.findItem(id, Qt.MatchFlag.MatchFixedString) == None:
+#             raise Exception('Item not in list') 
+                
         return id
     
     def refreshList(self, bagFileName):
@@ -49,6 +54,7 @@ class IDSelectorWidget(QGroupBox):
             fills the lineEdit with the clicked id
         '''
         self.lineEdit.setText(curItem.text())
+        
         
         
         

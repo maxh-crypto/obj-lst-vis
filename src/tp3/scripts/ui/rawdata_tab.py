@@ -119,8 +119,8 @@ class RawDataTab(QWidget):
         else:
             try:
                 obj_id = self.idSelector.getID()
-            except ValueError:
-                raise Exception("ObjectID is not a number! Insert valid ID.")       
+            except Exception:
+                raise Exception("ObjectID is not in the list. Insert valid ID.")       
                         
             try:    
                 plotData = Rosbag_Analysis.getRawData(bagfile, obj_id, category, attribute)
