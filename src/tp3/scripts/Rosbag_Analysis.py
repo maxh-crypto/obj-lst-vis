@@ -46,7 +46,10 @@ class Rosbag_Analysis:
             array_time.append(time) 
             array_objectCounts.append(count_objectsFrame)
         
-        return (array_time, array_objectCounts)    
+        meanValue = Rosbag_Analysis.calcMeanValue(array_objectCounts)
+        standardDev = Rosbag_Analysis.calcStandardDeviation(array_objectCounts)
+        
+        return (array_time, array_objectCounts, meanValue, standardDev)    
       
     ### method for getting count of objects contained in rosbag summed up over all messages ###
     @staticmethod

@@ -37,7 +37,7 @@ print(array_objectIDs)
 
 # # generic implementation (in work) 
                                                                                                             # #bag file   #object id    #category      #attribute
-#(array_timestamps_1, array_values_1) = ra.Rosbag_Analysis.getRawData(BAGFILE, 1, "", "obj_id")
+(array_timestamps_1, array_values_1, mean, std) = ra.Rosbag_Analysis.getRawData(BAGFILE_CAM, 1, "", "prop_existence")
 (array_timestamps_2, array_values_2, meanValue2, standardDev2) = ra.Rosbag_Analysis.getRawData(BAGFILE_CAM, 2, "geometric", "x")
 # (array_timestamps_3, array_values_3) = ra.Rosbag_Analysis.getRawData(BAGFILE, 3, "geometric", "x")
 
@@ -53,10 +53,10 @@ print('standardDev2: ' + str(standardDev2))
 # print(len(array_values_3))
 
 # #plotting arrays
-#py.plot(array_timestamps_1, array_values_1, '-b')
+py.plot(array_timestamps_1, array_values_1, '-b')
 #py.plot(array_timestamps_2, array_values_2, 'xr')
 # py.plot(array_timestamps_3, array_values_3, '-k')
-#py.show()     
+py.show()     
 
 ######################## get Advanced Data ############################
 
@@ -70,11 +70,14 @@ print('standardDevFN : ' + str(standardDevFN))
 # print(FN)
 
 (timestamps, x_values, meanValueDiff, standardDevDiff) = ra.Rosbag_Analysis.getAdvancedData(BAGFILE_GT, BAGFILE_CAM, 2, "geometric", "x", "difference", IoU_THRESHOLD)
-(timestamps_objects, objectCounts) = ra.Rosbag_Analysis.getObjectCountPerFrame(BAGFILE_GT)
+(timestamps_objects, objectCounts, meanCount, stdCount) = ra.Rosbag_Analysis.getObjectCountPerFrame(BAGFILE_GT)
 
 print('meanValueDiff: ' + str(meanValueDiff))
 print('standardDevDiff : ' + str(standardDevDiff))
 
+
+print('meanValueObjCount: ' + str(meanCount))
+print('standardDevObjCount : ' + str(stdCount))
 #plotting arrays
 py.plot(timestamps_objects, objectCounts , 'xb')
 #py.plot(timestamps, x_values , 'xr')
