@@ -28,6 +28,10 @@ class IDSelectorWidget(QGroupBox):
         
     def getID(self):
         id = int(self.lineEdit.text())
+        
+#         if self.idList.findItem(id, Qt.MatchFlag.MatchFixedString) == None:
+#             raise Exception('Item not in list') 
+                
         return id
     
     def refreshList(self, bagFileName):
@@ -49,6 +53,7 @@ class IDSelectorWidget(QGroupBox):
             fills the lineEdit with the clicked id
         '''
         self.lineEdit.setText(curItem.text())
+        
         
         
         

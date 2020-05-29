@@ -119,8 +119,8 @@ class RawDataTab(QWidget):
         else:
             try:
                 obj_id = self.idSelector.getID()
-            except ValueError:
-                raise Exception("ObjectID is not a number! Insert valid ID.")       
+            except Exception:
+                raise Exception("ObjectID is not in the list. Insert valid ID.")       
                         
             try:    
                 plotData = Rosbag_Analysis.getRawData(bagfile, obj_id, category, attribute)
@@ -130,14 +130,18 @@ class RawDataTab(QWidget):
             bag_id = self.selectedSource + 1 
             plotInfo['label'] = 'bag' + str(bag_id) + '.'
             plotInfo['label'] += 'obj' + str(obj_id) + '.'
-            plotInfo['label'] += category + '.'
+            
+            if category != '':
+                plotInfo['label'] += category + '.'
+                
             plotInfo['label'] += attribute
-            plotInfo['label'] += object_list_msg.units[attribute]
             
-            plotInfo['y_label'] = object_list_msg.values_units[attribute]
-            
-                       
             plotInfo['bag'] = bag_id
+            
+            if object_list_msg.units.has_key(attribute):
+                plotInfo['label'] += object_list_msg.units[attribute]
+                plotInfo['y_label'] = object_list_msg.values_units[attribute]                     
+
         
         return plotData, plotInfo
     

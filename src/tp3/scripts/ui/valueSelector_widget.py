@@ -57,16 +57,20 @@ class ValueSelectorWidget(QGroupBox):
         currentItem = self.valueTreeWidget.currentItem()
         if currentItem.childCount() == 0: # selctedItem is on the lowest layer
             selectedAttribute = currentItem.text(0)
+            
             if (selectedAttribute == "prop_existence" or 
             selectedAttribute == "prop_mov" or
             selectedAttribute == "obj_id" or
-            selectedAttribute == "object_count"):
-                selectedCategory = ""
+            selectedAttribute == "object_count" or 
+            selectedAttribute == "covariance"):
+                selectedCategory = "" 
             else:
                 selectedCategory = currentItem.parent().text(0)
+                
         else: # selected Item is not an attribute
             selectedAttribute = ""
             selectedCategory = ""
+            
         return { 'category' : selectedCategory, 
                 'attribute' : selectedAttribute }
         

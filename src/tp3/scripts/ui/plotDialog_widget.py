@@ -29,10 +29,10 @@ class PlotDialogWidget(QDialog):
         self.tabWidget = QTabWidget()
         self.rawDataTab = RawDataTab(bagFiles, self)
         self.compareTab = CompareDataTab(bagFiles, self) 
-        self.diffTap = DiffTab(bagFiles, self)
+        self.diffTab = DiffTab(bagFiles, self)
         self.tabWidget.addTab(self.rawDataTab, "Raw Data Graphs")
         self.tabWidget.addTab(self.compareTab, "Evaluation Graphs")
-        self.tabWidget.addTab(self.diffTap, "Difference Graphs")
+        self.tabWidget.addTab(self.diffTab, "Difference Graphs")
         self.layout.addWidget(self.tabWidget)
         
         # init the start button
