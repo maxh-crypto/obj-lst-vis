@@ -55,6 +55,10 @@ class ValueSelectorWidget(QGroupBox):
         
     def getCatAndAtt(self):
         currentItem = self.valueTreeWidget.currentItem()
+        
+        if currentItem == None:
+            raise Exception('No attribute selected! Please select a valid attribute.')
+        
         if currentItem.childCount() == 0: # selctedItem is on the lowest layer
             selectedAttribute = currentItem.text(0)
             

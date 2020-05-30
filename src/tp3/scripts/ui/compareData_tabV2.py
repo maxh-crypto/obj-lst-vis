@@ -65,12 +65,12 @@ class CompareDataTab(QWidget):
         
         # start new thread
         thread = EvaluationThread(self, operation, self.bagFiles, threshold)
-        thread.finished.connect(self.waitMessageBox.close)
+#         thread.finished.connect(self.waitMessageBox.close)
         thread.start()
-        self.waitMessageBox.setText('Computing ' + operation + ' values... \nThis could take a few seconds')
-        
-        if thread.isRunning():
-            self.waitMessageBox.exec_()
+#         self.waitMessageBox.setText('Computing ' + operation + ' values... \nThis could take a few seconds')
+#         
+#         if thread.isRunning():
+#             self.waitMessageBox.exec_()
         
         return self.plotData, self.plotInfo
         
@@ -127,7 +127,7 @@ class EvaluationThread(QtCore.QThread):
                 raise Exception("Sorry, unexpected error occurred.")
              
         # operation "recall"
-        elif self.operation == sOperationSelectorWidget.operations[5]:
+        elif self.operation == OperationSelectorWidget.operations[5]:
                          
             try:
                 plotData = Rosbag_Analysis.getRecall(self.bagFiles[0], self.bagFiles[1], self.threshold)

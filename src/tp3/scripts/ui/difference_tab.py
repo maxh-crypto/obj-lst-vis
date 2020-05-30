@@ -120,8 +120,9 @@ class DiffTab(QWidget):
             plotInfo['label'] = 'difference' + '.'   
             plotInfo['label'] += category + '.'
             plotInfo['label'] += attribute
-            plotInfo['label'] += object_list_msg.units[attribute]       
-              
-            plotInfo['y_label'] = object_list_msg.values_units[attribute]
+            
+            if object_list_msg.units.has_key(attribute):
+                plotInfo['label'] += object_list_msg.units[attribute]                    
+                plotInfo['y_label'] = object_list_msg.values_units[attribute]
             
         return plotData, plotInfo

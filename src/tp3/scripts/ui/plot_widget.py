@@ -30,9 +30,10 @@ class PlotWidget(QWidget):
     lineCount = 0 # counter for all active axes 
     linesList = []
     
-    def __init__(self, bagFiles):
+    def __init__(self, bagFiles, parent=None):
         super(PlotWidget, self).__init__()
         self.bagFiles = bagFiles
+        self.parent = parent
         
         # init the components:
         self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
