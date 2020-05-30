@@ -21,9 +21,9 @@ class PostProcMainWidget(QWidget):
         super(PostProcMainWidget, self).__init__()
 
         # init the GUI components:
-        self.bagWidget = BagWidget()
+        self.bagWidget = BagWidget(self)
         self.bagFiles = self.bagWidget.getBagFiles()
-        self.plotWidget = PlotWidget(self.bagFiles)
+        self.plotWidget = PlotWidget(self.bagFiles, self)
         self.__addPlotBtn = QPushButton("Add new Graph")
         self.__delPlotBtn = QPushButton("Delete Graph")
         self.__qualityBtn = QPushButton("Compute Data Quality")

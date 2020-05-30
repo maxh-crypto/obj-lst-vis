@@ -65,5 +65,7 @@ class PlotDialogWidget(QDialog):
             self.close()
             
         except Exception as e:
-            message_module.showMessage(str(e))
-        
+#             message_module.showMessage(str(e))
+            msg_box = QMessageBox(QMessageBox.Critical, 'Error', str(e))
+            msg_box.exec_()
+            

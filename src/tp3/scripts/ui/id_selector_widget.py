@@ -18,19 +18,24 @@ class IDSelectorWidget(QGroupBox):
         self.setTitle('3.Select ObjectID')
         layout = QVBoxLayout()
         
+        self.idList = [] # list of strings with all ids in the selected bag
+        
         self.lineEdit = QLineEdit()
-        self.idList = QListWidget()
-        self.idList.currentItemChanged.connect(self.idSelected)
+        self.idListWidget = QListWidget()
+        self.idListWidget.currentItemChanged.connect(self.idSelected)
         
         layout.addWidget(self.lineEdit)
-        layout.addWidget(self.idList)
+        layout.addWidget(self.idListWidget)
         self.setLayout(layout)
         
     def getID(self):
-        id = int(self.lineEdit.text())
+        id_str = self.lineEdit.text()
+        id_str = id_str.strip() # remove the whitespace before and after the id
         
-#         if self.idList.findItem(id, Qt.MatchFlag.MatchFixedString) == None:
-#             raise Exception('Item not in list') 
+        if id_str not in self.idList:
+            raise Exception('Item not in list')
+        
+        id = int(id_str)
                 
         return id
     
@@ -43,9 +48,9 @@ class IDSelectorWidget(QGroupBox):
         except:
             raise Exception("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
-        ids = map(str, ids) # convert list to strings
-        self.idList.clear()
-        self.idList.addItems(ids)
+        self.idList = map(str, ids) # convert list to strings
+        self.idListWidget.clear()
+        self.idListWidget.addItems(self.idList)
         
     def idSelected(self, curItem, prevItem):
         '''
