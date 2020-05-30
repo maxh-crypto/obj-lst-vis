@@ -3,7 +3,6 @@
     contains widgets to select the data required 
     for plotting raw data
 '''
-
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QWidget, QGridLayout, 
                                          QVBoxLayout, QPushButton,
@@ -144,8 +143,6 @@ class RawDataTab(QWidget):
 
         
         return plotData, plotInfo
-    
-        
-        
+       
         
         
