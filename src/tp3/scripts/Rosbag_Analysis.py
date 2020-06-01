@@ -69,15 +69,20 @@ class Rosbag_Analysis:
     @staticmethod
     def calcMeanValue(values):
         
-        meanValue = np.mean(values)
-        return meanValue
+        if len(values) == 0:
+            return nan
+        else: 
+            meanValue = np.mean(values)
+            return meanValue
    
     @staticmethod
     def calcStandardDeviation(values):
         
-        standardDev = np.std(values)
-        
-        return standardDev
+        if len(values) == 0:
+            return nan
+        else: 
+            standardDev = np.std(values)
+            return standardDev    
              
     @staticmethod
     def getRawData(bagfile, obj_id_target, category, attribute):
@@ -192,8 +197,6 @@ class Rosbag_Analysis:
         values_GT = []
         values_CAM = []
             
-        print('Count of mapped frames ' + str(len(mapped_frames)))   
-
         for frame in mapped_frames:
         
             objectsInFrame_GT = []
@@ -231,7 +234,7 @@ class Rosbag_Analysis:
                     break
                         
         if len(values_GT) == 0:
-            print("No object matches detected. Could not get calculation values.")
+            print("Error in Rosbag_Analysis.py: No object matches detected. Could not get calculation values.")
         
         return (timestamps_CAM, values_GT, values_CAM)      
      
@@ -248,9 +251,7 @@ class Rosbag_Analysis:
         array_mm = []
         array_precision = []
         array_recall = []
-          
-        print('Count of mapped frames ' + str(len(mapped_frames)))   
-          
+                    
         for frame in mapped_frames:
         
             objectsInFrame_GT = []
@@ -372,7 +373,7 @@ class Rosbag_Analysis:
         meanValue = Rosbag_Analysis.calcMeanValue(recall)
         standardDev = Rosbag_Analysis.calcStandardDeviation(recall)
         
-        return (timestamp, recal, meanValue, standardDev)
+        return (timestamp, recall, meanValue, standardDev)
         
     @staticmethod
     def getFPPI(bagfile1, bagfile2, IoU_threshold):
@@ -406,7 +407,10 @@ class Rosbag_Analysis:
         d_ti = np.sum(IoU_values_TP)
         TP_total = np.sum(TP)
         
-        MOTP = d_ti / TP_total
+        if TP_total == 0 :
+            MOTP = 0
+        else:
+            MOTP = d_ti / TP_total
         
         return MOTP
 
