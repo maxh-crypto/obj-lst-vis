@@ -37,10 +37,10 @@ def evaluateColor_sim(Class):
     class_List = {
 	"car": [1,0,0,1],
 	"truck":[0,1,0,1],
-	"motorcycle": [0,0,1,1],
-	"bicycle": [1,1,0,1],
-	"pedestrian": [1,0,1,3],
-	"stacionary": [0,1,1,3],
+        "pedestrian": [0,0,1,3],
+	"motorcycle": [1,0,1,1],
+	"bicycle": [1,1,0,3],	
+	"stacionary": [0,1,1,2],
 	"other":[1,1,1,2]   
     }
     return class_List.get(Class)
@@ -113,7 +113,7 @@ def evaluateObject_sim(objectData):
 
 def evaluateObject_cam(objectData):
     marker = Marker()
-    r, g, b, typ, height = evaluateColor_cam(evaluateClassification(objectData.classification))
+    r, g, b, typ = evaluateColor_sim(evaluateClassification(objectData.classification))
     marker.header.frame_id = "/base_link"
     
     marker.type = typ
@@ -121,8 +121,7 @@ def evaluateObject_cam(objectData):
     marker.action = marker.ADD
     marker.scale.x = objectData.dimension.length
     marker.scale.y = objectData.dimension.width
-    
-    marker.scale.z = height
+    marker.scale.z = objectData.dimension.height
 
     marker.color.a = 0.5
    
@@ -139,7 +138,7 @@ def evaluateObject_cam(objectData):
 
     marker.pose.position.x = car_ego_x + objectData.geometric.x 
     marker.pose.position.y = car_ego_y + objectData.geometric.y * (-1)
-    marker.pose.position.z = height/2
+    marker.pose.position.z = objectData.dimension.height/2 
     marker.lifetime = rospy.Duration(0.5)
     return marker
 
