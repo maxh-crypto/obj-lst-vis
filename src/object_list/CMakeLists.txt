@@ -57,6 +57,13 @@ find_package(catkin REQUIRED COMPONENTS
    Geometric.msg
    ObjectList.msg
    ObjectsList.msg
+   #EgoData.msg
+   #Dimension3d.msg
+   #Orientation3d.msg
+   #MovingObject.msg
+   #GroundTruthMovingObjects.msg
+   #TrafficUpdateMovingObject.msg
+
 
  )
 
