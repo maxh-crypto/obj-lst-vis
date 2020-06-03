@@ -9,6 +9,7 @@ from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import QDialog, QTabWidget, QVBoxLayout, QPushButton, QMessageBox
 from rawdata_tab import RawDataTab
 from compareData_tab import CompareDataTab
+from difference_tab import DiffTab
 
 import message_module
 
@@ -28,8 +29,10 @@ class PlotDialogWidget(QDialog):
         self.tabWidget = QTabWidget()
         self.rawDataTab = RawDataTab(bagFiles, self)
         self.compareTab = CompareDataTab(bagFiles, self) 
+        self.diffTab = DiffTab(bagFiles, self)
         self.tabWidget.addTab(self.rawDataTab, "Raw Data Graphs")
         self.tabWidget.addTab(self.compareTab, "Evaluation Graphs")
+        self.tabWidget.addTab(self.diffTab, "Difference Graphs")
         self.layout.addWidget(self.tabWidget)
         
         # init the start button
@@ -52,6 +55,8 @@ class PlotDialogWidget(QDialog):
                 plotData, plotInfo = self.rawDataTab.getPlotData()
             elif currentTab == 1: # 
                 plotData, plotInfo = self.compareTab.getPlotData()
+            elif currentTab == 2:
+                plotData, plotInfo = self.diffTab.getPlotData()
                 
             # emit signal with data
             self.newPlotData.emit(plotData, plotInfo)
@@ -60,5 +65,7 @@ class PlotDialogWidget(QDialog):
             self.close()
             
         except Exception as e:
-            message_module.showMessage(str(e))
-        
+#             message_module.showMessage(str(e))
+            msg_box = QMessageBox(QMessageBox.Critical, 'Error', str(e))
+            msg_box.exec_()
+            

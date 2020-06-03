@@ -10,6 +10,7 @@ from plotDialog_widget import PlotDialogWidget
 from delPlotDialog_widget import DelPlotDialog
 from QualityDialog_widget import QualityDialog
 
+
 class PostProcMainWidget(QWidget):
     '''
        this is the main GUI-Widget for the postprocessing Module
@@ -20,9 +21,9 @@ class PostProcMainWidget(QWidget):
         super(PostProcMainWidget, self).__init__()
 
         # init the GUI components:
-        self.bagWidget = BagWidget()
+        self.bagWidget = BagWidget(self)
         self.bagFiles = self.bagWidget.getBagFiles()
-        self.plotWidget = PlotWidget(self.bagFiles)
+        self.plotWidget = PlotWidget(self.bagFiles, self)
         self.__addPlotBtn = QPushButton("Add new Graph")
         self.__delPlotBtn = QPushButton("Delete Graph")
         self.__qualityBtn = QPushButton("Compute Data Quality")
@@ -34,6 +35,7 @@ class PostProcMainWidget(QWidget):
         
         # setup the layout:
         layout = QGridLayout()
+        # (rowIndex, rowStretch)
         layout.setRowStretch(0, 0) # controls behavior when changing the window size
         # (widget, fromRow, fromColumn, rowSpan, columnSpan)
         layout.addWidget(self.bagWidget, 0, 0, 1, 3)  

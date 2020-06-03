@@ -9,7 +9,6 @@ import message_module
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QDialog, QListWidget, 
                                         QVBoxLayout, QPushButton)
-from matplotlib.artist import Artist
 
 class DelPlotDialog(QDialog):
 
@@ -22,7 +21,7 @@ class DelPlotDialog(QDialog):
         
         # init the components:
         self.setWindowTitle("Delete Graph")
-        self.resize(300, 400)
+        self.resize(300, 200)
         self.linesListWidget = QListWidget(self)
         self.refreshList(self.linesList)
         self.__btn = QPushButton("Delete")
@@ -44,7 +43,11 @@ class DelPlotDialog(QDialog):
             self.linesListWidget.addItem(label)
             
     def btnPressed(self):
-        # TODO: remove line from list and refresh the widget
+        
+        if self.linesListWidget.count() == 0:
+            # empty list
+            return
+        
         try:
             lineNr = self.linesListWidget.currentRow()
         except:
