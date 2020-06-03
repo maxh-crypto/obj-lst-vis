@@ -126,8 +126,13 @@ class Rosbag_Analysis:
         
         ### operation ###
         if operation == "difference":
-            array_result = np.subtract(values_gt, values_cam)
-        
+            
+            if len(values_gt) == 0 or len(values_cam) == 0:
+                array_result = []
+                
+            else: 
+                array_result = np.subtract(values_gt, values_cam)
+
         meanValue = Rosbag_Analysis.calcMeanValue(array_result)
         standardDev = Rosbag_Analysis.calcStandardDeviation(array_result)
         
@@ -308,11 +313,11 @@ class Rosbag_Analysis:
             array_mm.append(count_mm)
             array_IoU_values_TP.append(sum_IoU_values)
             
-            if count_TP == 0 and count_FP == 0:
+            if (count_TP + count_FP) == 0:
                 array_precision.append(0)
             else: array_precision.append(count_TP / (count_TP + count_FP))
             
-            if count_TP == 0 and count_FN == 0:
+            if (count_TP + count_FN) == 0:
                 array_recall.append(0)
             else: array_recall.append(count_TP / (count_TP + count_FN))
             
@@ -381,7 +386,12 @@ class Rosbag_Analysis:
         (timestamp, TP, FP, FN, mm, precision, recall, IoU_values_TP) = Rosbag_Analysis.getEvaluation(bagfile1, bagfile2, IoU_threshold)
         
         FP_total = np.sum(FP)
-        FPPI = FP_total / len(timestamp)  #len(timestamp) == nFrames
+        
+        if len(timestamp) == 0:
+            FPPI = nan
+        
+        else:
+            FPPI = FP_total / len(timestamp)  #len(timestamp) == nFrames
         
         return FPPI
             
@@ -395,7 +405,10 @@ class Rosbag_Analysis:
         mm_total = np.sum(mm)
         count_objects_GT_total = Rosbag_Analysis.getObjectCountTotal(bagfile1)
 
-        MOTA = 1 - ((FN_total + FP_total + mm_total) / count_objects_GT_total)
+        if count_objects_GT_total == 0:
+            MOTA = 0
+        else:
+            MOTA = 1 - ((FN_total + FP_total + mm_total) / count_objects_GT_total)
         
         return MOTA
     
