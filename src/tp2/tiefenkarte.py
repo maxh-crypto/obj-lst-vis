@@ -46,7 +46,7 @@ def processimage(image):
     
     # Graphische Ausgabe des Sensorbilds
     cv2.imshow('gaus', i2)
-    cv2.waitKey(1)
+    cv2.waitKey(25)
     #cv2.destroyAllWindows()
     #speed(in_meters)
     return in_meters
@@ -101,7 +101,7 @@ try:
     #sensor.listen(lambda image: image.save_to_disk('output/%06d.png' % image.frame, cc))
     sensor.listen(lambda image: (processimage(image)))
 
-    time.sleep(25)
+    time.sleep(35)
 
 
 

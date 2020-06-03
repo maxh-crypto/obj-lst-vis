@@ -23,7 +23,8 @@ Installationsanleitung:
 			5. Environment Settings
 			6. carla-ros-bridge Aufruf
 			7. yolo 2d
-			8. rvis
+			8. rviz
+			9. packages post processing
 			----------------------------
 			- Arbeiten mit git
 			- rosbag erstellen
@@ -162,10 +163,10 @@ pip/pip3 nichtmehr auf py2.7/py3.6 sondern auf py3.5
 
 	überprüfen ob die Ordner angelegt wurden.
 
-4.2 git:
+4.2 git workspace anlegen:
 	apt-get install git
-	auf github gehen und link des repos kopieren
-	git clone <link einfügen>
+	auf github gehen und link des repos kopieren (maxh-crypto / obj-lst-vis)
+	git clone https://github.com/maxh-crypto/obj-lst-vis.git
 	cd obj-lst-vis
 	git checkout -b origin <your-branch-name>  
 	catkin_make
@@ -240,12 +241,20 @@ versucht werden die Pakete zu installieren.
 
 
 -------------------------------------------------------------------------------------------
-8. Schritt: rvis
+8. Schritt: rviz
 -------------------------------------------------------------------------------------------
 
+RVIZ ist in der Vollversion von ROS melodic enthalten und wurde somit bereits in 
+Schritt 3.2 installiert.
 
+-------------------------------------------------------------------------------------------
+9. Schritt: packages post processing (läuft mit Python 2)
+-------------------------------------------------------------------------------------------
 
+Für das post processing müssen noch folgende packages installiert werden:
 
+	pip install genpy
+	sudo apt-get install python-shapely
 
 
 -------------------------------------------------------------------------------------------
