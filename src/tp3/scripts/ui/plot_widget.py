@@ -1,10 +1,10 @@
-# import matplotlib
-# matplotlib.rcParams['text.usetex'] = True
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
 from python_qt_binding import QtCore, QtGui
-from python_qt_binding.QtWidgets import QWidget, QLineEdit, QPushButton, QVBoxLayout
+from python_qt_binding.QtWidgets import (QWidget, QLineEdit, QPushButton, 
+                                         QVBoxLayout, QHBoxLayout)
 
 from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
 if is_pyqt5():
@@ -17,6 +17,7 @@ else:
         )
 from matplotlib.figure import Figure
 from object_list_msg import units
+from legendMeanTable_widget import LegendInfoTable
 
 MAX_LINES = 3
 
@@ -29,18 +30,34 @@ class PlotWidget(QWidget):
     lineCount = 0 # counter for all active axes 
     linesList = []
     
-    def __init__(self, bagFiles):
+    def __init__(self, bagFiles, parent=None):
         super(PlotWidget, self).__init__()
         self.bagFiles = bagFiles
+        self.parent = parent
         
-        self.layout = QVBoxLayout()
-        
+        # init the components:
         self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
         toolbar = NavigationToolbar(self.canvas, self)
-        self.layout.addWidget(toolbar)
-        self.layout.addWidget(self.canvas)
-        self.setLayout(self.layout)
+        self.legendInfoWidget = LegendInfoTable(self)
+        self.legendInfoWidget.setMaximumWidth(600)
+        self.legendInfoWidget.setMaximumHeight(110)
+
         self.ax = self.canvas.figure.subplots()
+        
+        # layout
+#         mainLayout = QHBoxLayout()
+        
+        figLayout = QVBoxLayout()
+        figLayout.addWidget(toolbar)
+        figLayout.addWidget(self.canvas)
+        figLayout.addWidget(self.legendInfoWidget)
+        
+#         mainLayout.addLayout(figLayout)
+#         mainLayout.addWidget(self.legendInfoWidget)
+#         
+#         self.setLayout(mainLayout)
+        self.setLayout(figLayout)
+        
         
     def plot(self, plotData, plotInfo):  
         '''
@@ -50,19 +67,24 @@ class PlotWidget(QWidget):
         t = plotData[0]
         values = plotData[1]            
         
-        line, = self.ax.plot(t, values, '.')
+        line, = self.ax.plot(t, values, 'x')
         
-        line.set_label(plotInfo['label'])
+        label = plotInfo['label']
+        line.set_label(label)
         # self.ax.set_ylabel(plotInfo['y_label'])
         self.ax.set_xlabel('time [ms]')
         
-        self.ax.legend()
+#         self.ax.legend()
         
         self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
-        self.lineCount += 1
         self.linesList.append(line)
+        
+        color_rgba = matplotlib.colors.to_rgba(line.get_color())
+        
+        self.legendInfoWidget.addRow(label, color_rgba, plotData[2], plotData[3])
+        self.lineCount += 1
         
         
     def deleteGraph(self, lineNr):
@@ -73,8 +95,10 @@ class PlotWidget(QWidget):
         self.linesList.remove(line)
         self.ax.lines.remove(line)
         del(line)
+        self.legendInfoWidget.removeRow(lineNr)
+        
         self.lineCount -= 1
-        self.ax.legend()
+#         self.ax.legend()
         self.ax.figure.canvas.draw()
         
         

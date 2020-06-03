@@ -8,9 +8,10 @@ class BagWidget(QWidget):
         contains two selectors two determine 
         which bag files should be imported
     '''  
-    def __init__(self):
+    def __init__(self, parent=None):
         super(BagWidget, self).__init__()
-        
+        self.parent = parent
+                
         # create elements
         self.bagSelector1 = BagSelector('ground truth bag file')
         self.bagSelector2 = BagSelector('camera data bag file')

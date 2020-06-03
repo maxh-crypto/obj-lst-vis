@@ -68,11 +68,27 @@ class DiffTab(QWidget):
             
                 
     def getPlotData(self):
+        
+        plotInfo = {
+            'label' : '',
+            'y_label' : '',
+            'bag' : 1
+            }
+        
         for bag in self.bagFiles:
             if bag == "":
                 raise Exception("Bag file missing! Please import bag file in the main interface.")
             
-        threshold = self.sourceSelector.getThreshold()
+        threshold = self.thresholdSetter.getThreshold()
+        
+        selectedValue = self.valueWidget.getCatAndAtt()
+        category = selectedValue['category']
+        attribute = selectedValue['attribute']  
+        # check whether attribute is empty
+        # show error message when it is the case
+        # and return the function
+        if attribute == "":
+            raise Exception("Please select a plottable attribute.") 
         
         if attribute == "object_count":
             
@@ -93,8 +109,8 @@ class DiffTab(QWidget):
         else: 
             try:
                 obj_id = self.idSelector.getID()
-            except ValueError:
-                    raise Exception("ObjectID is not a number! Insert valid ID.")
+            except Exception:
+                    raise Exception("ObjectID is not in the list! Insert valid ID.")
             
             try:
                 plotData = Rosbag_Analysis.getAdvancedData(self.bagFiles[0], self.bagFiles[1], obj_id, category, attribute, 'difference', threshold)
@@ -104,8 +120,9 @@ class DiffTab(QWidget):
             plotInfo['label'] = 'difference' + '.'   
             plotInfo['label'] += category + '.'
             plotInfo['label'] += attribute
-            plotInfo['label'] += object_list_msg.units[attribute]       
-              
-            plotInfo['y_label'] = object_list_msg.values_units[attribute]
+            
+            if object_list_msg.units.has_key(attribute):
+                plotInfo['label'] += object_list_msg.units[attribute]                    
+                plotInfo['y_label'] = object_list_msg.values_units[attribute]
             
         return plotData, plotInfo
