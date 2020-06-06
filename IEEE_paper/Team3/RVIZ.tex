@@ -4,7 +4,7 @@ The published topics of Ground-Truth data and Camera-Calculation data will be su
 
 
 
-Marker messages are described with specific properties such as position, scale, type, color, orientation. Each object class receives selected shapes and colors so that they can be differentiate in RVIZ. The display variants for the possible object classes are shown in table \ref{ClassificationAssignment}. 
+Marker messages are described with specific properties such as position, scale, type, color, orientation. Each object class will assigned selected shapes and colors so that they can be differentiate in RVIZ. The display variants for the possible object classes are shown in table \ref{ClassificationAssignment}. 
 
 \begin{table}[h]
 \caption{Classification Assignment}
@@ -30,9 +30,6 @@ other & sphere & [1, 1, 1]\\
 \end{table}
 
 In Addition, the yaw angle of the objects has to be transformed into a quaternion for the visualization in RVIZ. The markers for the calculated camera data are assigned an RGB alpha value of 0.5, so that the difference between the camera data and the GT data is visually recognizable. 
-
-
-
 
 The highest detection probability of an object indicates the classification, so that the properties value of each shape can assigned to the marker message. Furthermore, each detection position must be mirrored on the Y-axis, because the vehicle coordinate system does not match to the RVIZ coordinate system. Finally, the generated markers are combined into a marker array and will be published.
 
