@@ -1,0 +1,46 @@
+\subsection{Evaluation of object lists - Post processing}
+
+After recording object list data streams in Rosbag files there is the possibility to analyse data in different ways by the post processing application offline. The user can either analyse single data streams or compare two different ones. An essential usage would be the comparison of a simulation data stream (Ground-Truth data) to a sensor data stream (camera data). The post processing application provides the opportunity to display several data values within the recorded Rosbag file relating to contained message frames.
+
+\subsubsection{Basic analysis}
+
+Considered to one single Rosbag file specific attribute values of single objects which are selected by their object ID can be displayed. The variety of available attribute types is shown in table 
+%\ref{<Object list – attributes table (TP1)>}
+. In addition, the number of detected objects can be visualized. 
+
+\subsubsection{Advanced analysis}
+
+Regarding two Rosbag recordings further analysis methods for comparing the streams are provided. In this case a common time base needs to be generated. To avoid errors because of time variation of both recordings following mapping algorithm is executed. Each frame time stamp is handled as time relative to its Rosbag start time in milliseconds. To every frame in the Rosbag file which is provided by sensor data a frame of simulation data is dedicated. The simulation frame to choose is the latest past frame in relative stream time. The principle of frame mapping is shown in figure \ref{fig:frame_mapping}. With this mechanism pairs of frames are generated (sensor frame with corresponding simulation frame).
+
+\begin{figure}[thpb]
+	\centering
+	\includegraphics[width=\linewidth]{frame_mapping}
+	\caption{Principle of frame mapping algorithm}
+	\label{fig:frame_mapping}
+\end{figure}
+
+A fundamental use case in analysing the recorded Rosbag files is to evaluate the quality of sensor data. Therefore, it is necessary to operate the mapping of object detection by the sensor in comparison to the simulation data. For this purpose, the algorithm \textbf{Intersection over Union} is applied.
+
+%\include{<Intersection_over_Union (Max H.)>}
+
+!! Put part of Max H. (IoU) here !!
+
+As a result of object mapping it is possible to visualize the number of True Positive (TP), False Positive (FP), False Negative (FN) and mismatch (mm) cases per frame. Further, following quality of service parameter according to \ref{<IEEE paper Fabio Reway>} can be displayed:
+
+\begin{itemize}
+	
+	\item recall per frame
+	\item precision per frame
+	\item FPPI per data stream (sensor)
+	\item MOTA per data stream (sensor)
+	\item MOTP per data stream (sensor)
+	
+\end{itemize}
+
+Another feature of the post processing application is the analysis of deviations by calculating differences of specific attribute values between two recorded data streams. For that matter only True Positive cases in object mapping are regarded and the concerning object is selected by its object ID in the simulation data record. The difference value results from
+
+$$
+difference = value_{simulation} - value_{sensor} \eqno{(???)}
+$$
+
+On top of every post processing analysis - except from FPPI, MOTA and MOTP - the mean value and standard deviation of the corresponding value series are calculated.
