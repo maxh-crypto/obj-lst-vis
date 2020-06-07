@@ -1,0 +1,104 @@
+%%%% IoU calculation %%%%
+
+% necessary packages:
+	% \usepackage{booktabs}
+	% \usepackage{tabularx}
+
+\subsubsection{Evaluation}
+\label{sssec:eval}
+To determine whether a given camera object is evaluated as True Positive (TP), False Positive (FP), False Negative (FN) or a mismatch (mm), the \textbf{Intersection over Union} (IoU) value is used, like shown in \cite{Reway}. 
+Like shown before, in general there is a list of $m$ camera objects ($B_{pr}$) and a list of $n$ ground truth objects ($B_{gt}$) for each frame. To evaluate a frame, for each combination of GT object and camera object the IoU value is calculated. All those values build a matrix like shown in Table \ref{tab:matrix}.
+\begin{table}[h]
+	\caption{IoU-Matrix for a single frame}
+	\begin{tabularx}{\columnwidth}{X|X|c|X}
+		\toprule
+		$IoU(B_{gt,1}, B_{pr,1})$ & $IoU(B_{gt,2}, B_{pr,1})$ & ... & $IoU(B_{gt,n}, B_{pr,1})$ \\
+		\midrule
+		$IoU(B_{gt,1}, B_{pr,2})$ & $IoU(B_{gt,2}, B_{pr,2})$ & ... & $IoU(B_{gt,n}, B_{pr,2})$ \\
+		\midrule
+		... & ... & ... & ... \\
+		\midrule		
+		$IoU(B_{gt,1}, B_{pr,m})$ & $IoU(B_{gt,2}, B_{pr,m})$ & ... & $IoU(B_{gt,n}, B_{pr,m})$ \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:matrix}
+\end{table}
+
+A given camera object $B_{pr,i}$ is ... \\
+
+... \textbf{FP}, if there is no value 
+\begin{equation}
+	IoU(B_{gt,k}, B_{pr,i}) > t \text{\quad with\quad} k \in \left\lbrace 1, ..., n\right\rbrace 
+	\label{eq:fp_case}
+\end{equation}
+in the according row of the matrix which is greater than the given threshold. \\
+
+... \textbf{FP}, if there is one or more IoU values in the according row greater than the threshold, but for every $B_{gt,k}$, for which equation \ref{eq:fp_case} is true, there is another $B_{pr,j}$ ($j\neq i$) which matches with $B_{gt,k}$ and $IoU(B_{gt,k}, B_{pr,j}) > IoU(B_{gt,k}, B_{pr,i})$ \\
+
+... a mismatch (\textbf{mm}) if it is no FP case, but none of the found possible matching $B_{gt,k}$ has the same class as $B_{pr,i}$. \\
+
+... \textbf{TP}, also called a match, if none of the other mentioned cases are detected. That means, that there is at least one $B_{gt,k}$ which fulfills equation \ref{eq:fp_case} and has the same classification as $B_{pr,i}$ and there is no other $B_{pr,j}$ which matches better with the found $B_{gt,k}$ \\
+
+Going through the rows of the matrix, for each $B_{pr,i}$ in the given frame it can be decided, whether the case is TP, FP or mm. \\
+
+On the other way round, examining the Ground Truth objects $B_{gt,k}$, that means the columns of the calculated matrix, all FN cases can be detected. It is an \textbf{FN}, if there is no $B_{pr,i}$ for which
+\begin{equation}
+IoU(B_{gt,k}, B_{pr,i}) > t \text{\quad with\quad} i \in \left\lbrace 1, ..., m\right\rbrace 
+\label{eq:fn_case}
+\end{equation}
+Going through the columns of the matrix, this decision can be made for every $B_{gt,k}$. \\
+With this steps, a given frame with $m$ camera objects and $n$ ground truth objects can be investigated. \\
+
+In this project these functions, one for investigating the camera objects and one for detecting all FN cases, were realized in Python. The calculation of an IoU value is processed with functions of the package \textit{shapely} \cite{Shapely}.
+First, the given objects, which are defined through their properties \textit{x}, \textit{y}, \textit{length}, \textit{height}, \textit{yaw} and \textit{classification} like presented in \cite{Aeberhard}
+are transformed into bounding boxes with a shapely function. With two of these bounding boxes shapely can calculate the intersection area and the union area, and so the IoU value can be processed. \\
+
+\subsubsection{Graphical User Interface}
+To investigate the quality of the processed camera object data, a graphical user interface (GUI) was created. It was designed with Pythons binding package for Qt (PyQt5) \cite{PyQt}
+and defined as a plugin for \textit{rqt}, a \textit{ROS} framework for GUI development \cite{rqt}.
+With this plugin, the user can import two bag files, one ground truth data bag file and one camera data bag file.
+By using the functions mentioned before, the GUI can show several data graphs to the user, like raw data plots, comparing plots with object data of both files or evaluation data. 
+% TODO: mit Christophs Bezeichnungen vergleichen
+Along with the data the mean value and the standard deviation for each data set is portrayed in the GUI. \\
+Apart from data plots the interface can also show quality parameters for the whole camera data bag file in an extra widget. 
+% TODO: Verweis auf Christophs part
+For each operation, where IoU calculation is needed, the user can set the threshold value for the evaluation. \\
+
+\subsubsection{Results}
+% TODO: in Kapitel RESULTS kopieren
+% TODO: Auswerten
+	% Vorausgehende Beschreibung der Situation
+	% Wie viele Objekte werden erkannt?
+	% Wie viele Objekte werden gematcht?
+		% evtl. vergleichende Tabelle bei verschiedenen Threshold-Werten
+		% Tabellen mit FPPI, MOTP, MOTA bei versch. Threshold-Werten
+The performance of processed camera data can be evaluated with metrics presented in \cite{Reway}, which are realized like introduced in part \ref{sssec:eval}. For the given scenario the reached performance is shown in Table \ref{tab:res}.
+		
+\begin{table}[h]
+	\caption{Performance results}
+	\begin{tabularx}{\columnwidth}{XXXX}
+		\toprule
+		\textbf{threshold} & $t=0.5$ & $t=0.6$ & $t=0.7$ \\
+		\toprule
+		Precision & ... & ... & ... \\
+		\midrule
+		Recall & ... & ... & ... \\
+		\midrule		
+		FPPI & ... & ... & ... \\
+		\midrule
+		MOTA & ... & ... & ... \\
+		\midrule
+		MOTP & ... & ... & ... \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:res}
+\end{table}
+		
+\subsubsection{Conclusions}
+% TODO: in Kapitel CONCLUSIONS kopieren
+% Werte schlecht, weil z.B. die geometric und dimension Werte der Kamera nicht gut mit den GT-Daten übereinstimmen
+	
+
+
+
+ 
