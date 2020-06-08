@@ -1,0 +1,8 @@
+prefix=/home/phk3601/obj-lst-vis/install
+
+Name: tp2
+Description: Description of tp2
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
