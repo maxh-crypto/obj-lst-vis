@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.16)  8 JUN 2020 09:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.16)  8 JUN 2020 10:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -243,9 +243,6 @@ Package: inputenc 2018/08/11 v1.3c Input encoding file
 (/usr/local/texlive/2020/texmf-dist/tex/latex/base/latin1.def
 File: latin1.def 2018/08/11 v1.3c Input encoding file
 ))
-(/usr/local/texlive/2020/texmf-dist/tex/latex/import/import.sty
-Package: import 2020/01/22  v 6.0
-)
 (/usr/local/texlive/2020/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
@@ -263,75 +260,116 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
+(/usr/local/texlive/2020/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen158
+\ar@mcellbox=\box48
+\extrarowheight=\dimen159
+\NC@list=\toks24
+\extratabsurround=\skip56
+\backup@length=\skip57
+\ar@cellbox=\box49
+)
+\TX@col@width=\dimen160
+\TX@old@table=\dimen161
+\TX@old@col=\dimen162
+\TX@target=\dimen163
+\TX@delta=\dimen164
+\TX@cols=\count191
+\TX@ftn=\toks25
+)
 (/usr/local/texlive/2020/texmf-dist/tex/latex/blindtext/blindtext.sty
 Package: blindtext 2012/01/06 V2.0 blindtext-Package
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
-\c@blindtext=\count191
-\c@Blindtext=\count192
-\c@blind@countparstart=\count193
-\blind@countxx=\count194
-\blindtext@numBlindtext=\count195
-\blind@countyy=\count196
-\c@blindlist=\count197
-\c@blindlistlevel=\count198
-\c@blindlist@level=\count199
-\blind@listitem=\count266
-\c@blind@listcount=\count267
-\c@blind@levelcount=\count268
-\blind@mathformula=\count269
-\blind@Mathformula=\count270
-\c@blind@randomcount=\count271
-\c@blind@randommax=\count272
-\c@blind@pangramcount=\count273
-\c@blind@pangrammax=\count274
+\c@blindtext=\count192
+\c@Blindtext=\count193
+\c@blind@countparstart=\count194
+\blind@countxx=\count195
+\blindtext@numBlindtext=\count196
+\blind@countyy=\count197
+\c@blindlist=\count198
+\c@blindlistlevel=\count199
+\c@blindlist@level=\count266
+\blind@listitem=\count267
+\c@blind@listcount=\count268
+\c@blind@levelcount=\count269
+\blind@mathformula=\count270
+\blind@Mathformula=\count271
+\c@blind@randomcount=\count272
+\c@blind@randommax=\count273
+\c@blind@pangramcount=\count274
+\c@blind@pangrammax=\count275
 )
 (/usr/local/texlive/2020/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
+(/usr/local/texlive/2020/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen165
+\lightrulewidth=\dimen166
+\cmidrulewidth=\dimen167
+\belowrulesep=\dimen168
+\belowbottomsep=\dimen169
+\aboverulesep=\dimen170
+\abovetopsep=\dimen171
+\cmidrulesep=\dimen172
+\cmidrulekern=\dimen173
+\defaultaddspace=\dimen174
+\@cmidla=\count276
+\@cmidlb=\count277
+\@aboverulesep=\dimen175
+\@belowrulesep=\dimen176
+\@thisruleclass=\count278
+\@lastruleclass=\count279
+\@thisrulewidth=\dimen177
+)
 (/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count275
-\l__pdf_internal_box=\box48
+\l__kernel_color_stack_int=\count280
+\l__pdf_internal_box=\box50
 )
 (./root.aux
 
 LaTeX Warning: Label `figurelabel' multiply defined.
 
-(./chapter/RVIZ.aux))
+(./chapter/RVIZ.aux) (./chapter/evaluation.aux))
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
 
 (/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count276
-\scratchdimen=\dimen158
-\scratchbox=\box49
-\nofMPsegments=\count277
-\nofMParguments=\count278
-\everyMPshowfont=\toks24
-\MPscratchCnt=\count279
-\MPscratchDim=\dimen159
-\MPnumerator=\count280
-\makeMPintoPDFobject=\count281
-\everyMPtoPDFconversion=\toks25
+\scratchcounter=\count281
+\scratchdimen=\dimen178
+\scratchbox=\box51
+\nofMPsegments=\count282
+\nofMParguments=\count283
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count284
+\MPscratchDim=\dimen179
+\MPnumerator=\count285
+\makeMPintoPDFobject=\count286
+\everyMPtoPDFconversion=\toks27
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -342,47 +380,47 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 61.
+ 62.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 61.
+ 62.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 61.
+ 62.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 61.
+ 62.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 61.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
 
-Underfull \hbox (badness 1383) in paragraph at lines 80--81
+Underfull \hbox (badness 1383) in paragraph at lines 81--82
 []\OT1/ptm/m/n/10 IEEE Fabio Re-way Test Method for Mea-sur-ing the
  []
 
 <picture/Ueberblick.png, id=1, 1342.01375pt x 397.485pt>
 File: picture/Ueberblick.png Graphic file (type png)
 <use picture/Ueberblick.png>
-Package pdftex.def Info: picture/Ueberblick.png  used on input line 90.
+Package pdftex.def Info: picture/Ueberblick.png  used on input line 91.
 (pdftex.def)             Requested size: 228.13931pt x 67.57155pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 97.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 98.
 <picture/KoordinatenSystem.pdf, id=3, 597.432pt x 845.0471pt>
 File: picture/KoordinatenSystem.pdf Graphic file (type pdf)
 <use picture/KoordinatenSystem.pdf>
-Package pdftex.def Info: picture/KoordinatenSystem.pdf  used on input line 115.
+Package pdftex.def Info: picture/KoordinatenSystem.pdf  used on input line 116.
 
 (pdftex.def)             Requested size: 179.23097pt x 253.51608pt.
 [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
@@ -391,21 +429,98 @@ Package pdftex.def Info: picture/KoordinatenSystem.pdf  used on input line 115.
  <./picture/Ueberblick.png> <./picture/KoordinatenSystem.pdf>]
 \openout2 = `chapter/RVIZ.aux'.
 
- (./chapter/RVIZ.tex)
-[2
+ (./chapter/RVIZ.tex
+<picture/rosgraph.png, id=21, 1169.87062pt x 298.11375pt>
+File: picture/rosgraph.png Graphic file (type png)
+<use picture/rosgraph.png>
+Package pdftex.def Info: picture/rosgraph.png  used on input line 10.
+(pdftex.def)             Requested size: 245.71811pt x 62.61482pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \hbox (badness 1360) in paragraph at lines 50--51
+[]\OT1/ptm/m/n/10 The pu-bished top-ics of Ground-Truth data, Camera-
+ []
+
+) [2
+
+ <./picture/rosgraph.png>]
+\openout2 = `chapter/evaluation.aux'.
+
+ (./chapter/evaluation.tex
+
+LaTeX Warning: Citation `Reway' on page 3 undefined on input line 9.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--51
+
+ []
+
+
+LaTeX Warning: Citation `Shapely' on page 3 undefined on input line 52.
+
+
+LaTeX Warning: Citation `Aeberhard' on page 3 undefined on input line 53.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--55
+
+ []
+
+
+LaTeX Warning: Citation `PyQt' on page 3 undefined on input line 57.
+
+
+LaTeX Warning: Citation `rqt' on page 3 undefined on input line 58.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--66
+
+ []
+
+
+LaTeX Warning: Citation `Reway' on page 3 undefined on input line 75.
+
+) [3
 
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-38.
- (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-Underfull \hbox (badness 2753) in paragraph at lines 151--152
+Underfull \hbox (badness 2753) in paragraph at lines 144--145
 []\OT1/ptm/m/n/10 Wie gut sind die Kam-er-aw-erte im Ver-gle-ich zu
  []
 
-(./root.bbl)
+No file root.bbl.
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -417,32 +532,37 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the US letter (8.5in X 11in) paper size.
 
-[3
+[4
 
 
-] (./root.aux (./chapter/RVIZ.aux))
+] (./root.aux (./chapter/RVIZ.aux) (./chapter/evaluation.aux))
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 3784 strings out of 480608
- 53356 string characters out of 5903630
- 298598 words of memory out of 5000000
- 19614 multiletter control sequences out of 15000+600000
- 579634 words of font info for 115 fonts, out of 8000000 for 9000
+ 3931 strings out of 480608
+ 54989 string characters out of 5903630
+ 309545 words of memory out of 5000000
+ 19737 multiletter control sequences out of 15000+600000
+ 589699 words of font info for 133 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 33i,9n,37p,429b,295s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 33i,13n,37p,589b,295s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
-xlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2020
-/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2020/texmf-di
-st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
-ype1/urw/times/utmri8a.pfb>
-Output written on root.pdf (3 pages, 662373 bytes).
+exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
+xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texl
+ive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
+ve/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2020/te
+xmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2020/texmf-dist/
+fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on root.pdf (4 pages, 771591 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
+ 58 PDF objects out of 1000 (max. 8388607)
+ 37 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
