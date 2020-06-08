@@ -1,14 +1,22 @@
-\subsection{Evaluation of object lists - Post processing}
+% necessary packages:
+% \usepackage{booktabs}
+% \usepackage{tabularx}
 
-After recording object list data streams in Rosbag files there is the possibility to analyse data in different ways by the post processing application offline. The user can either analyse single data streams or compare two different ones. An essential usage would be the comparison of a simulation data stream (Ground-Truth data) to a sensor data stream (camera data). The post processing application provides the opportunity to display several data values within the recorded Rosbag file relating to contained message frames.
+\subsection{Evaluation of object lists - Post-processing}
+To evaluate the quality of calculated sensor data with the aim to improve the object detection algorithm post-processing is necessary.
+After recording object list data streams in Rosbag files there is the possibility to analyse data in different ways by multiple post-processing functions. 
+Either a single Rosbag file can be analysed or two files can be compared. In both cases the data is evaluated frame by frame. 
+
+%The user can either analyse single data streams or compare two different ones. An essential usage would be the comparison of a simulation data stream (Ground-Truth data) to a sensor data stream (camera data). The post-processing application provides the opportunity to display several data values within the recorded Rosbag file relating to contained message frames. \\
 
 \subsubsection{Basic analysis}
 
 Considered to one single Rosbag file specific attribute values of single objects which are selected by their object ID can be displayed. The variety of available attribute types is shown in table 
 %\ref{<Object list – attributes table (TP1)>}
-. In addition, the number of detected objects can be visualized. 
+. In addition, the number of detected objects can be visualized. \\
 
 \subsubsection{Advanced analysis}
+\label{sssec:eval}
 
 Regarding two Rosbag recordings further analysis methods for comparing the streams are provided. In this case a common time base needs to be generated. To avoid errors because of time variation of both recordings following mapping algorithm is executed. Each frame time stamp is handled as time relative to its Rosbag start time in milliseconds. To every frame in the Rosbag file which is provided by sensor data a frame of simulation data is dedicated. The simulation frame to choose is the latest past frame in relative stream time. The principle of frame mapping is shown in figure \ref{fig:frame_mapping}. With this mechanism pairs of frames are generated (sensor frame with corresponding simulation frame).
 
@@ -19,28 +27,108 @@ Regarding two Rosbag recordings further analysis methods for comparing the strea
 	\label{fig:frame_mapping}
 \end{figure}
 
-A fundamental use case in analysing the recorded Rosbag files is to evaluate the quality of sensor data. Therefore, it is necessary to operate the mapping of object detection by the sensor in comparison to the simulation data. For this purpose, the algorithm \textbf{Intersection over Union} is applied.
+A fundamental use case in analysing the recorded Rosbag files is to evaluate the quality of sensor data in comparison with GT data through metrics introduced in \cite{Reway}. 
+To determine whether a given camera object is evaluated as True Positive (TP), False Positive (FP), False Negative (FN) or a mismatch (mm), the \textbf{Intersection over Union} (IoU) value is used. 
+In general there is a list of $m$ camera objects ($B_{pr}$) and a list of $n$ Ground-Truth objects ($B_{gt}$) for each frame. To evaluate a frame, for each combination of GT object and camera object the IoU value is calculated. All those values build a matrix like shown in table \ref{tab:matrix}.
+\begin{table}[h]
+	\caption{IoU-Matrix for a single frame}
+	\begin{tabularx}{\columnwidth}{X|X|c|X}
+		\toprule
+		$IoU(B_{gt,1}, B_{pr,1})$ & $IoU(B_{gt,2}, B_{pr,1})$ & ... & $IoU(B_{gt,n}, B_{pr,1})$ \\
+		\midrule
+		$IoU(B_{gt,1}, B_{pr,2})$ & $IoU(B_{gt,2}, B_{pr,2})$ & ... & $IoU(B_{gt,n}, B_{pr,2})$ \\
+		\midrule
+		... & ... & ... & ... \\
+		\midrule		
+		$IoU(B_{gt,1}, B_{pr,m})$ & $IoU(B_{gt,2}, B_{pr,m})$ & ... & $IoU(B_{gt,n}, B_{pr,m})$ \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:matrix}
+\end{table}
 
-%\include{<Intersection_over_Union (Max H.)>}
+After calculating the matrix the objects in one single frame can be evaluated. A given camera object $B_{pr,i}$ is ... \\
 
-!! Put part of Max H. (IoU) here !!
+... \textbf{FP}, if there is no value 
+\begin{equation}
+	IoU(B_{gt,k}, B_{pr,i}) > t \text{\quad with\quad} k \in \left\lbrace 1, ..., n\right\rbrace 
+	\label{eq:fp_case}
+\end{equation}
+in the according row of the matrix which is greater than the given threshold $t$. \\
 
-As a result of object mapping it is possible to visualize the number of True Positive (TP), False Positive (FP), False Negative (FN) and mismatch (mm) cases per frame. Further, following quality of service parameter according to \ref{<IEEE paper Fabio Reway>} can be displayed:
+... \textbf{FP}, if there is one or more IoU values in the according row greater than the threshold, but for every $B_{gt,k}$, for which expression \ref{eq:fp_case} is true, there is another $B_{pr,j}$ ($j\neq i$) which matches with $B_{gt,k}$ and $IoU(B_{gt,k}, B_{pr,j}) > IoU(B_{gt,k}, B_{pr,i})$ \\
 
+... a mismatch (\textbf{mm}) if it is no FP case, but none of the found possible matching $B_{gt,k}$ has the same class as $B_{pr,i}$. \\
+
+... \textbf{TP}, also called a match, if none of the other mentioned cases are detected. That means, that there is at least one $B_{gt,k}$ which fulfills expression \ref{eq:fp_case} and has the same classification as $B_{pr,i}$ and there is no other $B_{pr,j}$ which matches better with the found $B_{gt,k}$. \\
+
+Going through the rows of the matrix, for each $B_{pr,i}$ in the given frame it can be decided, whether the case is TP, FP or mm. \\
+
+The other way round, examining the Ground-Truth objects $B_{gt,k}$, that means the columns of the calculated matrix, all FN cases can be detected. It is an \textbf{FN} if there is no $B_{pr,i}$ for which
+\begin{equation}
+	IoU(B_{gt,k}, B_{pr,i}) > t \text{\quad with\quad} i \in \left\lbrace 1, ..., m\right\rbrace 
+	\label{eq:fn_case}
+\end{equation}
+Going through the columns of the matrix, this decision can be made for every $B_{gt,k}$. \\
+With these steps, a given frame with $m$ camera objects and $n$ Ground-Truth objects can be investigated. \\
+
+These functions, one for investigating the camera objects and one for detecting all FN cases, were realized in Python. The calculation of an IoU value is processed with functions of the package \textit{shapely} \cite{Shapely}.
+First, the given objects, which are defined through their properties \textit{x}, \textit{y}, \textit{length}, \textit{height}, \textit{yaw} and \textit{classification} like presented in \cite{Aeberhard}
+are transformed into bounding boxes. With two of these bounding boxes shapely can calculate the intersection area and the union area so that the IoU value can be processed. \\
+
+As a result of the frame evaluation functions following data quality parameters according to \ref{Reway} can be calculated:
 \begin{itemize}
 	
 	\item recall per frame
 	\item precision per frame
-	\item FPPI per data stream (sensor)
-	\item MOTA per data stream (sensor)
-	\item MOTP per data stream (sensor)
+	\item FPPI per sensor data stream 
+	\item MOTA per sensor data stream 
+	\item MOTP per sensor data stream 
 	
 \end{itemize}
 
-Another feature of the post processing application is the analysis of deviations by calculating differences of specific attribute values between two recorded data streams. For that matter only True Positive cases in object mapping are regarded and the concerning object is selected by its object ID in the simulation data record. The difference value results from
+Another feature of the post-processing application is the analysis of deviations by calculating differences of specific attribute values between two recorded data streams. For that matter only True Positive cases of IoU evaluation are regarded and the concerning object is selected by its object ID in the simulation data record. The difference value results from
+\begin{equation}
+	difference = value_{simulation} - value_{sensor} 
+	\label{eq:diff}
+\end{equation}
 
-$$
-difference = value_{simulation} - value_{sensor} \eqno{(???)}
-$$
+\subsubsection{Graphical User Interface}
+To investigate the quality of the processed camera object data, a graphical user interface (GUI) is provided. It is designed with Pythons binding package for Qt (PyQt5) \cite{PyQt} and defined as a plugin for \textit{rqt}, a \textit{ROS} framework for GUI development \cite{rqt}.
+With this plugin, the user can import two Rosbag files, one GT data file and one sensor (camera) data file.
+By using the functions mentioned before, the GUI can show several data graphs to the user, like raw data plots, comparing plots with object data of both files or evaluation data. 
+Along with every data set - except from FPPI, MOTA and MOTP - the mean value and the standard deviation for each data set is portrayed in the GUI. \\
+Apart from data plots the interface can also show quality parameters for the whole camera data Rosbag file in an extra widget. For each operation, where IoU calculation is needed, the user can set the threshold value for the evaluation. \\
 
-On top of every post processing analysis - except from FPPI, MOTA and MOTP - the mean value and standard deviation of the corresponding value series are calculated.
+\subsubsection{Results}
+% TODO: in Kapitel RESULTS kopieren
+% TODO: Auswerten
+% Vorausgehende Beschreibung der Situation
+% Wie viele Objekte werden erkannt?
+% Wie viele Objekte werden gematcht?
+% evtl. vergleichende Tabelle bei verschiedenen Threshold-Werten
+% Tabellen mit FPPI, MOTP, MOTA bei versch. Threshold-Werten
+The performance of processed camera data can be evaluated with metrics presented in \cite{Reway} which are realized like introduced in part \ref{sssec:eval}. For the given scenario the reached performance is shown in table \ref{tab:res}.
+
+\begin{table}[h]
+	\caption{Performance results}
+	\begin{tabularx}{\columnwidth}{XXXX}
+		\toprule
+		\textbf{threshold} & $t=0.5$ & $t=0.6$ & $t=0.7$ \\
+		\toprule
+		Precision & ... & ... & ... \\
+		\midrule
+		Recall & ... & ... & ... \\
+		\midrule		
+		FPPI & ... & ... & ... \\
+		\midrule
+		MOTA & ... & ... & ... \\
+		\midrule
+		MOTP & ... & ... & ... \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:res}
+\end{table}
+
+\subsubsection{Conclusions}
+% TODO: in Kapitel CONCLUSIONS kopieren
+% Werte schlecht, weil z.B. die geometric und dimension Werte der Kamera nicht gut mit den GT-Daten übereinstimmen

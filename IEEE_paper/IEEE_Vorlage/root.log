@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.16)  6 JUN 2020 11:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.16)  24 MAY 2020 12:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -301,10 +301,6 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 
 LaTeX Warning: Label `figurelabel' multiply defined.
 
-(./chapter/RVIZ.aux)
-
-LaTeX Warning: Label `ClassificationAssignment' multiply defined.
-
 )
 \openout1 = `root.aux'.
 
@@ -388,23 +384,12 @@ File: picture/KoordinatenSystem.pdf Graphic file (type pdf)
 Package pdftex.def Info: picture/KoordinatenSystem.pdf  used on input line 115.
 
 (pdftex.def)             Requested size: 179.23097pt x 253.51608pt.
-[1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
-
-
- <./picture/Ueberblick.png> <./picture/KoordinatenSystem.pdf>]
-\openout2 = `chapter/RVIZ.aux'.
-
- (./chapter/RVIZ.tex)
-[2
-
-
-]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-38.
- (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+45.
+(/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 2753) in paragraph at lines 151--152
+Underfull \hbox (badness 2753) in paragraph at lines 158--159
 []\OT1/ptm/m/n/10 Wie gut sind die Kam-er-aw-erte im Ver-gle-ich zu
  []
 
@@ -420,32 +405,36 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the US letter (8.5in X 11in) paper size.
 
-[3
+
+Overfull \vbox (336.63313pt too high) has occurred while \output is active []
 
 
-] (./root.aux (./chapter/RVIZ.aux))
+[1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+ <./picture/Ueberblick.png> <./picture/KoordinatenSystem.pdf>] (./root.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 3784 strings out of 480608
- 53356 string characters out of 5903630
- 298599 words of memory out of 5000000
- 19614 multiletter control sequences out of 15000+600000
- 579634 words of font info for 115 fonts, out of 8000000 for 9000
+ 3769 strings out of 480608
+ 53136 string characters out of 5903630
+ 299070 words of memory out of 5000000
+ 19608 multiletter control sequences out of 15000+600000
+ 577910 words of font info for 113 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 33i,9n,37p,429b,295s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 33i,9n,37p,257b,295s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2020/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2020
 /texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2020/texmf-di
 st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on root.pdf (3 pages, 662374 bytes).
+Output written on root.pdf (1 page, 659835 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
+ 39 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
