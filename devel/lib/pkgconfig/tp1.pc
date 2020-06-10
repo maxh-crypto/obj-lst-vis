@@ -1,8 +1,0 @@
-prefix=/home/phk3601/obj-lst-vis/devel
-
-Name: tp1
-Description: Description of tp1
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

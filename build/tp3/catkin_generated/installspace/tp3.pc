@@ -1,8 +1,0 @@
-prefix=/home/phk3601/obj-lst-vis/install
-
-Name: tp3
-Description: Description of tp3
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

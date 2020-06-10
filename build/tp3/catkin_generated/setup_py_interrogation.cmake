@@ -1,6 +1,0 @@
-set(tp3_SETUP_PY_VERSION "0.0.0")
-set(tp3_SETUP_PY_SCRIPTS "")
-set(tp3_SETUP_PY_PACKAGES "rqt_postproc")
-set(tp3_SETUP_PY_PACKAGE_DIRS "scripts/ui/rqt_postproc")
-set(tp3_SETUP_PY_MODULES "")
-set(tp3_SETUP_PY_MODULE_DIRS "")

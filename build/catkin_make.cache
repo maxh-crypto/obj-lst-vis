@@ -1,2 +1,0 @@
-object_list:tp1:tp2:tp3
--DCATKIN_DEVEL_PREFIX=/home/phk3601/obj-lst-vis/devel -DCMAKE_INSTALL_PREFIX=/home/phk3601/obj-lst-vis/install -G Unix Makefiles
