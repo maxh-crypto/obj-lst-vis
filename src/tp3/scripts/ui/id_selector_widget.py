@@ -15,7 +15,7 @@ class IDSelectorWidget(QGroupBox):
     def __init__(self, parent=None):
         super(IDSelectorWidget, self).__init__()
         self.parent = parent
-        self.setTitle('3.Select ObjectID')
+        self.setTitle('Select ObjectID')
         layout = QVBoxLayout()
         
         self.idList = [] # list of strings with all ids in the selected bag

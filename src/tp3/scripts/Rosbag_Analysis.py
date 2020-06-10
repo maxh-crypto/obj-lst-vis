@@ -70,7 +70,7 @@ class Rosbag_Analysis:
     def calcMeanValue(values):
         
         if len(values) == 0:
-            return nan
+            return float('nan')
         else: 
             meanValue = np.mean(values)
             return meanValue
@@ -79,7 +79,7 @@ class Rosbag_Analysis:
     def calcStandardDeviation(values):
         
         if len(values) == 0:
-            return nan
+            return float('nan')
         else: 
             standardDev = np.std(values)
             return standardDev    
