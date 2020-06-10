@@ -15,7 +15,7 @@ class ValueSelectorWidget(QGroupBox):
         self.hasObjCnt = hasObjCnt
         
         self.layout = QVBoxLayout()
-        self.setTitle('2.Select Value')
+        self.setTitle('Select Value')
         self.valueTreeWidget = QTreeWidget()
         self.buildTree()
         self.layout.addWidget(self.valueTreeWidget)

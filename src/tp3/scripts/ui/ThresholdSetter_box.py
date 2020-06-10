@@ -10,7 +10,7 @@ class ThresholdSetter(QGroupBox):
     def __init__(self, parent=None):
         super(ThresholdSetter, self).__init__()
         self.parent = parent
-        self.setTitle('1.Select IoU Threshold ')
+        self.setTitle('Select IoU Threshold ')
         self.layout = QVBoxLayout()
         self.spinBox = QDoubleSpinBox()
         self.spinBox.setDecimals(2)

@@ -50,14 +50,14 @@ class RawDataTab(QWidget):
         self.selectedSource = source
         
         if source == 0: # ground truth is selected
-            self.idSelector.setTitle("3.Select GT-ObjectID")
+            self.idSelector.setTitle("Select GT-ObjectID")
             try: 
                 self.idSelector.refreshList(self.bagFiles[0])
             except:
                 message_module.showMessage("Object_IDs could not be parsed. Maybe there is a problem with the selected bag file.")
         
         elif source == 1: # camera is selected
-            self.idSelector.setTitle("3.Select Cam-ObjectID")
+            self.idSelector.setTitle("Select Cam-ObjectID")
             try: 
                 self.idSelector.refreshList(self.bagFiles[1])
             except:
