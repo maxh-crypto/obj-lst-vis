@@ -161,13 +161,18 @@ def process3(d):
 	global step3
 	step3 = d
 
+def setTime(zeit):
+	global TIME_PERIOD
+	TIME_PERIOD = zeit 
+
+#=================================
+
 ####################################################
 ### Klassen für Berechnung der Objektliste #########
 ####################################################
 CAM_ANGULAR = 90 #90 degree camera view , const.
 CAM_XSIZE = 800  #x-Size Pixel
 CAM_YSize = 600  #y-Size Pixel
-TIME_PERIOD = 0.5# currently no value!!!
 PI = 3.14159265359
 #=================================
 class GeometricMSG:
@@ -274,7 +279,7 @@ class DimensionMSG:
 		self.length= 0
 		self.height= 0
 
-	def setDimension(self,dirDist,array,className):
+	def setDimension(self,dirDist,array,className, objLeng):
 		#==== Adjust Scale
 		classNameString =""
 		classNameString = classNameString.join(className)
@@ -293,27 +298,27 @@ class DimensionMSG:
 		
 		#self.height = hP * meterPerPixel
 		if classNameString == 'car':
-			self.length = 4.5
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'truck':
-			self.length = 18.75
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'motorbike':
-			self.length = 2.0
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'bicycle':
-			self.length = 1.9
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'person':
-			self.length = wP * meterPerPixel
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'stacionary':
-			self.length = 1.0
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		else:
@@ -436,9 +441,9 @@ class AllMSG:
 		self.dim = DimensionMSG()
 		self.klas = ClassificationMSG()
 
-	def setAllValues(self,dirDist,objKoordinaten, className,iD0,confi):
+	def setAllValues(self,dirDist,objKoordinaten, className,iD0,confi,objLeng):
 		self.geo.setValue(dirDist,objKoordinaten)
-		self.dim.setDimension(dirDist,objKoordinaten,className)
+		self.dim.setDimension(dirDist,objKoordinaten,className,objLeng)
 		self.klas.setClass(className)
 		self.id_Klasse = iD0[0]
 		self.confidence_spez = confi
@@ -1924,13 +1929,6 @@ def game_loop(args):
 	
 			if step3 == 1:
 				#hier variable
-				if startTime == 0:
-					endTime = time.time()
-					DiffTime = endTime- startTime
-				startTime = time.time()
-				#print("Zeit für einen Loop")
-				#print(" took {:.6f} seconds".format(DiffTime))
-
 
 				if counter > 1:
 
@@ -1941,23 +1939,32 @@ def game_loop(args):
 					newObjConfidence = objConfidence
 					print(newObjDetectionName)
 
+					endTime = time.time()
+					DiffTime = endTime - startTime
+					print("Zeit für einen Loop");
+					print("took {:.6f} seconds".format(DiffTime))
+					startTime = time.time()
+					setTime(DiffTime)
+
+
 					for i in range(len(newObjDetectionName)):
 						if checkDetectObj(newObjDetectionName[i]) == 1:
 							getdepth(newObjCoordinates[i], newObjDetectionName[i])
-							
+							print("Kleiner Test zu Koordinaten:")
+
 
 							idFound = False
 							
 							for j in range(len(ListeObj2)):
 
 								if ("".join(ListeObj2[j].iD_Classname) == "".join(newObjDetectionName[i]) and int("".join(map(str,newObjID_Var[i]))) == ListeObj2[j].id_Klasse):
-									ListeObj2[j].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))))
+									ListeObj2[j].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 									idFound = True
 									#print(type(float("".join(map(str,newObjConfidence[i])))))
 
 							if idFound == False:
 								ListeObj2.append(AllMSG())
-								ListeObj2[i].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))))
+								ListeObj2[i].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 								
 						if i == len(newObjDetectionName)-1:
 							process3(0)
@@ -1967,6 +1974,8 @@ def game_loop(args):
 						#print("Länge der Liste")
 						#print(len(ListeObj2))
 						if z< len(ListeObj2):
+							if ListeObj2[z].geo.x == 0 and ListeObj2[z].geo.y:
+								del ListeObj2[z]
 							if ListeObj2[z].stillChanging != True:
 								#ListeObj2.pop(z)
 								del ListeObj2[z]
@@ -1984,7 +1993,7 @@ def game_loop(args):
 					yoloTalker(ListeObj2)
 			
 		###----Extract Ground Truth Data----####
-			Object_List_Talker(world,args)
+			#Object_List_Talker(world,args)
 
 
 	finally:
