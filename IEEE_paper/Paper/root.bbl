@@ -1,0 +1,116 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{#1}
+\csname url@rmstyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand\BIBentrySTDinterwordspacing{\spaceskip=0pt\relax}
+\providecommand\BIBentryALTinterwordstretchfactor{4}
+\providecommand\BIBentryALTinterwordspacing{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand\BIBforeignlanguage[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+
+\bibitem{Aeberhard}
+\BIBentryALTinterwordspacing
+M.~Aeberhard, ``Object-level fusion for surround environment perception in
+  automated driving applications,'' Ph.D. dissertation, {Technische
+  Universit{\"a}t Dortmund}, Dortmund. [Online]. Available:
+  \url{https://d-nb.info/113647157X/34}
+\BIBentrySTDinterwordspacing
+
+\bibitem{knuthwebsite}
+\BIBentryALTinterwordspacing
+{ODSC - Open Data Science}, ``Overview of the yolo object detection
+  algorithm.'' [Online]. Available:
+  \url{https://medium.com/@ODSC/overview-of-the-yolo-object-detection-algorithm-7b52a745d3e0}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Gap}
+\BIBentryALTinterwordspacing
+F.~Reway, A.~Hoffmann, D.~Wachtel, W.~Huber, A.~Knoll, and E.~Ribeiro, ``Test
+  method for measuring the simulation-to-reality gap of camera-based object
+  detection algorithms for autonomous driving.'' [Online]. Available:
+  \url{https://www.researchgate.net/publication/341494584_Test_Method_for_Measuring_the_Simulation-to-Reality_Gap_of_Camera-based_Object_Detection_Algorithms_for_Autonomous_Driving}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Dosovitskiy17}
+D.~Alexey, R.~German, C.~Felipe, L.~Antonio, and K.~Vladlen, ``{CARLA}: {An}
+  open urban driving simulator,'' in \emph{Proceedings of the 1st Annual
+  Conference on Robot Learning}, 2017, pp. 1--16.
+
+\bibitem{ROS}
+\BIBentryALTinterwordspacing
+{Stanford Artificial Intelligence Laboratory et al.}, ``Robotic operating
+  system.'' [Online]. Available: \url{https://www.ros.org}
+\BIBentrySTDinterwordspacing
+
+\bibitem{NCAP}
+\BIBentryALTinterwordspacing
+{EUROPEAN NEW CAR ASSESSMENT PROGRAMME (Euro NCAP)}, ``Aeb vru test protocol
+  v3.0.2,'' JULY 2019. [Online]. Available:
+  \url{https://cdn.euroncap.com/media/53153/euro-ncap-aeb-vru-test-protocol-v302.pdf}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Protocoll}
+\BIBentryALTinterwordspacing
+{Insurance Institute for Highway Safety}, ``Pedestrian autonomous emergency
+  braking test protocol (version ii),'' FEBRUARY 2019. [Online]. Available:
+  \url{https://www.iihs.org/media/f6a24355-fe4b-4d71-bd19-0aab8b39aa7e/TfEBAA/Ratings/Protocols/current/test_protocol_pedestrian_aeb.pdf}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Yolo}
+\BIBentryALTinterwordspacing
+A.~Rosebrock, ``Yolo object detection with opencv.'' [Online]. Available:
+  \url{https://www.pyimagesearch.com/2018/11/12/yolo-object-detection-with-opencv/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{distance}
+\BIBentryALTinterwordspacing
+``Depth camera.'' [Online]. Available:
+  \url{https://carla.readthedocs.io/en/latest/ref_sensors/#depth-camera}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Tracker}
+\BIBentryALTinterwordspacing
+A.~Rosebrock, ``Simple object tracking with opencv.'' [Online]. Available:
+  \url{https://www.pyimagesearch.com/2018/07/23/simple-object-tracking-with-opencv/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{URDF}
+\BIBentryALTinterwordspacing
+{Open Source Robotics Foundation, Inc.}, ``car\_demo.'' [Online]. Available:
+  \url{https://github.com/osrf/car_demo}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Reway}
+F.~Reway, A.~Hoffmann, D.~Wachtel, W.~Huber, A.~Knoll, and E.~Riberio, ``Test
+  method for measuring the simulation-to-reality gap of camera-based object
+  detection algorithms for autonomous driving.''
+
+\bibitem{Shapely}
+\BIBentryALTinterwordspacing
+S.~Gillies, ``Shapely documentation.'' [Online]. Available:
+  \url{https://pypi.org/project/Shapely/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{PyQt5}
+\BIBentryALTinterwordspacing
+{Riverbank Computing Limited}, ``Pyqt5.'' [Online]. Available:
+  \url{https://pypi.org/project/PyQt5/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{rqt}
+\BIBentryALTinterwordspacing
+D.~Thomas, D.~Scholz, and A.~Blasdel, ``Ros rqt.'' [Online]. Available:
+  \url{http://wiki.ros.org/rqt}
+\BIBentrySTDinterwordspacing
+
+\end{thebibliography}
