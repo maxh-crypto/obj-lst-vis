@@ -1,9 +1,11 @@
 '''
     This module can analyse Rosbag files and provide data for the post-processing GUI. 
-    There are multiple functions that partly depend on each other.
+    There are multiple methods that partly depend on each other. Some of them use 
+    methods by ui.DataEvaluation_module.py
     
     author: Christoph Zach
-    institue: Technische Hochschule Ingolstadt / Carissma
+    copyright by: Technische Hochschule Ingolstadt / Carissma
+    date: June 2020
 '''
 
 import rosbag
@@ -289,9 +291,9 @@ class Rosbag_Analysis:
     @staticmethod
     def getCalculationValues(bagfile1, bagfile2, obj_id_target_gt, category, attribute, IoU_threshold):
         '''
-            prepares value arrays for calculations in getAdvancedData().
+            provides value arrays for calculations in getAdvancedData().
             Uses values of selected object ID (according to GT data) if a
-            detected sensor object can be matched (only True Positive cases).
+            detected sensor object can be matched (only True Positive cases are used).
             
             input: 
                 Rosbag file 1 (Ground-Truth data),
@@ -305,40 +307,43 @@ class Rosbag_Analysis:
                 array of values GT
                 array of values sensor
         '''
+        # frame mapping
         mapped_frames = Rosbag_Analysis.getFrames(bagfile1, bagfile2)
         
         timestamps_CAM = []
         values_GT = []
         values_CAM = []
-            
+        
+        # analyse every pair of frames (sensor message and concerning GT message)
         for frame in mapped_frames:
         
             objectsInFrame_GT = []
             objectsInFrame_CAM = []
             triple_count = -1
             
-            #collect all GT objects in frame
+            #collect all GT objects in current GT frame
             for object_gt in frame[1].obj_list:
                 objectsInFrame_GT.append(object_gt)
                 
-            #collect all CAM objects in frame
+            #collect all CAM objects in current sensor frame
             for object_cam in frame[2].obj_list:
                 objectsInFrame_CAM.append(object_cam)
         
             ###
-            #IoU testing - position mapping
+            ### proceeding IoU evaluation
             evaluations = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
             ###
 
-            # analysing evaluation results
+            # analysing IoU evaluation results
             for triple in evaluations:
                 triple_count += 1
 
-                # TP (true positive) case - you got a match:   
+                # TP (True Positive) case (enumeration value 0) for selected GT object - you got a match:   
                 if triple[0] == 0 and objectsInFrame_GT[triple[1]].obj_id == obj_id_target_gt:
                 
-                    timestamps_CAM.append(frame[0])
+                    timestamps_CAM.append(frame[0]) # sensor time stamp (relative)
                     
+                    # fetch attribute value of object
                     if category == "": # branch with one level in object list tree (e.g. 'obj_id')
                         values_GT.append(getattr(objectsInFrame_GT[triple[1]], attribute))
                         values_CAM.append(getattr(objectsInFrame_CAM[triple_count], attribute))
@@ -346,7 +351,8 @@ class Rosbag_Analysis:
                         values_GT.append(getattr(getattr(objectsInFrame_GT[triple[1]], category), attribute))
                         values_CAM.append(getattr(getattr(objectsInFrame_CAM[triple_count], category), attribute))
                     break
-                        
+        
+        # no matches for selected GT object detected: no Ground-Truth data available
         if len(values_GT) == 0:
             print("Error in Rosbag_Analysis.py: No object matches detected. Could not get calculation values.")
         
@@ -354,7 +360,25 @@ class Rosbag_Analysis:
      
     @staticmethod
     def getEvaluation(bagfile1, bagfile2, IoU_threshold):
-        
+        '''
+            provides value arrays for the evaluation of Quality-of-Service parameter of a sensor detection
+            in comparison to Ground-Truth data.
+            
+            input: 
+                Rosbag file 1 (Ground-Truth data),
+                Rosbag file 2 (sensor data),
+                threshold for IoU evaluation
+            return: 
+                array of time stamps (sensor)
+                array of number of TP cases
+                array of number of FP cases
+                array of number of FN cases
+                array of number of mm cases
+                array of values of precision
+                array of values of recall 
+                array of IoU evaluation values (only TP cases regarded)
+        '''
+        # frame mapping
         mapped_frames = Rosbag_Analysis.getFrames(bagfile1, bagfile2)
         
         array_timestamps = []
@@ -365,7 +389,8 @@ class Rosbag_Analysis:
         array_mm = []
         array_precision = []
         array_recall = []
-                    
+        
+        # analyse every pair of frames (sensor message and concerning GT message)        
         for frame in mapped_frames:
         
             objectsInFrame_GT = []
@@ -377,30 +402,30 @@ class Rosbag_Analysis:
             count_FN = 0.0
             sum_IoU_values = 0.0
             
-            array_timestamps.append(frame[0])
+            array_timestamps.append(frame[0])   # sensor time stamp (relative)
             
-            #collect all GT objects in frame
+            #collect all GT objects in current frame
             for object_gt in frame[1].obj_list:
                 objectsInFrame_GT.append(object_gt)
 
-            # collect all CAM objects in frame
+            # collect all CAM objects in current frame
             for object_cam in frame[2].obj_list:
                 objectsInFrame_CAM.append(object_cam)
            
             ###
-            #IoU testing - position mapping
+            ### proceeding IoU evaluation
             evaluations = de.det_TP_FP_mm(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
             ###
 
-            # analysing evaluation results
+            # analysing IoU evaluation results
             for triple in evaluations:
             
-                # TP (true positive) case - you got a match:
+                # TP (True Positive) case - you got a match:
                 if triple[0] == 0:
                     count_TP += 1
                     sum_IoU_values += triple[2]
                 
-                # FP (false positive) case:
+                # FP (False Positive) case:
                 elif triple[0] == 1:
                     count_FP += 1
                 
@@ -408,31 +433,31 @@ class Rosbag_Analysis:
                 elif triple[0] == 2:
                     count_mm += 1
           
-            # test FN (false negative) case:                    
+            # evaluating FN (False Negative) case:                    
             evaluations_FN = de.isFN(objectsInFrame_GT, objectsInFrame_CAM, IoU_threshold)
-            
+           
+            # counting FN cases
             for i in evaluations_FN:
                 if i == True:
                     count_FN += 1
             
-            # add values for each frame
+            # collecting return values for each pair of frame
             array_TP.append(count_TP)
             array_FP.append(count_FP)
             array_FN.append(count_FN) 
             array_mm.append(count_mm)
             array_IoU_values_TP.append(sum_IoU_values)
             
+            # calculating value of precision (per frame)
             if (count_TP + count_FP) == 0:
                 array_precision.append(0)
             else: array_precision.append(count_TP / (count_TP + count_FP))
             
+            # calculating value of recall (per frame)
             if (count_TP + count_FN) == 0:
                 array_recall.append(0)
             else: array_recall.append(count_TP / (count_TP + count_FN))
             
-            array_IoU_values_TP.append(sum_IoU_values)
-            
-                   #timestamps CAM
         return (array_timestamps, array_TP, array_FP, array_FN, array_mm, array_precision, array_recall, array_IoU_values_TP)     
     
     @staticmethod
@@ -632,7 +657,7 @@ class Rosbag_Analysis:
 
 
     ### following: example method - DEPRECATED ###
-    ### how to get all values of geometric.x of object with ID 1 ###
+    ### how to get all values of geometric.x of object with ID 1 in a Rosbag file ###
     @staticmethod
     def get_geometric_x(bagfile, obj_id): 
         
