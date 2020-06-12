@@ -1,0 +1,64 @@
+This is BibTeX, Version 0.99d (MiKTeX 2.9.7440 64-bit)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: root.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: IEEEtran.bst
+Reallocating 'name_of_file' (item size: 1) to 8 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: Example.bib
+Warning--entry type for "ROS" isn't style-file defined
+--line 60 of file Example.bib
+-- IEEEtran.bst version 1.11 (2003/04/02) by Michael Shell.
+-- http://www.ctan.org/tex-archive/macros/latex/contrib/supported/IEEEtran/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty year in Aeberhard
+Warning--empty journal in Reway
+Warning--empty year in Reway
+
+Done.
+You've used 15 entries,
+            3975 wiz_defined-function locations,
+            870 strings with 9391 characters,
+and the built_in function-call counts, 5972 in all, are:
+= -- 401
+> -- 130
+< -- 6
++ -- 64
+- -- 30
+* -- 256
+:= -- 1056
+add.period$ -- 30
+call.type$ -- 15
+change.case$ -- 15
+chr.to.int$ -- 15
+cite$ -- 18
+duplicate$ -- 491
+empty$ -- 581
+format.name$ -- 34
+if$ -- 1257
+int.to.chr$ -- 0
+int.to.str$ -- 15
+missing$ -- 118
+newline$ -- 91
+num.names$ -- 14
+pop$ -- 380
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 428
+stack$ -- 0
+substring$ -- 49
+swap$ -- 276
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 0
+warning$ -- 3
+while$ -- 18
+width$ -- 17
+write$ -- 155
+(There were 4 warnings)

@@ -161,13 +161,18 @@ def process3(d):
 	global step3
 	step3 = d
 
+def setTime(zeit):
+	global TIME_PERIOD
+	TIME_PERIOD = zeit 
+
+#=================================
+
 ####################################################
 ### Klassen für Berechnung der Objektliste #########
 ####################################################
 CAM_ANGULAR = 90 #90 degree camera view , const.
 CAM_XSIZE = 800  #x-Size Pixel
 CAM_YSize = 600  #y-Size Pixel
-TIME_PERIOD = 0.5# currently no value!!!
 PI = 3.14159265359
 #=================================
 class GeometricMSG:
@@ -274,7 +279,7 @@ class DimensionMSG:
 		self.length= 0
 		self.height= 0
 
-	def setDimension(self,dirDist,array,className):
+	def setDimension(self,dirDist,array,className, objLeng):
 		#==== Adjust Scale
 		classNameString =""
 		classNameString = classNameString.join(className)
@@ -293,27 +298,27 @@ class DimensionMSG:
 		
 		#self.height = hP * meterPerPixel
 		if classNameString == 'car':
-			self.length = 4.5
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'truck':
-			self.length = 18.75
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'motorbike':
-			self.length = 2.0
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'bicycle':
-			self.length = 1.9
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'person':
-			self.length = wP * meterPerPixel
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		elif classNameString == 'stacionary':
-			self.length = 1.0
+			self.length = objLeng
 			self.width = wP * meterPerPixel
 			self.height = hP * meterPerPixel
 		else:
@@ -436,9 +441,9 @@ class AllMSG:
 		self.dim = DimensionMSG()
 		self.klas = ClassificationMSG()
 
-	def setAllValues(self,dirDist,objKoordinaten, className,iD0,confi):
+	def setAllValues(self,dirDist,objKoordinaten, className,iD0,confi,objLeng):
 		self.geo.setValue(dirDist,objKoordinaten)
-		self.dim.setDimension(dirDist,objKoordinaten,className)
+		self.dim.setDimension(dirDist,objKoordinaten,className,objLeng)
 		self.klas.setClass(className)
 		self.id_Klasse = iD0[0]
 		self.confidence_spez = confi
@@ -580,23 +585,26 @@ ct = CentroidTracker()
 ########
 
 
-def getdepth(array):
+def getdepth(arraycoordinates,transform_name):
+	array = arraycoordinates
+	newimageRGB = rgb_frame
 	if type(array) == int:
 		distance(0,0)
+	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
+		distance(0,0)
+	elif len(transform_name)>3:
+		distance(0,0)
 	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
-		distance(0,0)
-	elif not rgb_frame.all():
-		distance(0,0)
-	else:
 		ycenter = array[0] + (array[2] * 0.35)
 		xcenter = array[1] + (array[3] * 0.5)
 
-		pixel = depthimage[int(xcenter),int(yhalf)]
+		pixel = depthimage[int(xcenter),int(ycenter)]
 		normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
 		in_meters = 1000 * normalized
 
 
-		frame_of_interest = rgb_frame[array[1]:(array[1]+array[3]),array[0]:(array[0]+array[2])]
+
+		frame_of_interest = newimageRGB[array[1]:(array[1]+array[3]),array[0]:(array[0]+array[2])]
 		frame_of_interest_grayscaled = cv2.cvtColor(frame_of_interest, cv2.COLOR_BGR2GRAY)
 		gaus_threshold = cv2.adaptiveThreshold(frame_of_interest_grayscaled, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
 
@@ -606,9 +614,10 @@ def getdepth(array):
 		for i in range(0,array[3]):
 			for j in range(0,array[2]):
 				if gaus_threshold[i,j] == 0:
-					pixel = depthimage[int(xhalf),int(yhalf)]
-					calc = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
-					calc_in_meters = 1000 * normalized
+					pixel_length = depthimage[(array[1]+j),(array[0]+i)]
+					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
+					calc_in_meters = 1000 * calc
+
 
 					if calc_in_meters < nearest:
 						nearest = calc_in_meters
@@ -619,7 +628,7 @@ def getdepth(array):
 			#dist = math.sqrt(in_meters**2 + length**2 +2*in_meters*length*math.cos(angle))
 		#else:
 			#dist = in_meters
-		#length = furthest-nearest
+		length = furthest-nearest
 		if length == -1000:
 			distance(in_meters, 0)
 		elif transform_name == ['car'] and length > 7:
@@ -631,10 +640,12 @@ def getdepth(array):
 		else:
 			dist = in_meters + length * 0.5
 			distance(dist,length)
+		
+	else:
+		distance(0,0)
 
 def yolostart(imagevariable):
 	global rgb_frame
-	rgb_frame = imagevariable
 	if step1 > 1:
 		process1(0)
 		frame = imagevariable
@@ -745,6 +756,7 @@ def yolostart(imagevariable):
 							i_D_Var.append([iiiDs[i]])
 						yoloVariables(j, k, s, i_D_Var)
 						process2(1)
+						rgb_frame = imagevariable
 			else:
 				process1(2)
 
@@ -1917,13 +1929,6 @@ def game_loop(args):
 	
 			if step3 == 1:
 				#hier variable
-				if startTime == 0:
-					endTime = time.time()
-					DiffTime = endTime- startTime
-				startTime = time.time()
-				print("Zeit für einen Loop")
-				print(" took {:.6f} seconds".format(DiffTime))
-
 
 				if counter > 1:
 
@@ -1932,23 +1937,34 @@ def game_loop(args):
 					newObjDetectionName = objDetectionName
 					newObjID_Var = objID_Var
 					newObjConfidence = objConfidence
+					print(newObjDetectionName)
+
+					endTime = time.time()
+					DiffTime = endTime - startTime
+					print("Zeit für einen Loop");
+					print("took {:.6f} seconds".format(DiffTime))
+					startTime = time.time()
+					setTime(DiffTime)
+
 
 					for i in range(len(newObjDetectionName)):
 						if checkDetectObj(newObjDetectionName[i]) == 1:
-							getdepth(newObjCoordinates[i])
+							getdepth(newObjCoordinates[i], newObjDetectionName[i])
+							print("Kleiner Test zu Koordinaten:")
+
 
 							idFound = False
 							
 							for j in range(len(ListeObj2)):
 
 								if ("".join(ListeObj2[j].iD_Classname) == "".join(newObjDetectionName[i]) and int("".join(map(str,newObjID_Var[i]))) == ListeObj2[j].id_Klasse):
-									ListeObj2[j].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))))
+									ListeObj2[j].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 									idFound = True
-									print(type(float("".join(map(str,newObjConfidence[i])))))
+									#print(type(float("".join(map(str,newObjConfidence[i])))))
 
 							if idFound == False:
 								ListeObj2.append(AllMSG())
-								ListeObj2[i].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))))
+								ListeObj2[i].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 								
 						if i == len(newObjDetectionName)-1:
 							process3(0)
@@ -1958,6 +1974,8 @@ def game_loop(args):
 						#print("Länge der Liste")
 						#print(len(ListeObj2))
 						if z< len(ListeObj2):
+							if ListeObj2[z].geo.x == 0 and ListeObj2[z].geo.y:
+								del ListeObj2[z]
 							if ListeObj2[z].stillChanging != True:
 								#ListeObj2.pop(z)
 								del ListeObj2[z]
@@ -1975,7 +1993,7 @@ def game_loop(args):
 					yoloTalker(ListeObj2)
 			
 		###----Extract Ground Truth Data----####
-			Object_List_Talker(world,args)
+			#Object_List_Talker(world,args)
 
 
 	finally:
