@@ -19,7 +19,7 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	```
 	* Setup your environment (in a new terminal, in workspace *obj-lst-vis*):
 	``` bash
-	./devel/setup.bash
+	source ./devel/setup.bash
  	 ```
 	* Start rqt (in the same terminal as step before):
 	``` bash
