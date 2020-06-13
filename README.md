@@ -12,36 +12,36 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 
 ### GUI
 0. Start GUI:
-  a. Start roscore in a new terminal (if it is not already running):
-  ``` bash
-  roscore
-  ```
-  b. Setup your environment (in a new terminal, in workspace *obj-lst-vis*):
-  ``` bash
-  ./devel/setup.bash
-  ```
-  c. Start rqt (in the same terminal as step b.):
-  ``` bash
-  rqt
-  ```
-  d. Start the post-processing Plugin: Select "ObjectList Postprocessing Plugin" under "Plugins"
+	a. Start roscore in a new terminal (if it is not already running):
+	``` bash
+	roscore
+	```
+	b. Setup your environment (in a new terminal, in workspace *obj-lst-vis*):
+	``` bash
+	./devel/setup.bash
+ 	 ```
+	c. Start rqt (in the same terminal as step b.):
+	``` bash
+	rqt
+    ```
+	d. Start the post-processing Plugin: Select "ObjectList Postprocessing Plugin" under "Plugins"
   
 1. Import the Rosbag files to investigate
-  a. Import a Ground Truth Rosbag file by pressing the button "ground truth bag file" and selecting one in the folder structure
-  b. Import a Camera Data Rosbag file by pressing the button "camera data bag file" and selecting one in the folder structure
+	a. Import a Ground Truth Rosbag file by pressing the button "ground truth bag file" and selecting one in the folder structure
+	b. Import a Camera Data Rosbag file by pressing the button "camera data bag file" and selecting one in the folder structure
   
 2. Add graphs to the plot area by pressing the button "Add new Graph":
-  a. Tab "Raw Data Graphs":
-      i. Select the desired Rosbag file (only one selectable)
-     ii. Select the desired value which should be investigated
-    iii. Select a ObjectID by clicking one in the list or by typing a number in the edit field
-  b. Tab "Evaluation Graphs":
-      i. Select the desired evaluation value
-     ii. optional: adjust the threshold value for the IoU evaluation
-  c. Tab "Difference Graphs":
-      i. optional: adjust the threshold value for the IoU evaluation
-     ii. Select the desired value which should be compared
-    iii. Select a ObjectID (here: always GT-IDs) by clicking one in the list or by typing a number in the edit field
+	a. Tab "Raw Data Graphs":
+    	  i. Select the desired Rosbag file (only one selectable)
+     	 ii. Select the desired value which should be investigated
+    	iii. Select a ObjectID by clicking one in the list or by typing a number in the edit field
+	b. Tab "Evaluation Graphs":
+    	  i. Select the desired evaluation value
+    	 ii. optional: adjust the threshold value for the IoU evaluation
+	c. Tab "Difference Graphs":
+    	  i. optional: adjust the threshold value for the IoU evaluation
+     	 ii. Select the desired value which should be compared
+    	iii. Select a ObjectID (here: always GT-IDs) by clicking one in the list or by typing a number in the edit field
   After selecting the desired graph press "Start" and the graph is shown in the plot area of the main window
 
 3. Delete a graph by pressing the button "Delete Graph", selecting the graph in the list and pressing the button "Delete"
