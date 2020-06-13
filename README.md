@@ -21,7 +21,7 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	``` bash
 	./devel/setup.bash
  	 ```
-	* Start rqt (in the same terminal as step b.):
+	* Start rqt (in the same terminal as step before):
 	``` bash
 	rqt
     ```
