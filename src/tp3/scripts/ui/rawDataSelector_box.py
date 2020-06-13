@@ -16,7 +16,7 @@ class RawDataSelector(QGroupBox):
     def __init__(self, parent=None):
         super(RawDataSelector, self).__init__()
         self.parent = parent
-        self.setTitle('1.Select Bag or diff.')
+        self.setTitle('Select bag file')
         
         # Init the components
         self.bag1RadioBtn = QRadioButton('ground truth')
