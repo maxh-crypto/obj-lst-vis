@@ -40,6 +40,7 @@
 \usepackage{siunitx}
 \usepackage[nolist]{acronym}
 \graphicspath{{images/}}
+\usepackage{capt-of}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +53,7 @@
 }
 
 \author{Christoph Zach, Denis Rösler, Dominik Knauer, Maximilian Pfaller,\\ Maximilian Haindl, Philipp Korn, Stephan Schweigard and Tobias Wagner
-	\thanks{*This work was not supported by any organization}% <-this % stops a space
+%	\thanks{*This work was not supported by any organization}% <-this % stops a space
 }
 
 
@@ -77,31 +78,50 @@
 		\acro{IoU}{Intersection over Union}
 		\acro{RVIZ}{3D visualization tool}
 	\end{acronym}
-	
+		\begin{figure*}[!h]
+		\centering
+		\includegraphics[width=0.85\linewidth]{Overview}
+		\caption{Process diagramm for data generation, illustration and evaluation}
+		\label{fig:Overview}
+	\end{figure*}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%									Abstract									%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\begin{abstract}
-		
-		This electronic document is a live template. The various components of your paper [title, text, heads, etc.] are already defined on the style sheet, as illustrated by the portions given in this document.		
-	\end{abstract}
-	
 
+%	\begin{abstract}
+		\input{TP/Abstract}
+		
+%		This electronic document is a live template. The various components of your paper [title, text, heads, etc.] are already defined on the style sheet, \\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		text\\
+%		as illustrated by the portions given in this document.		
+%	\end{abstract}
+	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%									Introduction								%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	\begin{figure*}[!h]
+%		\centering
+%		\includegraphics[width=0.85\linewidth]{images/Ueberblick}
+%		\caption{Overview}
+%		\label{fig:Overview}
+%	\end{figure*}
 	\section{INTRODUCTION}
 	\input{TP/Intro}
-	\begin{figure*}[]
-		\centering
-		\includegraphics[width=0.85\linewidth]{images/Ueberblick}
-		\caption{Overview}
-		\label{figurelabel}
-	\end{figure*}
+	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%									Related Works								%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	\section{RELATED WORKS}
 	IEEE Fabio Reway Test Method for Measuring the Simulation-to-Reality Gap of Camera-based Object Detection Algorithms for Autonomous Driving	
 

@@ -531,7 +531,7 @@ def yoloTalker(allData):
 		b.obj_list[i].dimension.length = allData[i].dim.length
 		b.obj_list[i].dimension.width = allData[i].dim.width
 		b.obj_list[i].dimension.height = allData[i].dim.height
-
+ 
 
 		b.obj_list[i].classification.car = allData[i].klas.car
 		b.obj_list[i].classification.truck = allData[i].klas.truck
@@ -585,16 +585,17 @@ ct = CentroidTracker()
 ########
 
 
-def getdepth(arraycoordinates,transform_name):
+def getdepth(arraycoordinates,transform_name, transform_len):
 	array = arraycoordinates
 	newimageRGB = rgb_frame
 	if type(array) == int:
 		distance(0,0)
 	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
 		distance(0,0)
-	elif len(transform_name)>3:
+	elif transform_len>3:
 		distance(0,0)
 	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
+		#print("I am here")
 		ycenter = array[0] + (array[2] * 0.35)
 		xcenter = array[1] + (array[3] * 0.5)
 
@@ -607,14 +608,21 @@ def getdepth(arraycoordinates,transform_name):
 		frame_of_interest = newimageRGB[array[1]:(array[1]+array[3]),array[0]:(array[0]+array[2])]
 		frame_of_interest_grayscaled = cv2.cvtColor(frame_of_interest, cv2.COLOR_BGR2GRAY)
 		gaus_threshold = cv2.adaptiveThreshold(frame_of_interest_grayscaled, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
+		
+		#print("array[3]: ",array[3], " and range(array[3]: ", range(array[3]))
 
 		nearest = 1000
 		furthest = 0
 
-		for i in range(0,array[3]):
-			for j in range(0,array[2]):
+
+		for i in range(array[3]):
+			for j in range(array[2]):
 				if gaus_threshold[i,j] == 0:
-					pixel_length = depthimage[(array[1]+j),(array[0]+i)]
+					if (array[0]+i)>IM_HEIGTH:
+						i = i -1
+					if (array[1]+j)>IM_WIDTH:
+						j = j - 1
+					pixel_length = depthimage[(array[1]+i),(array[0]+j)]
 					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
 					calc_in_meters = 1000 * calc
 
@@ -628,6 +636,7 @@ def getdepth(arraycoordinates,transform_name):
 			#dist = math.sqrt(in_meters**2 + length**2 +2*in_meters*length*math.cos(angle))
 		#else:
 			#dist = in_meters
+		#print("Distanz: ", in_meters)
 		length = furthest-nearest
 		if length == -1000:
 			distance(in_meters, 0)
@@ -1949,9 +1958,8 @@ def game_loop(args):
 
 					for i in range(len(newObjDetectionName)):
 						if checkDetectObj(newObjDetectionName[i]) == 1:
-							getdepth(newObjCoordinates[i], newObjDetectionName[i])
-							print("Kleiner Test zu Koordinaten:")
-
+							getdepth(newObjCoordinates[i], newObjDetectionName[i],len(newObjDetectionName))
+							
 
 							idFound = False
 							
@@ -1993,7 +2001,7 @@ def game_loop(args):
 					yoloTalker(ListeObj2)
 			
 		###----Extract Ground Truth Data----####
-			#Object_List_Talker(world,args)
+			Object_List_Talker(world,args)
 
 
 	finally:
