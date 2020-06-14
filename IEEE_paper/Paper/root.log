@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7440 64-bit) (preloaded format=pdflatex 2020.5.19)  11 JUN 2020 17:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7440 64-bit) (preloaded format=pdflatex 2020.5.19)  14 JUN 2020 14:14
 entering extended mode
 **./root.tex
 (root.tex
@@ -423,23 +423,26 @@ Package: suffix 2006/07/15 1.5a Variant command support
 Package: xstring 2019/02/06 v1.83 String manipulations (CT)
 )
 \AC@clearlist=\toks27
+)
+("C:\Program Files\MiKTeX 2.9\tex/latex/capt-of\capt-of.sty"
+Package: capt-of 2009/12/29 v0.2 standard captions outside of floats
 ) (root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
 
 ("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -456,42 +459,8 @@ LaTeX Font Info:    ... okay on input line 64.
 \everyMPtoPDFconversion=\toks29
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/epstopdf-pkg\epstopdf-base.sty"
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-
-("C:\Program Files\MiKTeX 2.9\tex/generic/infwarerr\infwarerr.sty"
-Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-("C:\Program Files\MiKTeX 2.9\tex/latex/grfext\grfext.sty"
-Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
-
-("C:\Program Files\MiKTeX 2.9\tex/generic/kvdefinekeys\kvdefinekeys.sty"
-Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-))
-("C:\Program Files\MiKTeX 2.9\tex/latex/kvoptions\kvoptions.sty"
-Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
-
-("C:\Program Files\MiKTeX 2.9\tex/generic/ltxcmds\ltxcmds.sty"
-Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
-)
-("C:\Program Files\MiKTeX 2.9\tex/generic/kvsetkeys\kvsetkeys.sty"
-Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
-))
-("C:\Program Files\MiKTeX 2.9\tex/latex/pdftexcmds\pdftexcmds.sty"
-Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-("C:\Program Files\MiKTeX 2.9\tex/generic/iftex\iftex.sty"
-Package: iftex 2020/03/06 v1.0d TeX engine tests
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 504.
 )
 \c@lstlisting=\count300
 
@@ -503,94 +472,87 @@ Dictionary: translator-basic-dictionary, Language: English
 File: siunitx-abbreviations.cfg 2017/11/26 v2.7k siunitx: Abbreviated units
 )
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 64.
+ 65.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ot1ztmcm.fd"
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 64.
+ 65.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omlztmcm.fd"
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 64.
+ 65.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omsztmcm.fd"
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 64.
+ 65.
 
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\omxztmcm.fd"
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
- (TP/Intro.tex
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
+<images/Overview.png, id=1, 1610.4165pt x 476.982pt>
+File: images/Overview.png Graphic file (type png)
+<use images/Overview.png>
+Package pdftex.def Info: images/Overview.png  used on input line 83.
+(pdftex.def)             Requested size: 430.00958pt x 127.36034pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+(TP/Abstract.tex) (TP/Intro.tex
 Package acronym Info: Label `acro:YOLO' newly defined as it shall be overridden
 
 although it is yet undefined on input line 1.
 Package acronym Info: Label `acro:ROS' newly defined as it shall be overridden
-although it is yet undefined on input line 1.
+although it is yet undefined on input line 2.
 Package acronym Info: Label `acro:RVIZ' newly defined as it shall be overridden
 
-although it is yet undefined on input line 1.
-
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 3.
-
-<images/KoordinatenSystem.png, id=1, 453.695pt x 480.79625pt>
-File: images/KoordinatenSystem.png Graphic file (type png)
-<use images/KoordinatenSystem.png>
-Package pdftex.def Info: images/KoordinatenSystem.png  used on input line 5.
-(pdftex.def)             Requested size: 181.47478pt x 192.31508pt.
+although it is yet undefined on input line 2.
 )
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 95.
-
-<images/Ueberblick.png, id=3, 1342.01375pt x 397.485pt>
-File: images/Ueberblick.png Graphic file (type png)
-<use images/Ueberblick.png>
-Package pdftex.def Info: images/Ueberblick.png  used on input line 97.
-(pdftex.def)             Requested size: 430.00958pt x 127.36156pt.
-
-Underfull \hbox (badness 1383) in paragraph at lines 106--107
+Underfull \hbox (badness 1383) in paragraph at lines 126--127
 []\OT1/ptm/m/n/10 IEEE Fabio Re-way Test Method for Mea-sur-ing the
  []
 
 (TP/TP1.tex
 Package acronym Info: Label `acro:API' newly defined as it shall be overridden
 although it is yet undefined on input line 3.
- [1{C:/Users/max/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
-
-
- <./images/KoordinatenSystem.png>]
-<images/Target_Placement_test_scenario.png, id=13, 280.6485pt x 430.0065pt>
+<images/Target_Placement_test_scenario.png, id=3, 280.6485pt x 430.0065pt>
 File: images/Target_Placement_test_scenario.png Graphic file (type png)
 <use images/Target_Placement_test_scenario.png>
 Package pdftex.def Info: images/Target_Placement_test_scenario.png  used on inp
-ut line 46.
+ut line 51.
 (pdftex.def)             Requested size: 116.35252pt x 178.27222pt.
-Package acronym Info: Label `acro:ID' newly defined as it shall be overridden
-although it is yet undefined on input line 58.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 6
-1.
+ [1{C:/Users/max/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
+
+]
+Package acronym Info: Label `acro:ID' newly defined as it shall be overridden
+although it is yet undefined on input line 59.
+<images/KoordinatenSystem.png, id=12, 453.695pt x 480.79625pt>
+File: images/KoordinatenSystem.png Graphic file (type png)
+<use images/KoordinatenSystem.png>
+Package pdftex.def Info: images/KoordinatenSystem.png  used on input line 62.
+(pdftex.def)             Requested size: 181.47478pt x 192.31508pt.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
+0.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ts1ptm.fd"
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )) (TP/TP2.tex
+[2 <./images/Overview.png> <./images/Target_Placement_test_scenario.png> <./ima
+ges/KoordinatenSystem.png>]
 Package acronym Info: Label `acro:TP' newly defined as it shall be overridden
 although it is yet undefined on input line 8.
 Package acronym Info: Label `acro:FP' newly defined as it shall be overridden
 although it is yet undefined on input line 8.
-
-[2 <./images/Ueberblick.png> <./images/Target_Placement_test_scenario.png>]
 <images/depthimage.png, id=20, 803.0pt x 602.25pt>
 File: images/depthimage.png Graphic file (type png)
 <use images/depthimage.png>
@@ -606,44 +568,43 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--32
 
  []
 
-) (TP/ObjectList.tex
-<images/calc_angle.png, id=21, 576.65437pt x 367.3725pt>
+) (TP/ObjectList.tex [3 <./images/depthimage.png>]
+<images/calc_angle.png, id=28, 533.36766pt x 358.71515pt>
 File: images/calc_angle.png Graphic file (type png)
 <use images/calc_angle.png>
-Package pdftex.def Info: images/calc_angle.png  used on input line 25.
-(pdftex.def)             Requested size: 202.3529pt x 128.91302pt.
- [3 <./images/depthimage.png> <./images/calc_angle.png>]
-<images/objlist_output.png, id=30, 329.23pt x 442.15187pt>
+Package pdftex.def Info: images/calc_angle.png  used on input line 56.
+(pdftex.def)             Requested size: 202.3529pt x 136.08875pt.
+<images/objlist_output.png, id=29, 329.23pt x 442.15187pt>
 File: images/objlist_output.png Graphic file (type png)
 <use images/objlist_output.png>
-Package pdftex.def Info: images/objlist_output.png  used on input line 47.
+Package pdftex.def Info: images/objlist_output.png  used on input line 93.
 (pdftex.def)             Requested size: 151.76854pt x 203.82411pt.
-)
-(TP/rviz.tex
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (TP/rviz.tex
 Underfull \hbox (badness 6236) in paragraph at lines 3--4
 \OT1/ptm/m/n/10 Calculation data are sub-scribed by [][] node \OT1/ptm/m/it/10 
 ob-
  []
 
-<images/rosgraph.png, id=31, 1169.87062pt x 298.11375pt>
+<images/rosgraph.png, id=30, 1169.87062pt x 298.11375pt>
 File: images/rosgraph.png Graphic file (type png)
 <use images/rosgraph.png>
 Package pdftex.def Info: images/rosgraph.png  used on input line 7.
 (pdftex.def)             Requested size: 430.00958pt x 109.57709pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (TP/Post_processing.tex
+) (TP/Post_processing.tex [4 <./images/calc_angle.png> <./images/objlist_output
+.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 14--17
 
  []
 
-[4 <./images/objlist_output.png>]
-<images/frame_mapping.pdf, id=36, 251.98141pt x 85.7604pt>
-File: images/frame_mapping.pdf Graphic file (type pdf)
-<use images/frame_mapping.pdf>
-Package pdftex.def Info: images/frame_mapping.pdf  used on input line 25.
-(pdftex.def)             Requested size: 245.71811pt x 83.63239pt.
+<images/canvas.png, id=36, 2007.5pt x 682.55pt>
+File: images/canvas.png Graphic file (type png)
+<use images/canvas.png>
+Package pdftex.def Info: images/canvas.png  used on input line 25.
+(pdftex.def)             Requested size: 245.71811pt x 83.5376pt.
 Package acronym Info: Label `acro:FN' newly defined as it shall be overridden
 although it is yet undefined on input line 31.
 Package acronym Info: Label `acro:mm' newly defined as it shall be overridden
@@ -675,7 +636,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
-
+[5 <./images/rosgraph.png> <./images/canvas.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 64--65
 
  []
@@ -690,9 +651,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 74--77
 
  []
 
-[5 <./images/rosgraph.png> <./images/frame_mapping.pdf>]) (TP/Results.tex)
-(TP/Conclusion.tex)
-Underfull \hbox (badness 2556) in paragraph at lines 2--129
+) (TP/Results.tex) (TP/Conclusion.tex)
+Underfull \hbox (badness 2556) in paragraph at lines 2--149
 []\OT1/ptm/m/n/10 TODO: in Kapi-tel CON-CLU-SIONS kopieren Werte
  []
 
@@ -724,7 +684,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 64--68
 aab8b39aa7e /
  []
 
-)
+[6])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -736,27 +696,28 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the US letter (8.5in X 11in) paper size.
 
-[6] (root.aux) ) 
+[7
+
+] (root.aux) ) 
 Here is how much of TeX's memory you used:
- 11025 strings out of 480799
- 208746 string characters out of 2905534
- 440585 words of memory out of 3000000
- 26822 multiletter control sequences out of 15000+200000
- 593300 words of font info for 147 fonts, out of 3000000 for 9000
+ 10558 strings out of 480799
+ 200846 string characters out of 2905534
+ 431751 words of memory out of 3000000
+ 26384 multiletter control sequences out of 15000+200000
+ 593614 words of font info for 148 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,13n,46p,1430b,1091s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/symbols/msam10.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
-tmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on root.pdf (6 pages, 3011637 bytes).
+ 36i,15n,46p,1051b,1091s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/font
+s/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/
+utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on root.pdf (7 pages, 3510662 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
+ 76 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
