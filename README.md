@@ -6,9 +6,28 @@ Developement of an autonomous driving environment model visualization based on o
 This repository can be cloned and used as catkin workspace in a ROS environment 
 
 ## CARLA
-
+* Open a new Terminal 
+	``` bash
+	cd /opt/carla-simulator/bin/
+	```
+* Source Carla
+	``` bash
+	source CarlaUE4.sh
+	```
+	            
 ## YOLO and ROS
-
+* Setup your environment (in a new terminal, in workspace *obj-lst-vis*):
+	``` bash
+	source ./devel/setup.bash
+ 	 ```
+* Source Roslaunch File (without recording Bagfiles):
+	``` bash
+	roslaunch tp3 startTP3.launch
+ 	 ```
+* Source Roslaunch File (with recording Groundtruth und Camera Data):
+	``` bash
+	roslaunch tp3 startTP3.launch groundtruth:= true camera:=true
+	```
 ## Post-processing
 
 ### GUI
