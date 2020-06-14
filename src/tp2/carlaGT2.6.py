@@ -595,7 +595,7 @@ def getdepth(arraycoordinates,transform_name, transform_len):
 	elif transform_len>3:
 		distance(0,0)
 	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
-		print("I am here")
+		#print("I am here")
 		ycenter = array[0] + (array[2] * 0.35)
 		xcenter = array[1] + (array[3] * 0.5)
 
@@ -636,7 +636,7 @@ def getdepth(arraycoordinates,transform_name, transform_len):
 			#dist = math.sqrt(in_meters**2 + length**2 +2*in_meters*length*math.cos(angle))
 		#else:
 			#dist = in_meters
-		print("Distanz: ", in_meters)
+		#print("Distanz: ", in_meters)
 		length = furthest-nearest
 		if length == -1000:
 			distance(in_meters, 0)
@@ -1998,10 +1998,10 @@ def game_loop(args):
 					for z in range(len(ListeObj2)):
 						ListeObj2[z].changeTrigger()
 
-					#yoloTalker(ListeObj2)
+					yoloTalker(ListeObj2)
 			
 		###----Extract Ground Truth Data----####
-			#Object_List_Talker(world,args)
+			Object_List_Talker(world,args)
 
 
 	finally:
