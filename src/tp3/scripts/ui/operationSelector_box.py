@@ -24,7 +24,7 @@ class OperationSelectorWidget(QGroupBox):
     def __init__(self, parent=None):
         super(OperationSelectorWidget, self).__init__()
         self.parent = parent
-        self.setTitle('1.Select Operation')
+        self.setTitle('Select Value')
         self.layout = QVBoxLayout()
         self.initRadioButtons()
         self._currentSelected = ''
