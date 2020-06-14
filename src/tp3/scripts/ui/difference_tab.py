@@ -32,7 +32,7 @@ class DiffTab(QWidget):
         self.thresholdSetter = ThresholdSetter(self)
         self.valueWidget = ValueSelectorWidget(self, False)        
         self.idSelector = IDSelectorWidget()
-        self.idSelector.setTitle("3.Select GT-ObjectID")
+        self.idSelector.setTitle("Select GT-ObjectID")
         
         # connect the signals to the slots)
         self.valueWidget.valueTreeWidget.itemClicked.connect(self.valueSelected)
@@ -93,7 +93,6 @@ class DiffTab(QWidget):
         if attribute == "object_count":
             
             # get object_counts per frame and build the difference
-            # TODO: Methode von Christoph schreiben lassen mit zeitl. mapping
             try:    
                 time_list_gt, obj_count_list_gt = Rosbag_Analysis.getObjectCountPerFrame(self.bagFiles[0])
                 time_list_cam, obj_count_list_cam = Rosbag_Analysis.getObjectCountPerFrame(self.bagFiles[1])

@@ -47,7 +47,7 @@ class QualityDialog(QDialog):
         
         self.setLayout(layout)
         
-        self.resize(300, 400)
+        self.resize(300, 200)
         
         # calculate the data quality:
         self.calculate()
