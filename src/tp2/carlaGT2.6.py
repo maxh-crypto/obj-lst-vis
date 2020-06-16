@@ -611,11 +611,15 @@ def getlength(arraycoordinates,transform_name, transform_len):
 
 		for i in range(array[3]):
 			for j in range(array[2]):
-				if gaus_threshold[i,j] == 0:
-					if (array[0]+i)>IM_HEIGTH:
-						i = i -1
-					if (array[1]+j)>IM_WIDTH:
-						j = j - 1
+				if (array[0]+i)>IM_HEIGTH:
+						#i = counti
+						break
+				elif (array[1]+j)>IM_WIDTH:
+						#j = countj
+						break
+				elif gaus_threshold[i,j] == 0:
+					#counti = i
+					#countj = j
 					pixel_length = depth[(array[1]+i),(array[0]+j)]
 					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
 					calc_in_meters = 1000 * calc
@@ -646,7 +650,7 @@ def getdistance(arraycoordinates,transform_len, winkelarray):
 	array = arraycoordinates
 	depth = depthimage
 	length = objLength
-	print("Unser Winkel ist: ",winkel)
+	#print("Unser Winkel ist: ",winkel)
 	if type(array) == int:
 		distance(0)
 	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
@@ -668,7 +672,7 @@ def getdistance(arraycoordinates,transform_len, winkelarray):
 		
 
 		distance(finaldistance)
-		print("final: ", finaldistance, " vs. direct: ", in_meters)
+		#print("final: ", finaldistance, " vs. direct: ", in_meters)
 	else:
 		distance(0)
 
@@ -2124,10 +2128,10 @@ def game_loop(args):
 					#print(allDistances)
 					#print("Domi's Info: ", allCoordinates, " Denis's Info: ", newObjCoordinates)
 					
-					#yoloTalker(ListeObj2)
+					yoloTalker(ListeObj2)
 			
 		###----Extract Ground Truth Data----####
-			#Object_List_Talker(world,args)
+			Object_List_Talker(world,args)
 
 
 	finally:
