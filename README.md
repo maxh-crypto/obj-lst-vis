@@ -26,7 +26,7 @@ This repository can be cloned and used as catkin workspace in a ROS environment
  	 ```
 * Source Roslaunch File (with recording Groundtruth und Camera Data):
 	``` bash
-	roslaunch simulation obj-lst-vis.launch groundtruth:= true camera:=true
+	roslaunch simulation obj-lst-vis.launch groundtruth:=true camera:=true
 	```
 ## Post-processing
 
