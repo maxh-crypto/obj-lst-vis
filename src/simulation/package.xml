@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>model</name>
+  <name>simulation</name>
   <version>0.0.0</version>
   <description>package for obj-lst-vis project</description>
 
