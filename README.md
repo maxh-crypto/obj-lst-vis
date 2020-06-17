@@ -28,9 +28,8 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	``` bash
 	roslaunch simulation obj-lst-vis.launch groundtruth:=true camera:=true
 	```
-## Post-processing
+## Post-processing (GUI)
 
-### GUI
 0. Start GUI:
 	* Start roscore in a new terminal (if it is not already running):
 	``` bash
@@ -47,7 +46,7 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	* Start the post-processing Plugin: Select "ObjectList Postprocessing Plugin" under "Plugins"
   
 1. Import the Rosbag files to investigate
-	* Import a Ground Truth Rosbag file by pressing the button "ground truth bag file" and selecting one in the folder structure
+	* Import a Ground-Truth Rosbag file by pressing the button "ground truth bag file" and selecting one in the folder structure
 	* Import a Camera Data Rosbag file by pressing the button "camera data bag file" and selecting one in the folder structure
   
 2. Add graphs to the plot area by pressing the button "Add new Graph":
