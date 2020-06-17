@@ -22,11 +22,11 @@ This repository can be cloned and used as catkin workspace in a ROS environment
  	 ```
 * Source Roslaunch File (without recording Bagfiles):
 	``` bash
-	roslaunch tp3 startTP3.launch
+	roslaunch simulation obj-lst-vis.launch
  	 ```
 * Source Roslaunch File (with recording Groundtruth und Camera Data):
 	``` bash
-	roslaunch tp3 startTP3.launch groundtruth:= true camera:=true
+	roslaunch simulation obj-lst-vis.launch groundtruth:= true camera:=true
 	```
 ## Post-processing
 
