@@ -1,17 +1,11 @@
-% necessary packages:
-% \usepackage{booktabs}
-% \usepackage{tabularx}
-
-\subsection{Evaluation of object lists - Post-processing}
+\subsection{Evaluation of objects lists - Post-processing}
 To evaluate the quality of calculated sensor data with the aim to improve the object detection algorithm post-processing is necessary.
-After recording object list data streams in Rosbag files there is the possibility to analyse data in different ways by multiple post-processing functions. 
-Either a single Rosbag file can be analysed or two files can be compared. In both cases the data is evaluated frame by frame. 
-
-%The user can either analyse single data streams or compare two different ones. An essential usage would be the comparison of a simulation data stream (Ground-Truth data) to a sensor data stream (camera data). The post-processing application provides the opportunity to display several data values within the recorded Rosbag file relating to contained message frames. \\
+After recording object list data streams in Rosbag files there is the possibility to analyze data in different ways by multiple post-processing functions. 
+Either a single Rosbag file can be analyzed or two files can be compared. In both cases the data is evaluated frame by frame. 
 
 \subsubsection{Basic analysis}
 
-Considered to one single Rosbag file specific attribute values of single objects which are selected by their object \ac{ID} can be displayed. The variety of available attribute types is shown in table 
+Considered to one single Rosbag file specific attribute values of single objects which are selected by their object \ac{ID} can be displayed. The variety of available attribute types is shown described in \cref{B} 
 %\ref{<Object list – attributes table (TP1)>}
 . In addition, the number of detected objects can be visualized. \\
 
@@ -20,7 +14,7 @@ Considered to one single Rosbag file specific attribute values of single objects
 
 Regarding two Rosbag recordings further analysis methods for comparing the streams are provided. In this case a common time base needs to be generated. To avoid errors because of time variation of both recordings following mapping algorithm is executed. Each frame time stamp is handled as time relative to its Rosbag start time in milliseconds. To every frame in the Rosbag file which is provided by sensor data a frame of simulation data is dedicated. The simulation frame to choose is the latest past frame in relative stream time. The principle of frame mapping is shown in figure \ref{fig:frame_mapping}. With this mechanism pairs of frames are generated (sensor frame with corresponding simulation frame).
 
-\begin{figure}[thpb]
+\begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{canvas}
 	\caption{Principle of frame mapping algorithm}
@@ -29,7 +23,7 @@ Regarding two Rosbag recordings further analysis methods for comparing the strea
 
 A fundamental use case in analysing the recorded Rosbag files is to evaluate the quality of sensor data in comparison with GT data through metrics introduced in \cite{Reway}. 
 To determine whether a given camera object is evaluated as \ac{TP}, \ac{FP}, \ac{FN} or a \ac{mm}, the \textbf{\ac{IoU}} value is used. 
-In general there is a list of $m$ camera objects ($B_{pr}$) and a list of $n$ Ground-Truth objects ($B_{gt}$) for each frame. To evaluate a frame, for each combination of GT object and camera object the IoU value is calculated. All those values build a matrix like shown in \cref{tab:matrix}.
+In general there is a list of $m$ camera objects ($B_{pr}$) and a list of $n$ \ac{GT} objects ($B_{gt}$) for each frame. To evaluate a frame, for each combination of GT object and camera object the IoU value is calculated. All those values build a matrix like shown in \cref{tab:matrix}.
 \begin{table}[h]
 	\caption{IoU-Matrix for a single frame}
 	\begin{tabularx}{\columnwidth}{X|X|c|X}
@@ -63,13 +57,13 @@ in the according row of the matrix which is greater than the given threshold $t$
 
 Going through the rows of the matrix, for each $B_{pr,i}$ in the given frame it can be decided, whether the case is TP, FP or mm. \\
 
-The other way round, examining the Ground-Truth objects $B_{gt,k}$, that means the columns of the calculated matrix, all FN cases can be detected. It is an \textbf{FN} if there is no $B_{pr,i}$ for which
+The other way round, examining the \ac{GT} objects $B_{gt,k}$, that means the columns of the calculated matrix, all FN cases can be detected. It is an \textbf{FN} if there is no $B_{pr,i}$ for which
 \begin{equation}
 	IoU(B_{gt,k}, B_{pr,i}) > t \text{\quad with\quad} i \in \left\lbrace 1, ..., m\right\rbrace 
 	\label{eq:fn_case}
 \end{equation}
 Going through the columns of the matrix, this decision can be made for every $B_{gt,k}$. \\
-With these steps, a given frame with $m$ camera objects and $n$ Ground-Truth objects can be investigated. \\
+With these steps, a given frame with $m$ camera objects and $n$ \ac{GT} objects can be investigated. \\
 
 These functions, one for investigating the camera objects and one for detecting all FN cases, were realized in Python. The calculation of an IoU value is processed with functions of the package \textit{shapely} \cite{Shapely}.
 First, the given objects, which are defined through their properties \textit{x}, \textit{y}, \textit{length}, \textit{height}, \textit{yaw} and \textit{classification} like presented in \cite{Aeberhard}
@@ -93,7 +87,7 @@ Another feature of the post-processing application is the analysis of deviations
 \end{equation}
 
 \subsubsection{Graphical User Interface}
-To investigate the quality of the processed camera object data, a graphical user interface (GUI) is provided. It is designed with Pythons binding package for Qt (PyQt5) \cite{PyQt5} and defined as a plugin for \textit{rqt}, a \textit{ROS} framework for GUI development \cite{rqt}.
+To investigate the quality of the processed camera object data, a graphical user interface (GUI) is provided. It is designed with Pythons binding package for Qt (PyQt5) \cite{PyQt5} and defined as a plugin for \textit{rqt}, a \textit{\ac{ROS}} framework for GUI development \cite{rqt}.
 With this plugin, the user can import two Rosbag files, one GT data file and one sensor (camera) data file.
 By using the functions mentioned before, the GUI can show several data graphs to the user, like raw data plots, comparing plots with object data of both files or evaluation data. 
 Along with every data set - except from FPPI, MOTA and MOTP - the mean value and the standard deviation for each data set is portrayed in the GUI. \\
