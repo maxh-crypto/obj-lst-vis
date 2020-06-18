@@ -1,0 +1,23 @@
+<launch>
+
+  <arg name="model" default="$(find simulation)/urdf/prius.urdf"/>
+  <arg name="gui" default="false" />
+  <arg name="rvizconfig" default="$(find simulation)/rviz/urdf.rviz" />
+  <arg name="groundtruth" default="false" />
+  <arg name="camera" default="false" />
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+
+  <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+  <node pkg="simulation" name="Objekt_Visualization" type="Objektlist_Visualization.py"/>
+    
+  <node if="$(arg groundtruth)" pkg="simulation" name="RecordGroundtruth" type="RecordGroundtruth.py"/>
+  <node if="$(arg camera)" pkg="simulation" name="RecordCamera" type="RecordCamera.py"/>
+  
+  <node pkg="simulation" name="scenario" type="carlaGT2.6.py"/>
+   
+</launch>

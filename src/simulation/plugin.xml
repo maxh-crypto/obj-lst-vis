@@ -1,0 +1,20 @@
+<library path="scripts"> <!-- The package relative path which gets added to sys.path -->
+  <class name="PostProcPlugin" type="ui.postproc_module.PostProcPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A rqt Plugin for performing postprocessing on object list message bag files
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>ObjectList Postprocessing Plugin</label>
+      <icon type="theme">system-help</icon>
+      <statustip>User Interface for postprocession on Object Lists</statustip>
+    </qtgui>
+  </class>
+</library>
