@@ -33,6 +33,7 @@ class BagSelector(QWidget):
     def __init__(self, btnText):
         super(BagSelector, self).__init__()
         self.bagEdit = QLineEdit()
+        self.bagEdit.textChanged.connect(self.pathChanged)
         self.bagBtn = QPushButton(btnText)
         self.bagBtn.clicked.connect(self.btnClicked)
         
@@ -48,4 +49,7 @@ class BagSelector(QWidget):
         fileTupel = QFileDialog.getOpenFileName(self, 'Select file', cwd, "Bag files (*.bag)")
         self.fileName = fileTupel[0]
         self.bagEdit.setText(self.fileName) # print filename to lineEdit
+        
+    def pathChanged(self):
+        self.fileName = self.bagEdit.text()
     

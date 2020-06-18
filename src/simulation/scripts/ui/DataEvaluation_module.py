@@ -163,7 +163,13 @@ def isFN(B_gt_list, B_pr_list, threshold):
     iou_mat = genIouMat(B_gt_list, B_pr_list)
     res_list = []
     
+    if iou_mat.size == 0:
+        return res_list
+    
     for col in iou_mat.T: # loop through the columns, means the B_gt objects
+        
+        if col.size == 0:
+            continue
         
         max_iou = np.max(col)
         
