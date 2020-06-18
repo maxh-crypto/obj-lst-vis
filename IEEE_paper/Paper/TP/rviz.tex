@@ -1,11 +1,10 @@
 \subsection{Visualization of object lists}
 
-The published topics of Ground-Truth Data and Camera-Calculation data are subscribed by \ac{ROS} node \textit{object\_visualization}. Each topic contains the ego vehicle data and the specifically generated object list. In \ac{RVIZ} the objects are represented by primitive figures with the help of marker messages. Figure \ref{fig:Nodes} shows the used topics and nodes. Rectangles represent topics and ellipses the called nodes. Moreover, tf is a package and controls the coordinate relationship of the ego vehicle.
-
+The published topics of \ac{GT} data and Camera-Calculation data are subscribed by \ac{ROS} node \textit{Object\_Visualization}. Each topic contains the ego vehicle data and the specifically generated object list. In \ac{RVIZ} the objects are represented by primitive figures with the help of marker messages. Figure \ref{fig:Nodes} shows the used topics and nodes. Rectangles represent topics and ellipses the called nodes. Moreover, tf is a package and controls the coordinate relationship of the ego vehicle.
 \begin{figure*}[thpb]
 	\centering
 	\includegraphics[width=0.85\linewidth]{rosgraph}
-	\caption{Nodes / Topics in \ac{ROS}}
+	\caption{Nodes (ellipses)/ Topics (rectangles) in \ac{ROS}}
 	\label{fig:Nodes}
 \end{figure*}
 Marker messages are described with specific properties such as position, scale, type, color, orientation. Each object classification is assigned to one specific shape and color so that they can be differentiated in \ac{RVIZ}. The display variants for the possible object classes are shown in \cref{ClassificationAssignment}. 
@@ -13,7 +12,7 @@ Marker messages are described with specific properties such as position, scale, 
 	\caption{Classification Assignment}
 	\begin{tabularx}{\columnwidth}{XXX}
 		\toprule
-		Classification & Shape & Color[RGB]\\
+		Classification & Shape & Color [RGB]\\
 		\toprule
 		car & cube & [1, 0, 0]\\
 		truck & cube & [0, 1, 0]\\
@@ -31,4 +30,4 @@ In addition, the yaw angle of the objects has to be transformed into a quaternio
 The highest detection probability of an object indicates the classification so that the marker message properties can be set to the corresponding values of \cref{ClassificationAssignment}. Furthermore, each detection position is mirrored on the Y-axis, because the vehicle coordinate system does not match the \ac{RVIZ} coordinate system. Finally, the generated markers are combined into a marker array and published.
 The ego vehicle is described as URDF model according to \cite{URDF}.
 Furthermore, the model can be moved and rotated in the \ac{RVIZ} coordinate system by tf messages. 
-The published topics of Ground-Truth Data, Camera-Calculation data and ego vehicle data are also saved in a Rosbag file. Each file contains the published ego data and the corresponding object lists. In the following, these files are used for postprocessing.
+The published topics of \ac{GT} data, Camera-Calculation data and ego vehicle data are also saved in a Rosbag file. Each file contains the published ego data and the corresponding object lists. In the following, these files are used for post processing.
