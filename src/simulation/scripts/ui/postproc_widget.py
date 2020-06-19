@@ -1,3 +1,7 @@
+'''
+    this is the main widget for the whole plugin
+    itself contains the main layout and the main components
+'''
 import sys
 sys.path.append("../")
 import message_module

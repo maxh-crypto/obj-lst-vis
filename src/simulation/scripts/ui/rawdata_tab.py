@@ -2,6 +2,7 @@
     this widget inherits from QWidget and 
     contains widgets to select the data required 
     for plotting raw data
+    it is a tab embedded in the plot dialog widget
 '''
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import (QWidget, QGridLayout, 
@@ -78,9 +79,9 @@ class RawDataTab(QWidget):
     
     def getPlotData(self):
         '''
-            gets the raw data according to the selected parameters
-            from Rosbag_Analysis
+            provides the raw data according to the selected parameters
         '''
+        # info needed for the figure legend
         plotInfo = {
             'label' : '',
             'y_label' : '',
