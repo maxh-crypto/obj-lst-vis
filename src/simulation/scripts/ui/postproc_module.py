@@ -1,3 +1,6 @@
+'''
+    this module connects the Qt based Plugin with the ROS framework
+'''
 import os
 import rospy
 import rospkg

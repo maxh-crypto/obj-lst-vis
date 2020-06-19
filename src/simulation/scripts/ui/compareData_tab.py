@@ -1,8 +1,7 @@
 '''
     this widget inherits from QWidget and 
     contains widgets to select the data required 
-    for comparing and plotting data of all imported 
-    bag files
+    for evaluating the camera data and plotting the results
 '''
 
 from python_qt_binding import QtCore, QtGui

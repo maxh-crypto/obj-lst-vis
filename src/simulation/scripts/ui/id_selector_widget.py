@@ -2,7 +2,7 @@
     this small widget is shown in plot dialog
     here the user can select which object he 
     wants to plot
-    contains a text edit widget to write the id manually (with autofill)
+    contains a text edit widget to write the id manually 
     and a list of all possible IDs, that appear in the selected bag
 '''
 
@@ -16,14 +16,16 @@ class IDSelectorWidget(QGroupBox):
         super(IDSelectorWidget, self).__init__()
         self.parent = parent
         self.setTitle('Select ObjectID')
-        layout = QVBoxLayout()
         
         self.idList = [] # list of strings with all ids in the selected bag
         
+        # init the items
         self.lineEdit = QLineEdit()
         self.idListWidget = QListWidget()
         self.idListWidget.currentItemChanged.connect(self.idSelected)
         
+        # layout:
+        layout = QVBoxLayout()
         layout.addWidget(self.lineEdit)
         layout.addWidget(self.idListWidget)
         self.setLayout(layout)
@@ -39,7 +41,11 @@ class IDSelectorWidget(QGroupBox):
                 
         return id
     
+    
     def refreshList(self, bagFileName):
+        '''
+            refreshes the list with the ids of the current 
+        '''
         
         if bagFileName == "":
             return
@@ -51,6 +57,7 @@ class IDSelectorWidget(QGroupBox):
         self.idList = map(str, ids) # convert list to strings
         self.idListWidget.clear()
         self.idListWidget.addItems(self.idList)
+        
         
     def idSelected(self, curItem, prevItem):
         '''

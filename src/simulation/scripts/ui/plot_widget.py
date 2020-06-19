@@ -1,3 +1,8 @@
+'''
+    this widget is the main plot area with the toolbar and the legend area
+    the plot area is a matplotlib figure
+'''
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -45,17 +50,10 @@ class PlotWidget(QWidget):
         self.ax = self.canvas.figure.subplots()
         
         # layout
-#         mainLayout = QHBoxLayout()
-        
         figLayout = QVBoxLayout()
         figLayout.addWidget(toolbar)
         figLayout.addWidget(self.canvas)
         figLayout.addWidget(self.legendInfoWidget)
-        
-#         mainLayout.addLayout(figLayout)
-#         mainLayout.addWidget(self.legendInfoWidget)
-#         
-#         self.setLayout(mainLayout)
         self.setLayout(figLayout)
         
         
@@ -71,18 +69,18 @@ class PlotWidget(QWidget):
         
         label = plotInfo['label']
         line.set_label(label)
-        # self.ax.set_ylabel(plotInfo['y_label'])
+
         self.ax.set_xlabel('time [ms]')
-        
-#         self.ax.legend()
         
         self.ax.grid(b=True)
         self.ax.figure.canvas.draw()
         
         self.linesList.append(line)
         
+        # get the line color
         color_rgba = matplotlib.colors.to_rgba(line.get_color())
         
+        # add a new row to the legend
         self.legendInfoWidget.addRow(label, color_rgba, plotData[2], plotData[3])
         self.lineCount += 1
         
@@ -95,10 +93,11 @@ class PlotWidget(QWidget):
         self.linesList.remove(line)
         self.ax.lines.remove(line)
         del(line)
+        
+        # remove this specific line from the legend
         self.legendInfoWidget.removeRow(lineNr)
         
         self.lineCount -= 1
-#         self.ax.legend()
         self.ax.figure.canvas.draw()
         
         

@@ -1,3 +1,5 @@
+# deprecated, currently not in use
+
 '''
 	this small widget is shown in the plot dialog
 	here the user can determine the type of the xAxis value

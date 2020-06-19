@@ -43,7 +43,10 @@ class DelPlotDialog(QDialog):
             self.linesListWidget.addItem(label)
             
     def btnPressed(self):
-        
+        '''
+            this slot is called when the button 'Delete' is pressed
+            and emits a signal so that the plot widget deletes the line
+        '''
         if self.linesListWidget.count() == 0:
             # empty list
             return
@@ -52,8 +55,11 @@ class DelPlotDialog(QDialog):
             lineNr = self.linesListWidget.currentRow()
         except:
             message_module.showMessage("Please select a graph to delete.")
-            
+        
+        # remove the line from the list    
         self.linesListWidget.takeItem(lineNr) 
+        
+        # emit the signal
         self.deletePressed.emit(lineNr)
         
         
