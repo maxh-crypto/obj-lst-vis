@@ -1,6 +1,6 @@
-\subsubsection{Generating an object list}
-From the detected coordinates $x$ and $y$ and the corresponding distance, the distance, velocity, acceleration, yaw angle of the object and angular velocity, can be calculated. For this previous values are stored and assigned to an \ac{ID}. With the proportionality of the object distance from the vertical center line and the camera angle, the script scales in metric distance.
-
+\subsubsection{Generating an objects list}
+From the detected coordinates $x$ and $y$ and the corresponding distance, the distance, velocity, acceleration, yaw angle and yaw rate of the object can be calculated. For this, previous values are stored and assigned to an \ac{ID}. With the proportionality of the object distance from the vertical center line and the camera angle, the script scales in metric distance.
+\Cref{eq:d_Pixel} divides the image into two segments (left and right segment) and calculates the distance $d_{Pixel}$ of the object to this center axis.
 \begin{equation}
 		d_{Pixel} = y_{Pixel} -  \frac{w_{Pixel}}{2}\\	
 		\label{eq:d_Pixel}
@@ -16,8 +16,7 @@ From the detected coordinates $x$ and $y$ and the corresponding distance, the di
 \end{table}
 
 
-\Cref{eq:d_Pixel} divides the image into two segments (left and right segment) and calculates the distance $d_{Pixel}$ of the object to this center axis.
-
+In \cref{eq:k_angle} a factor $k_{angle}$ is calculated which corresponds to a value of -1...0 or 0...1. This factor indicates the object position relative to the total segment width.
 \begin{equation}
 k_{angle}  = \frac{d_{Pixel}}{w_{Segment,Pixel}}
 \label{eq:k_angle}
@@ -31,8 +30,8 @@ k_{angle}  = \frac{d_{Pixel}}{w_{Segment,Pixel}}
 	\end{center}
 \end{table}
 
-In \cref{eq:k_angle} a factor $k_{angle}$ is calculated which corresponds to a value of -1...0 or 0...1. This factor indicates the object position relative to the total segment width.
 
+The field angle of view of the camera which corresponds to \ang{90}, is used. In relation to a segment, it would be \ang{45}. This is calculated with the factor, to get an angle $\phi$ related to the vertical axis (see \cref{eq:phi}).
 \begin{equation}
 \phi = k_{angle} * \alpha_{Segment}
 \label{eq:phi}
@@ -53,9 +52,9 @@ In \cref{eq:k_angle} a factor $k_{angle}$ is calculated which corresponds to a v
 	\label{fig:anglecalculation}
 \end{figure}
 
-The field angle of view from the camera which corresponds to \ang{90}, is used. In relation to a segment, it would be \ang{45}. This is calculated with the factor, to get an angle $\phi$ related to the vertical axis (see \cref{eq:phi}).
-By using the angle and the direct distance, the trigonometric theorems can be used to calculate the x- and y-distance in meters (shown in \cref{fig:anglecalculation}) which are the basis for the calculation of velocity, acceleration, yaw angle and yaw rate. The object attributes are stored over several frames to calculate time-dependent values. Velocity is calculated by the change of the x- and y-distances, the acceleration, by changing the x- and y-velocities. The yaw angle with the velocity in x- and y-direction and the yaw rate is calculated by time changing angles. The calculated values are related to the ego vehicle.
-The dimension of the object is based on formulas \cref{eq:d_Pixel,eq:k_angle,eq:phi} as well. Angle $\phi$ is used to calculate the distance $y$ in meters from the center vertical axis for the position of the vehicle on the y-axis in \cref{eq:y}.
+
+By using the angle and the direct distance, the trigonometric theorems can be used to calculate the x- and y-distance in meters (shown in \cref{fig:anglecalculation}) which are the basis for the calculation of velocity, acceleration, yaw angle and yaw rate. The object attributes are stored over several frames to calculate time-dependent values. Velocity is calculated by the change of the x- and y-distances, the acceleration, by changing the x- and y-velocities. The yaw angle with the velocity in x- and y-direction and the yaw rate is calculated by time changing angles. The calculated values are related to the ego-vehicle.
+The dimension of the object is based on \cref{eq:d_Pixel,eq:k_angle,eq:phi} as well. Angle $\phi$ is used to calculate the distance $y$ in meters from the center vertical axis for the position of the vehicle on the y-axis in \cref{eq:y}.
 
 \begin{equation}
 	y = h_{direct} * sin(\frac{\phi * \pi}{180})
@@ -84,7 +83,7 @@ After calculating the distance of the object to the center axis of the image, it
 	\end{center}
 \end{table}
 
-With the \ac{ROS} framework, the required data such as geometry, probability, \ac{ID} of the object etc. are transferred via the rose node /data\_play in form of \ac{ROS} message (see \cref{fig:Nodes}).
+With the \ac{ROS} framework, the object data list is transferred via the \ac{ROS} node /data\_play in form of a \ac{ROS} message (see \cref{fig:Nodes}).
 
 %\begin{figure}[h]
 %	\centering
