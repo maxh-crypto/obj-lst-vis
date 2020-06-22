@@ -1,7 +1,8 @@
 '''
-    this widget inherits from QWidget and 
-    contains widgets to select the data required 
-    for plotting raw data
+    in this tab of the plot dialog the user can 
+    decide to plot the differences of the to data streams
+    over time for specific object
+    the object mapping is processed by the Rosbag_Analysis module
 '''
 
 from python_qt_binding import QtCore, QtGui
@@ -68,28 +69,41 @@ class DiffTab(QWidget):
             
                 
     def getPlotData(self):
+        '''
+            provides the data to plot when the user presses the start button
+            in the plot dialog
+        '''
         
+        # info needed for the legend
         plotInfo = {
             'label' : '',
             'y_label' : '',
             'bag' : 1
             }
         
+        # check if two bag files are imported
         for bag in self.bagFiles:
             if bag == "":
                 raise Exception("Bag file missing! Please import bag file in the main interface.")
-            
+        
+        # get the selected threshold value:    
         threshold = self.thresholdSetter.getThreshold()
         
+        # get the selected category and attribute of the object list message:
         selectedValue = self.valueWidget.getCatAndAtt()
         category = selectedValue['category']
         attribute = selectedValue['attribute']  
+        
         # check whether attribute is empty
-        # show error message when it is the case
-        # and return the function
+        # show error message if it is the case
+        # and return
         if attribute == "":
             raise Exception("Please select a plottable attribute.") 
         
+        # attribute is not empty:
+        
+        # this part is not used: 
+        ### ---------------------------
         if attribute == "object_count":
             
             # get object_counts per frame and build the difference
@@ -103,6 +117,7 @@ class DiffTab(QWidget):
             
             plotInfo['label'] = 'difference' + '.'
             plotInfo['label'] += 'object_count'
+        ### ----------------------------
             
         # selected attribute is from object_list_msg    
         else: 
