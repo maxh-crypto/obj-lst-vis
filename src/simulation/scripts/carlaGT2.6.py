@@ -609,11 +609,17 @@ def getlength(arraycoordinates,transform_name, transform_len):
 		nearest = 1000
 		furthest = 0
 
-		#######################check = False
-
 		for i in range(array[3]):
 			for j in range(array[2]):
-				if gaus_threshold[i,j] == 0 and (array[0]+i)<IM_HEIGTH and (array[1]+j)<IM_WIDTH:
+				if (array[0]+i)>IM_HEIGTH:
+						#i = counti
+						break
+				elif (array[1]+j)>IM_WIDTH:
+						#j = countj
+						break
+				elif gaus_threshold[i,j] == 0:
+					#counti = i
+					#countj = j
 					pixel_length = depth[(array[1]+i),(array[0]+j)]
 					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
 					calc_in_meters = 1000 * calc
@@ -623,8 +629,6 @@ def getlength(arraycoordinates,transform_name, transform_len):
 						nearest = calc_in_meters
 					if calc_in_meters > furthest:
 						furthest = calc_in_meters
-				else:
-					break
 
 		length = furthest-nearest
 		if length == -1000:
@@ -646,6 +650,7 @@ def getdistance(arraycoordinates,transform_len, winkelarray):
 	array = arraycoordinates
 	depth = depthimage
 	length = objLength
+	#print("Unser Winkel ist: ",winkel)
 	if type(array) == int:
 		distance(0)
 	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
