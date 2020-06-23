@@ -1,3 +1,4 @@
+# deprecated
 import enum
 
 class xAxisTypes(enum.Enum):

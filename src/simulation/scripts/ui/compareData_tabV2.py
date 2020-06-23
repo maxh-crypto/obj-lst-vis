@@ -1,3 +1,7 @@
+# in building state 
+# new version of compareData_tab which calls 
+# the evaluation functions in an extra thread
+
 '''
     this widget inherits from QWidget and 
     contains widgets to select the data required 

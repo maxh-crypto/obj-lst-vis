@@ -10,7 +10,8 @@
 	% Wie viele Objekte werden gematcht?
 	% evtl. vergleichende Tabelle bei verschiedenen Threshold-Werten
 	% Tabellen mit FPPI, MOTP, MOTA bei versch. Threshold-Werten
-	The performance of processed camera data can be evaluated with metrics presented in \cite{Reway} which are realized like introduced in part \ref{sssec:eval}.
+	The performance of processed camera data can be evaluated with metrics presented in \cite{Reway} which are realized like introduced in part \ref{sssec:eval}. The metrics are validated by comparing two identical rosbags. This ensures that the implementation of the evaluation functions are correctly. Abbildung Ref shows the distance of an object in x direction from Ground-Truth Data and camera data. Moreover, this figure  makes the time difference between GT and camera data very clearly. The GT stops sending after about nine seconds, because the used sensor suit  can not recognize an object anymore. Certainly, the Camera-Data  sends the comparable object list after another two seconds, so that a correct evaluation can not be carried out. 
+	
 %	For the given scenario the reached performance is shown in table \ref{tab:res}.
 %	
 %	\begin{table}[h]
