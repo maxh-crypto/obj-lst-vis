@@ -1353,7 +1353,8 @@ def Object_List_Talker(world,args):
 
 	a1=ObjectList() #Creat one object of class ObjectList (vehicle in front)
 	a1.obj_id= 2	#Assign ID
-
+	timestamp = rospy.Time.now()
+	b.header.stamp = timestamp
 	#Creating class objects
 	Npc1_geo = Geometric(world,world.npc1)
 	Npc1_dim = Dimension(world.npc1)
@@ -1477,12 +1478,11 @@ def Object_List_Talker(world,args):
 	a0.ax = Player_geo.ax
 	a0.ay = Player_geo.ay
 
-	b.header.stamp = rospy.Time.now()				# TimeStamp und Frame ID
+	b.header.stamp = timestamp				# TimeStamp und Frame ID
 	b.header.frame_id = "ObjectListego_GroundTruth" #Headername of ROS message (ego-vehicle)
 
 	#add object to ObjectList
 	b.ego_geometric.append(a0)
-	b.header.stamp = rospy.Time.now()
 	#publishing ROS Node
 	pub.publish(b)
 	
@@ -1974,7 +1974,7 @@ def game_loop(args):
 			pygame.display.flip()
 			
 #===============================================================================================			
-# NCAP scenario parameter (set velocity (ego-vehicle), set starting/braking points
+# NCAP scenario parameter set velocity (ego-vehicle), set starting/braking points
 #===============================================================================================
 			# get location of objects
 			player_pos = world.player.get_location()  
