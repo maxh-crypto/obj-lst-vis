@@ -54,8 +54,15 @@ class ValueSelectorWidget(QGroupBox):
             return ""
         
     def getCatAndAtt(self):
+        '''
+            returns the current selected category and attribute
+            of the object list message
+            if no or an invalid attribute is selected the function
+            raises an exception
+        '''
         currentItem = self.valueTreeWidget.currentItem()
         
+        # if no item at all in the tree is selected
         if currentItem == None:
             raise Exception('No attribute selected! Please select a valid attribute.')
         

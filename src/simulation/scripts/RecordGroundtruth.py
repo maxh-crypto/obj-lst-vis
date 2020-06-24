@@ -16,19 +16,22 @@ import rospkg
 rospack = rospkg.RosPack()
 rospack.list()
 
-
+# Init ROS Node
 rospy.init_node('Record_Objektlist_Groundtruth')
 root_path =  rospack.get_path('simulation') + '/rosbag_files/' 
+
+# Evaluation CPU Time 
 current_time = datetime.datetime.now()
 path  = root_path + 'Groundtruth_' + str(current_time.year) + '-' + str(current_time.month) + '-' + str(current_time.day) + '-' + str(current_time.hour) + '-' + str(current_time.minute) + '-' + str(current_time.second) + '.bag'
 
-
 bag = rosbag.Bag(path,'w')
 
+# Function will be called after receiving a Ground Truth data topic
 def callback_simulation(data):
     
     bag.write('objectlist',data)
    
+# Function will be called after receiving a ego vehicle topic
 def callback_egovehicle(data):
     
     bag.write('egovehicle',data)
@@ -36,9 +39,7 @@ def listener():
 
     rospy.Subscriber("simulation", ObjectsList, callback_simulation)
     rospy.Subscriber("egovehicle", ObjectsList, callback_egovehicle)
-    # spin() simply keeps python from exiting until this node is stopped
-    
-    
+
     rospy.spin()
     bag.close()
 

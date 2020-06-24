@@ -7,7 +7,7 @@
 # For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
-	Example of automatic vehicle control from client side.
+	EURO NCAP CPNC-50 Scenario visualized in CARLA
 """
 
 from __future__ import print_function
@@ -609,11 +609,17 @@ def getlength(arraycoordinates,transform_name, transform_len):
 		nearest = 1000
 		furthest = 0
 
-		#######################check = False
-
 		for i in range(array[3]):
 			for j in range(array[2]):
-				if gaus_threshold[i,j] == 0 and (array[0]+i)<IM_HEIGTH and (array[1]+j)<IM_WIDTH:
+				if (array[0]+i)>IM_HEIGTH:
+						#i = counti
+						break
+				elif (array[1]+j)>IM_WIDTH:
+						#j = countj
+						break
+				elif gaus_threshold[i,j] == 0:
+					#counti = i
+					#countj = j
 					pixel_length = depth[(array[1]+i),(array[0]+j)]
 					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
 					calc_in_meters = 1000 * calc
@@ -623,8 +629,6 @@ def getlength(arraycoordinates,transform_name, transform_len):
 						nearest = calc_in_meters
 					if calc_in_meters > furthest:
 						furthest = calc_in_meters
-				else:
-					break
 
 		length = furthest-nearest
 		if length == -1000:
@@ -646,6 +650,7 @@ def getdistance(arraycoordinates,transform_len, winkelarray):
 	array = arraycoordinates
 	depth = depthimage
 	length = objLength
+	#print("Unser Winkel ist: ",winkel)
 	if type(array) == int:
 		distance(0)
 	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
@@ -879,21 +884,20 @@ def depthAlgo(image2):
 	return None
 
 # ==============================================================================
-# -- World ---------------------------------------------------------------
+# -- Spawn World ---------------------------------------------------------------
 # ==============================================================================
-
 class World(object):
 	def __init__(self, carla_world, hud, actor_filter):
 		self.world = carla_world
 		self.map = self.world.get_map()
 		self.hud = hud
-		self.player = None
-		self.npc1 = None
-		self.npc2 = None
+		self.player = None 							#ego-vehicle
+		self.npc1 = None 							#parked car front
+		self.npc2 = None 							#parekd car rear
 		self.player_position = carla.Location()
 		self.npc1_position = carla.Location()
 		self.npc2_position = carla.Location()
-		self.walker1 = None
+		self.walker1 = None 						#pedestrian
 		self.collision_sensor = None
 		self.lane_invasion_sensor = None
 		self.gnss_sensor = None
@@ -907,19 +911,16 @@ class World(object):
 		self.world.on_tick(hud.on_world_tick)
 		self.recording_enabled = False
 		self.recording_start = 0
-		
-		
 
 	
 	def restart(self):
 		# Keep same camera config if the camera manager exists.
 		cam_index = self.camera_manager.index if self.camera_manager is not None else 0
 		cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 0
-		# Get a blueprint.
 
+		# set vehicle blueprint spezification
 		blueprint = self.world.get_blueprint_library().filter(self._actor_filter)
-	
-		blueprintPlayer = blueprint[8]
+		blueprintPlayer = blueprint[8] #selecting spezified vehicle blueprint (blueprint libary)
 		blueprintNpc1 = blueprint[1]
 		blueprintNpc2 = blueprint[14]
 
@@ -928,8 +929,8 @@ class World(object):
 		blueprintNpc2.set_attribute('role_name', 'npc2')
 
 		blueprintNpc1.set_attribute('color', '17,37,103')
-		#blueprintNpc2.set_attribute('color', '17,37,103')
 
+		# Choose spawn point and spawn ego-vehicle
 		while self.player is None:
 			spawn_points = self.map.get_spawn_points() 
 			spawn_point = carla.Transform(carla.Location(x=119.600000, y=8.330196, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
@@ -937,15 +938,13 @@ class World(object):
 			self.vehicle_control = carla.VehicleControl()
 			self.vehicle_control.throttle = 1.0
 			
-
-	   
-		# Spawn the npc cars
+		# Choose spawn point and spawn parked cars
 			spawn_point = carla.Transform(carla.Location(x=219.600000, y=12.800000, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
 			self.npc1 = self.world.try_spawn_actor(blueprintNpc1, spawn_point)
 			spawn_point = carla.Transform(carla.Location(x=214.123000, y=12.883151, z=1.843102), carla.Rotation(pitch=0.000000, yaw=0.855823, roll=0.000000))
 			self.npc2 = self.world.spawn_actor(blueprintNpc2, spawn_point)
 	   
-		# Spawn the walker
+		# Choose spawn point and spawn walker
 			walker_controller_bp = self.world.get_blueprint_library().find('controller.ai.walker')
 			blueprintsWalkers = self.world.get_blueprint_library().filter("walker.*")
 			blueprintsWalkers = blueprintsWalkers[0]
@@ -956,14 +955,11 @@ class World(object):
 
 			self.world.wait_for_tick()
 			
-
-		
 		# Set up walker control by direct input 
 			self.control = carla.WalkerControl()
 			self.control.speed = 1.39
 			self.control.direction = carla.Vector3D(x=0.000000, y=-1.000000, z=0.000000)
 		
-			
 		# Set up the sensors.
 		self.collision_sensor = CollisionSensor(self.player, self.hud)
 		self.lane_invasion_sensor = LaneInvasionSensor(self.player, self.hud)
@@ -996,8 +992,6 @@ class World(object):
 		self.camera_manager.sensor = None
 		self.camera_manager.index = None
 	
-		
-   
 	def destroy(self):
 		actors = [
 			self.camera_manager.sensor,
@@ -1015,29 +1009,38 @@ class World(object):
 				actor.destroy()
 
 
-
+# ==============================================================================
+# -- Calculating the Feature vector --------------------------------------------
+# ==============================================================================
 class Feature(object):
 	def __init__(self,world,actor):
-		fov_angle = 30
+		fov_angle = 30  			#fov angle camera (total opening angle 60°)
 
 		player_transform = world.player.get_transform()
 		player_yaw = player_transform.rotation.yaw
-		player_location = world.player.get_location()  
+		player_location = world.player.get_location() 
+
+		# calculating camera position ego-vehicle (front middle) 
 		player_location.x = math.cos(player_yaw * math.pi/180) * world.player.bounding_box.extent.x + player_location.x
 		player_location.y = math.sin(player_yaw * math.pi/180) * world.player.bounding_box.extent.x + player_location.y
 
 		actor_location = actor.get_location()	
 		actor_transform = actor.get_transform()
 		actor_yaw = actor_transform.rotation.yaw
-		Xcoord = carla.Location()
+
+		# calculating the center coordinates of front bumper with bounding box information
+		# x = longitudinal axis offset
+		Xcoord = carla.Location()  
 		Xcoord.x = actor.bounding_box.extent.x * math.cos(actor_yaw * math.pi/180)
 		Xcoord.y = actor.bounding_box.extent.x * math.sin(actor_yaw * math.pi/180)
-		
+
+		# y = lateral axis offset
 		Ycoord = carla.Location()
 		Ycoord.y = actor.bounding_box.extent.y * math.cos(actor_yaw * math.pi/180)
 		Ycoord.x = actor.bounding_box.extent.y * math.sin(actor_yaw * math.pi/180)
 
-		
+		#calculing the coordinates of the edges (parked vehicles and pedestrian)
+		#front right
 		FR = carla.Location()
 		FR = (Xcoord + Ycoord + actor_location) - player_location
 		angle = math.atan2(FR.y, FR.x) * 180 / math.pi
@@ -1045,7 +1048,7 @@ class Feature(object):
 			FRbool = 1
 		else:
 			FRbool = 0
-	
+		#front middle
 		FM = carla.Location()
 		FM = (Xcoord + actor_location) - player_location
 		angle = math.atan2(FM.y, FM.x) * 180 / math.pi
@@ -1053,7 +1056,7 @@ class Feature(object):
 			FMbool = 1
 		else:
 			FMbool = 0
-	
+		#front left
 		FL = carla.Location()
 		FL = (Xcoord - Ycoord + actor_location) - player_location
 		angle = math.atan2(FL.y, FL.x) * 180 / math.pi
@@ -1061,9 +1064,7 @@ class Feature(object):
 			FLbool = 1
 		else:
 			FLbool = 0
-
-
-		
+		#middle right
 		MR = carla.Location()
 		MR = (Ycoord + actor_location) - player_location
 		angle = math.atan2(MR.y, MR.x) * 180 / math.pi
@@ -1071,9 +1072,7 @@ class Feature(object):
 			MRbool = 1
 		else:
 			MRbool = 0
-	
-
-	
+		#middle left
 		ML = carla.Location()
 		ML = ( -1*Ycoord + actor_location) - player_location	
 		angle = math.atan2(ML.y, ML.x) * 180 / math.pi
@@ -1081,8 +1080,7 @@ class Feature(object):
 			MLbool = 1
 		else:
 			MLbool = 0
-	
-		
+		#rear right
 		RR = carla.Location()
 		RR = (-1*Xcoord + Ycoord + actor_location) - player_location	
 		angle = math.atan2(RR.y, RR.x) * 180 / math.pi
@@ -1090,7 +1088,7 @@ class Feature(object):
 			RRbool = 1
 		else:
 			RRbool = 0
-	
+		#rear middle
 		RM = carla.Location()
 		RM = (-1*Xcoord + actor_location) - player_location	
 		angle = math.atan2(RM.y, RM.x) * 180 / math.pi
@@ -1098,7 +1096,7 @@ class Feature(object):
 			RMbool = 1
 		else:
 			RMbool = 0
-	
+		#rear left
 		RL = carla.Location()
 		RL = (-1*Xcoord - Ycoord + actor_location) - player_location	
 		angle = math.atan2(RL.y, RL.x) * 180 / math.pi
@@ -1108,8 +1106,6 @@ class Feature(object):
 			RLbool = 0
 
 
-
-	
 		self.FR = FRbool
 		self.FM = FMbool
 		self.FL = FLbool
@@ -1126,15 +1122,21 @@ class Feature(object):
 		self.RRval = RR
 		self.RMval = RM
 		self.RLval = RL
-		
-	
+
+
+	#Check if edges are in camera fov
 	def check_exist(self):
 		val = self.FR + self.FM + self.FM + self.MR + self.ML + self.RR + self.RM + self.RL
 		if val > 0:
 			return 1
 
+
+# ================================================================================================
+# -- Differenciate if edges of Feature vector are visible or non-visible (only in this scenario) -
+# ================================================================================================
 class Feature2:
-	def __init__(self,world,a1,a2,a3):   #currently this only works when a1=Feature npc1 a2=Feature npc2 a3=Feature walker1
+	def __init__(self,world,a1,a2,a3):   #currently this only works when a1=Feature npc1 a2=Feature npc2 a3=Feature pedestrian
+	#store al values in Array
 		self.values = [a1.FRval,a1.FMval,a1.FLval,a1.MRval,a1.MLval,a1.RRval,a1.RMval,a1.RLval,
 			a2.FRval,a2.FMval,a2.FLval,a2.MRval,a2.MLval,a2.RRval,a2.RMval,a2.RLval,
 			a3.FRval,a3.FMval,a3.FLval,a3.MRval,a3.MLval,a3.RRval,a3.RMval,a3.RLval]
@@ -1142,10 +1144,13 @@ class Feature2:
 			a2.FR,a2.FM,a2.FL,a2.MR,a2.ML,a2.RR,a2.RM,a2.RL,
 			a3.FR,a3.FM,a3.FL,a3.MR,a3.ML,a3.RR,a3.RM,a3.RL]
 
+	#Funktion to decide if the edges of the parked cars are visible or non-visible.
+	#Works only in this scenario and if the vehciles position is longitudinal to ego-vehicle.
+	#calculating the nearest edge position and set all posible visible edges true. (5 edges per object)
 		idx = 0
-		while(idx <= 16):
+		while(idx <= 16):     #executing the cycle 3 times (1. idx=0, 2. idx=8, 3. idx=16) one time for every spwaned object (8 edges per object)
 			values_dist=[]
-			for v in self.values[0:8]:
+			for v in self.values[idx:idx+8]:
 				v = math.sqrt(v.x ** 2 + v.y ** 2)
 				values_dist.append(v)
 				
@@ -1226,17 +1231,12 @@ class Feature2:
 		
 			idx = idx + 8
 			
-		
+		#make a new array of calculated values
 		self.bools = [a1.FR,a1.FM,a1.FL,a1.MR,a1.ML,a1.RR,a1.RM,a1.RL,
 			a2.FR,a2.FM,a2.FL,a2.MR,a2.ML,a2.RR,a2.RM,a2.RL,
 			a3.FR,a3.FM,a3.FL,a3.MR,a3.ML,a3.RR,a3.RM,a3.RL]
 
-
-
-
-
-
-#Walker 1 Hardcode
+		#Set visible edges of pedestrian
 		von = 16
 		bis = 24
 		count = von
@@ -1246,19 +1246,14 @@ class Feature2:
 			else:
 				self.corr_val(count,0,a1,a2,a3)
 			count = count+1
-			
-			
-
-		
-		
-		
+	
+	# Value Assignment for class object 		
 	def corr_val(self,valindex,visible,a1,a2,a3):
 
 		if visible == 1 and self.bools[valindex] == 1 :
 			visible = 1
 		else:
 			visible = 0
-
 	
 		actor = a1
 		if valindex > 7 and valindex <= 15:
@@ -1301,16 +1296,20 @@ class Feature2:
 		elif valindex == 7 and visible == 1:
 			actor.RL = 1
 		
-
+# ================================================================================================
+# -- Calculating vehicle and pedestrian dimensions -----------------------------------------------
+# ================================================================================================	
 class Dimension:
 	def __init__(self,actor):
 		self.length = actor.bounding_box.extent.x *2
 		self.height = actor.bounding_box.extent.z *2
 		self.width = actor.bounding_box.extent.y *2
 
+# ================================================================================================
+# -- Calculating position, acceleratrion, velocity and yaw angle of vehicles and pedestrian ------
+# ================================================================================================
 class Geometric:
 	def __init__(self,world,actor):
-		
 		
 		if actor == world.player:
 			tempxy = actor.get_location() 
@@ -1342,20 +1341,20 @@ class Geometric:
 			tempav = actor.get_angular_velocity() - world.player.get_angular_velocity()
 			self.yawrate = tempav
 
-
+# ================================================================================================
+# -- Setup Talker for ROS ------------------------------------------------------------------------
+# ================================================================================================
 def Object_List_Talker(world,args):
 
 	pub = rospy.Publisher('simulation', ObjectsList, queue_size=100) #
 	rospy.init_node('camera',anonymous=False)  # Initiate the node camera and anonymous true permitt openinig this node a lot of time including number in the end of the node name  
-   #rate=rospy.Rate(50)  #50 hz
 
-   #while not rospy.is_shutdown():
+	b=ObjectsList() #Create object ObjectsList (includes all objects)
 
-	b=ObjectsList() # Erstellen des Objekts ObjectsList (enthaelt alle Objekte)
-	a1=ObjectList() # Erstellen eines Objektes von der Klasse ObjectList
-	a1.obj_id= 2	# Zuweisen der ID
+	a1=ObjectList() #Creat one object of class ObjectList (vehicle in front)
+	a1.obj_id= 2	#Assign ID
 
-	 
+	#Creating class objects
 	Npc1_geo = Geometric(world,world.npc1)
 	Npc1_dim = Dimension(world.npc1)
 	Npc1_fea = Feature(world,world.npc1)
@@ -1368,7 +1367,7 @@ def Object_List_Talker(world,args):
 	Player_geo = Geometric(world,world.player)
 	FE2 = Feature2(world,Npc1_fea,Npc2_fea,Walker1_fea)
 	
-
+	#Assinging values of class objects to ROS message (vehicle in front)
 	a1.geometric.x = Npc1_geo.x
 	a1.geometric.y = Npc1_geo.y
 	a1.geometric.vx = Npc1_geo.vx
@@ -1376,7 +1375,6 @@ def Object_List_Talker(world,args):
 	a1.geometric.ax = Npc1_geo.ax
 	a1.geometric.ay = Npc1_geo.ay
 	a1.geometric.yaw= Npc1_geo.yaw
-	#a1.geometric.yawrate = Npc1_geo.yawrate
 	a1.dimension.length = Npc1_dim.length
 	a1.dimension.height = Npc1_dim.height
 	a1.dimension.width = Npc1_dim.width
@@ -1393,11 +1391,10 @@ def Object_List_Talker(world,args):
 	a1.prop_mov = 0
 
 
-	
-	a2=ObjectList()
-	a2.obj_id= 1
+	a2=ObjectList() #Creat one object of class ObjectList (vehicle in rear)
+	a2.obj_id= 1	#Assign ID
 
-
+	#assinging values of class objects to ROS message (vehicle in rear)
 	a2.geometric.x = Npc2_geo.x
 	a2.geometric.y = Npc2_geo.y
 	a2.geometric.vx = Npc2_geo.vx
@@ -1405,7 +1402,6 @@ def Object_List_Talker(world,args):
 	a2.geometric.ax = Npc2_geo.ax
 	a2.geometric.ay = Npc2_geo.ay
 	a2.geometric.yaw= Npc2_geo.yaw
-	#a2.geometric.yawrate = Npc2_geo.yawrate
 	a2.dimension.length = Npc2_dim.length
 	a2.dimension.height = Npc2_dim.height
 	a2.dimension.width = Npc2_dim.width
@@ -1422,10 +1418,10 @@ def Object_List_Talker(world,args):
 	a2.prop_mov = 0
 
 
-	a3=ObjectList()
-	a3.obj_id= 3
+	a3=ObjectList()	#Creat one object of class ObjectList (pedestrian)
+	a3.obj_id= 3	#Assign ID
 
-
+	#assinging values of class objects to ROS message (pedestrian)
 	a3.geometric.x = Walker1_geo.x
 	a3.geometric.y = Walker1_geo.y
 	a3.geometric.vx = Walker1_geo.vx
@@ -1433,7 +1429,6 @@ def Object_List_Talker(world,args):
 	a3.geometric.ax = Walker1_geo.ax
 	a3.geometric.ay = Walker1_geo.ay
 	a3.geometric.yaw= Walker1_geo.yaw
-	#a3.geometric.yawrate = Walker1_geo.yawrate
 	a3.dimension.length = Walker1_dim.length
 	a3.dimension.height = Walker1_dim.height
 	a3.dimension.width = Walker1_dim.width
@@ -1449,34 +1444,30 @@ def Object_List_Talker(world,args):
 	a3.prop_existence = 1
 	a3.prop_mov = 1
 
+	b.header.frame_id = "ObjectList_GroundTruth" #Headername of ROS message (2 cars and pedestrian)
 
-	b.header.frame_id = "ObjectList_GroundTruth"
 
-
-# hier werden die Objekte der Objektliste hinzugefuegt mittels append
-	if Npc2_fea.check_exist() == 1 or args.visible:
+	#add all objects to ObjectList and check if they are visible
+	if Npc2_fea.check_exist() == 1 or args.visible:	   #car in rear
 		b.obj_list.append(a2)
-	if Npc1_fea.check_exist() == 1 or args.visible:
+	if Npc1_fea.check_exist() == 1 or args.visible:	   #car in front
 		b.obj_list.append(a1)
-	if Walker1_fea.check_exist() == 1 or args.visible:
+	if Walker1_fea.check_exist() == 1 or args.visible: #pedestrian
 		b.obj_list.append(a3)
-	b.header.stamp = rospy.Time.now()
+	b.header.stamp = rospy.Time.now()  #add timestamp of ROS message
 
-# hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
+	#publish ROS Node (2 vehicles and pedestrian)
 	if Npc1_fea.check_exist() == 1 or Npc2_fea.check_exist() == 1 or Walker1_fea.check_exist() == 1:
 		pub.publish(b)
 	rospy.loginfo(b)
 	
-
 	pub = rospy.Publisher('egovehicle', ObjectsList, queue_size=100) #
 	rospy.init_node('camera',anonymous=False)  
- 
 
-	b=ObjectsList() # Erstellen des Objekts ObjectsList (enthaelt alle Obj)
+	#publishing ROS Node (ego-vehicle)
+	b=ObjectsList() #Create object ObjectsList (includes only Geometric)
 
-# ab hier werden die Eigenschaften eines Objektes zugewiesen
-	 
-
+	#assinging values of class objects to ROS message (ego-vehicle)
 	a0=geo()
 
 	a0.x = Player_geo.x
@@ -1486,25 +1477,18 @@ def Object_List_Talker(world,args):
 	a0.ax = Player_geo.ax
 	a0.ay = Player_geo.ay
 
-	
+	b.header.stamp = rospy.Time.now()				# TimeStamp und Frame ID
+	b.header.frame_id = "ObjectListego_GroundTruth" #Headername of ROS message (ego-vehicle)
 
-# der ObjektListe werden noch charakteristische Eigenschaften zugewiesen wie			# TimeStamp und Frame ID
-
-	b.header.stamp = rospy.Time.now()
-	b.header.frame_id = "ObjectListego_GroundTruth"
-
-# hier werden die Objekte der Objektliste hinzugefuegt mittels append
+	#add object to ObjectList
 	b.ego_geometric.append(a0)
 	b.header.stamp = rospy.Time.now()
-# hier wird die Nachricht gepublished und ein Node kann diese Nachricht abonnieren
+	#publishing ROS Node
 	pub.publish(b)
-	#rospy.loginfo(b)
 	
 # ==============================================================================
 # -- KeyboardControl -----------------------------------------------------------
 # ==============================================================================
-
-
 class KeyboardControl(object):
 	def __init__(self, world):
 		world.hud.notification("Press 'H' or '?' for help.", seconds=4.0)
@@ -1522,10 +1506,8 @@ class KeyboardControl(object):
 		return (key == K_ESCAPE) or (key == K_q and pygame.key.get_mods() & KMOD_CTRL)
 
 # ==============================================================================
-# -- HUD -----------------------------------------------------------------------
+# -- HUD (Head Up Dispaly) -----------------------------------------------------
 # ==============================================================================
-
-
 class HUD(object):
 	def __init__(self, width, height):
 		self.dim = (width, height)
@@ -1662,8 +1644,6 @@ class HUD(object):
 # ==============================================================================
 # -- FadingText ----------------------------------------------------------------
 # ==============================================================================
-
-
 class FadingText(object):
 	def __init__(self, font, dim, pos):
 		self.font = font
@@ -1690,8 +1670,6 @@ class FadingText(object):
 # ==============================================================================
 # -- HelpText ------------------------------------------------------------------
 # ==============================================================================
-
-
 class HelpText(object):
 	def __init__(self, font, width, height):
 		lines = __doc__.split('\n')
@@ -1717,8 +1695,6 @@ class HelpText(object):
 # ==============================================================================
 # -- CollisionSensor -----------------------------------------------------------
 # ==============================================================================
-
-
 class CollisionSensor(object):
 	def __init__(self, parent_actor, hud):
 		self.sensor = None
@@ -1755,8 +1731,6 @@ class CollisionSensor(object):
 # ==============================================================================
 # -- LaneInvasionSensor --------------------------------------------------------
 # ==============================================================================
-
-
 class LaneInvasionSensor(object):
 	def __init__(self, parent_actor, hud):
 		self.sensor = None
@@ -1782,8 +1756,6 @@ class LaneInvasionSensor(object):
 # ==============================================================================
 # -- GnssSensor --------------------------------------------------------
 # ==============================================================================
-
-
 class GnssSensor(object):
 	def __init__(self, parent_actor):
 		self.sensor = None
@@ -1954,7 +1926,6 @@ class CameraManager(object):
 # ==============================================================================
 # -- game_loop() ---------------------------------------------------------
 # ==============================================================================
-
 def game_loop(args):
 	pygame.init()
 	pygame.font.init()
@@ -2002,35 +1973,44 @@ def game_loop(args):
 			world.render(display)
 			pygame.display.flip()
 			
+#===============================================================================================			
+# NCAP scenario parameter (set velocity (ego-vehicle), set starting/braking points
+#===============================================================================================
+			# get location of objects
 			player_pos = world.player.get_location()  
-
-			
 			player_velocity = world.player.get_velocity()
 			player_velocity = math.sqrt(player_velocity.x ** 2 + player_velocity.y ** 2)
-		
 			
-			
-			if player_pos.x < 210:                        #needs rework when object detection works
-				if   max_speed == 1:
-					world.vehicle_control.manual_gear_shift = True
-					world.vehicle_control.gear = 3
-					world.vehicle_control.throttle = 0.46
-					world.player.apply_control(world.vehicle_control)
-				elif max_speed == 0:
-					world.vehicle_control.throttle = 1.0
-					world.player.apply_control(world.vehicle_control)
-					if player_velocity > 34/3.6:
-						max_speed = 1
+			#set PI-Controller for ego-vehicle
+			Kp = 0.30				#Proportional value
+			Tn = 1.9				#Integral value
+			vsoll = 40 * 1.15/3.6	#set 40km/h multiplicator
+
+			#set 40km/h braking point of ego-vehicle
+			if player_pos.x < 210:   	
+				#accelerating to 40km/h and hold
+				world.vehicle_control.manual_gear_shift = True
+				world.vehicle_control.gear = 1
+				E = vsoll - player_velocity
+				throttle = E*Kp + E*Kp * (1/Tn)	
+				if throttle > 1:
+					throttle = 1
+				elif throttle < 0.2:
+					throttle = 0.2
+				world.vehicle_control.throttle = throttle
+				world.player.apply_control(world.vehicle_control)
+				# start braking
 			else: 
 				world.vehicle_control.manual_gear_shift = False
 				world.vehicle_control.throttle = 0.0
 				world.vehicle_control.brake = 1
 				world.player.apply_control(world.vehicle_control)
 
-
-
-			if player_pos.x > 170.56:
+			#set pedestrian position to start moving if ego-vehicle (40km/h) reaches this position
+			if player_pos.x > 170.56:  
 				world.walker1.apply_control(world.control)
+#end scenario parameter
+
 	
 			if step3 == 1:
 				#hier variable
@@ -2141,8 +2121,6 @@ def game_loop(args):
 # ==============================================================================
 # -- main() --------------------------------------------------------------
 # ==============================================================================
-
-
 def main():
 	argparser = argparse.ArgumentParser(
 		description='CARLA Manual Control Client')
@@ -2182,7 +2160,7 @@ def main():
 						   choices=["Roaming", "Basic"],
 						   help="select which agent to run",
 						   default="Basic")
-	#args = argparser.parse_args()
+
 	args, unknown = argparser.parse_known_args()
 
 	args.width, args.height = [int(x) for x in args.res.split('x')]

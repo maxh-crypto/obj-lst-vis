@@ -20,6 +20,16 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	``` bash
 	source ./devel/setup.bash
  	 ```
+* Make python files executable (only necessary after file changes) - repeat for:
+	* 'src/simulation/scripts/Objektlist_Visualization.py'
+	* 'src/simulation/scripts/RecordGroundtruth.py'
+	* 'src/simulation/scripts/RecordCamera.py'
+	* 'src/simulation/scripts/carlaGT2.6.py'
+	
+	``` bash
+	chmod +x <filename>
+ 	 ```
+	 
 * Source Roslaunch File (without recording Bagfiles):
 	``` bash
 	roslaunch simulation obj-lst-vis.launch
