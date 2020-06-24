@@ -1,7 +1,7 @@
 '''
     in this GroupBox the user can select 
-    which operation he wants to perform 
-    on the seleted bag files
+    which evaluation function he wants to perform 
+    on the imported Rosbag files
 '''
 
 from python_qt_binding import QtCore, QtGui
@@ -25,6 +25,7 @@ class OperationSelectorWidget(QGroupBox):
         super(OperationSelectorWidget, self).__init__()
         self.parent = parent
         self.setTitle('Select Value')
+        
         self.layout = QVBoxLayout()
         self.initRadioButtons()
         self._currentSelected = ''

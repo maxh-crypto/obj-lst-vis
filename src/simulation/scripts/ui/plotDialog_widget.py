@@ -21,11 +21,10 @@ class PlotDialogWidget(QDialog):
         self.parent = parent
         self.bagFiles = bagFiles
         self.setWindowTitle("Add new Graph")
-        # self.setWindowModality(Qt.ApplicationModal)
         self.layout = QVBoxLayout()        
         self.resize(600, 400)
         
-        # TabWidget
+        # init the components
         self.tabWidget = QTabWidget()
         self.rawDataTab = RawDataTab(bagFiles, self)
         self.compareTab = CompareDataTab(bagFiles, self) 
@@ -65,7 +64,6 @@ class PlotDialogWidget(QDialog):
             self.close()
             
         except Exception as e:
-#             message_module.showMessage(str(e))
             msg_box = QMessageBox(QMessageBox.Critical, 'Error', str(e))
             msg_box.exec_()
             

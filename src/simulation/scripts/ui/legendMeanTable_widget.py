@@ -15,6 +15,8 @@ class LegendInfoTable(QTableWidget):
         
         # init the components:
         self.setHorizontalHeaderLabels(['Graph', 'Mean', 'Std Deviation'])
+        
+        # resize the columns
         self.setColumnWidth(0, 300)
         self.setColumnWidth(1, 100)
         self.setColumnWidth(2, 100)

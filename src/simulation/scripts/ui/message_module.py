@@ -1,3 +1,7 @@
+'''
+    a module for error messages in an extra window
+'''
+
 from python_qt_binding import QtCore, QtGui
 from python_qt_binding.QtWidgets import QMessageBox
 

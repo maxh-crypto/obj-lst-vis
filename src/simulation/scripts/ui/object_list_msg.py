@@ -1,6 +1,5 @@
 '''
-    this module contains the categories and 
-    attributes from ObjectList.msg as enums
+    this module contains global dicts
 '''
 
 obj_list_msg = {

@@ -40,7 +40,9 @@
 \usepackage{siunitx}
 \usepackage[nolist]{acronym}
 \graphicspath{{images/}}
-\usepackage{capt-of}
+\usepackage{float}
+\usepackage{framed}
+\hyphenchar\font=-1
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +54,7 @@
 	Development of an autonomous driving environment model visualization based on object list level
 }
 
-\author{Christoph Zach, Denis Rösler, Dominik Knauer, Maximilian Pfaller,\\ Maximilian Haindl, Philipp Korn, Stephan Schweigard and Tobias Wagner
+\author{Christoph Zach, Denis Rï¿½sler, Dominik Knauer, Maximilian Pfaller,\\ Maximilian Haindl, Philipp Korn, Stephan Schweigard and Tobias Wagner
 %	\thanks{*This work was not supported by any organization}% <-this % stops a space
 }
 
@@ -67,23 +69,19 @@
 	\thispagestyle{empty}
 	\pagestyle{empty}
 	\begin{acronym}[slmtA]
+		\acro{GT}{Ground-Truth}
 		\acro{YOLO}{You Only Look Once}
 		\acro{ROS}{Robot Operating System}
 		\acro{API}{application programming interface}
-		\acro{ID}{Identifier}
+		\acro{ID}{identifier}
 		\acro{TP}{True Positive}
 		\acro{FP}{False Positive}
 		\acro{FN}{False Negative}
-		\acro{mm}{missmatch}
+		\acro{mm}{mismatch}
 		\acro{IoU}{Intersection over Union}
 		\acro{RVIZ}{3D visualization tool}
+		\acro{GUI}{Graphical User Interface}
 	\end{acronym}
-		\begin{figure*}[!h]
-		\centering
-		\includegraphics[width=0.85\linewidth]{Overview}
-		\caption{Process diagramm for data generation, illustration and evaluation}
-		\label{fig:Overview}
-	\end{figure*}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%									Abstract									%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,19 +89,6 @@
 %	\begin{abstract}
 		\input{TP/Abstract}
 		
-%		This electronic document is a live template. The various components of your paper [title, text, heads, etc.] are already defined on the style sheet, \\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		text\\
-%		as illustrated by the portions given in this document.		
-%	\end{abstract}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%									Introduction								%%
@@ -123,7 +108,7 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	\section{RELATED WORKS}
-	IEEE Fabio Reway Test Method for Measuring the Simulation-to-Reality Gap of Camera-based Object Detection Algorithms for Autonomous Driving	
+	\input{TP/related_works}
 
 	
 	
@@ -151,11 +136,11 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%							Appendix & Acknowledgment							%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\input{TP/Appendix_Acknowledgment}
+	%\input{TP/Appendix_Acknowledgment}
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	References are important to the reader; therefore, each citation must be complete and correct. If at all possible, references should be commonly available publications.
+%	References are important to the reader; therefore, each citation must be complete and correct. If at all possible, references should be commonly available publications.
 
 	\addtolength{\textheight}{-12cm}    % This command serves to balance the column lengths
 										% on the last page of the document manually. It shortens

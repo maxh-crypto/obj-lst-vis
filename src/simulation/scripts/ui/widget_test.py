@@ -9,10 +9,10 @@ from postproc_widget import PostProcMainWidget
 def window():
     app = QApplication(sys.argv)
     w = PostProcMainWidget()
-    w.bagWidget.bagSelector1.bagEdit.setText('/home/max/obj-lst-vis/src/tp3/bagfiles/Groundtruth_2020-5-28-10-45-14.bag')
-    w.bagWidget.bagSelector1.fileName = '/home/max/obj-lst-vis/src/tp3/bagfiles/Groundtruth_2020-5-28-10-45-14.bag'
-    w.bagWidget.bagSelector2.bagEdit.setText('/home/max/obj-lst-vis/src/tp3/bagfiles/Camera_2020-5-28-10-45-14.bag')
-    w.bagWidget.bagSelector2.fileName = '/home/max/obj-lst-vis/src/tp3/bagfiles/Camera_2020-5-28-10-45-14.bag'
+    w.bagWidget.bagSelector1.bagEdit.setText('/home/max/obj-lst-vis/src/simulation/rosbag_files/Groundtruth_2020-6-18-8-20-53.bag')
+    w.bagWidget.bagSelector1.fileName = '/home/max/obj-lst-vis/src/simulation/rosbag_files/Groundtruth_2020-6-18-8-20-53.bag'
+    w.bagWidget.bagSelector2.bagEdit.setText('/home/max/obj-lst-vis/src/simulation/rosbag_files/Camera_2020-6-18-8-20-53.bag')
+    w.bagWidget.bagSelector2.fileName = '/home/max/obj-lst-vis/src/simulation/rosbag_files/Camera_2020-6-18-8-20-53.bag'
     w.setWindowTitle("Object List Postprocessing")
     w.show()
     sys.exit(app.exec_())
