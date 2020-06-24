@@ -1483,7 +1483,6 @@ def Object_List_Talker(world,args):
 
 	#add object to ObjectList
 	b.ego_geometric.append(a0)
-	b.header.stamp = rospy.Time.now()
 	#publishing ROS Node
 	pub.publish(b)
 	
@@ -1975,7 +1974,7 @@ def game_loop(args):
 			pygame.display.flip()
 			
 #===============================================================================================			
-# NCAP scenario parameter (set velocity (ego-vehicle), set starting/braking points
+# NCAP scenario parameter set velocity (ego-vehicle), set starting/braking points
 #===============================================================================================
 			# get location of objects
 			player_pos = world.player.get_location()  
