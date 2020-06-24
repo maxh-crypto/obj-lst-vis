@@ -1,3 +1,25 @@
 
-For detecting objects in an environment an object description model is necessary. This work is based on the model introduced in \cite{Aeberhard} which depicts an object through vectors and values shown in \cref{fig:vectors}.
-To compare objects lists with each other and to evaluate detected objects the authors of \cite{Reway} developed a test method. It presumes the existence of an objects list and the associated GT dataset, therefore this work concentrates on creating these lists. To investigate the quality of the created objects lists, metrics of \cite{Reway} are used.
+For detecting objects in an environment an object description model is necessary. This work is based on the model introduced in \cite{Aeberhard} which depicts an object through vectors and values shown in \cref{eq:vectors}.
+To compare object lists with each other and to evaluate detected objects the authors of \cite{Reway} developed a test method. It presumes the existence of an object list and the associated GT dataset, therefore this work concentrates on creating these lists. To investigate the quality of the created object lists, metrics of \cite{Reway} are used.
+\begin{framed}
+	\begin{itemize}
+		\item An object list with N objects:
+		\begin{equation*}
+		O = {\{O_{1},O_{2},...,O_{N}\}}
+		\end{equation*}	
+		\item A single object consists of:
+		\begin{equation}
+		O_{i} = {{\{\hat{x},P,\hat{d},d_{_{\sigma}2},p(\exists x),c,f\}}}
+		\label{eq:vectors}
+		\end{equation}
+		\begin{table}[H]
+			\begin{tabular}{l c l}
+				$State vector$ & = & $x = [x,y,v_{x},v_{y},a_{x},a_{y},\psi,\dot{\psi}]'$\\
+				$Dimension vector$ & = &  $d = [l,w]'$\\
+				$Classification vector$ & = & $c = [C_{Car},C_{Truck},C_{Motorcycle},C_{Pedestrian},$\\
+				& & $C_{Stationary},C_{Other}]'$\\
+				$Feature vector$ & = & $f = [FL,FR,RL,RR,FM,RM,ML,MR]'$\\
+			\end{tabular}
+		\end{table}
+	\end{itemize}
+\end{framed}

@@ -1,26 +1,11 @@
 \section{Conclusions}
 	 Nowadays, urban driving simulation software has a major impact on the development process of new autonomous driving functions. Due to the constant further development of the range of functions, the adaptable \ac{API}, \ac{ROS} integration and as well the rapidly growing community, open-source simulators like CARLA offer excellent opportunities for testing and evaluating individual sensor suites and functions. Freely adaptable scenarios and weather conditions offer the developer a lot of flexibility when creating their own test cases.\\
-	 
-	 
-	 
-	 In this specific scenario a real-time object detection system combined with an object tracker are used.
-	 As said in \cref{C}, the data processing time is highly dependent on the hardware on which the calculation runs. The delay mentioned in \cref{Results} between the time of recording and visualization leads to outdated results in \ac{RVIZ}. This is the most urgent problem to be solved. Further improvements can be achieved with training the \ac{YOLO} algorithm. Synchronizing the published objects lists data by considering the time stamps of the calculated data as well as the \ac{GT} data should also lead to more comparable data. However, this only will be useful if the acquisition time by \ac{YOLO} and the code itself will improve.
-	 
-	 
-%	  to adapt the simulation environment or to synchronize the published frames by considering the time stamps of the calculated data as well as the \ac{GT} data.
-	 %Verbesserungen ..... Yolo, Zeit, weigths, frames
-	 %Außerem hardware, da Simulation recehnintesiv
 
-	 
-	 
-	 %Conclusion
-	 % wegen 1 Sek Code kann optimiert werden --> 0.3 Sekunden (YOLO) ist aber immer noch zu lange für eine Praxisanwendung
-	 % Verbesserung durch 3D-YOLO, YOLO für spezifischen Anwendungsfall antrainieren (nur für relevante Objekte), damit keine Filter mehr notwendig
-	 % Frames synchronisieren!!!
-	  
-	 % Entweder leistungsfähigere Hardware für Echtzeit-Anforderung oder Code-Optimierung
-	 % Dadurch signifikante Verbeserung der Rechenzeit möglich
-	 
+	 In this specific scenario a real-time object detection system combined with an object tracker are used.
+	 As said in \cref{C}, the data processing time is highly dependent on the hardware on which the calculation runs. The delay mentioned in \cref{Results} between the time of recording and visualization leads to outdated results in \ac{RVIZ}. This is the most urgent problem to be solved. Further improvements can be achieved with training the \ac{YOLO} algorithm.
+	 Synchronizing the published object lists data by considering the time stamps of the sensor image frames itself and not of the published \ac{ROS} data flow should also lead to more comparable data.
+	 However, this only will be useful if the acquisition time by \ac{YOLO} and the code itself will improve.
+%	 Synchronizing the published objects lists data by considering the time stamps of the calculated data as well as the \ac{GT} data should also lead to more comparable data. However, this only will be useful if the acquisition time by \ac{YOLO} and the code itself will improve.
 	 
 	 
 	
