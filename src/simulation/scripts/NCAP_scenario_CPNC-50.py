@@ -1483,7 +1483,6 @@ def Object_List_Talker(world,args):
 
 	#add object to ObjectList
 	b.ego_geometric.append(a0)
-	b.header.stamp = rospy.Time.now()
 	#publishing ROS Node
 	pub.publish(b)
 	
