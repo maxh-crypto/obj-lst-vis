@@ -15,22 +15,11 @@ A major part of the project deals with the used software to create the test envi
 			Target path             & Perpendicular\\
 			Pedestrian dummy size   & Child\\
 			Overlap                 & 50 \%\\
-			\hline
-			
-			
+			\hline	
 		\end{tabular}
 	\end{center}
 \end{table}
 
-
-\begin{figure}[H]
-	\centering
-	\fbox{\includegraphics[width=1\linewidth]{vector.png}}
-	\caption{Object list vector \cite{Aeberhard}}
-	\label{fig:vectors}
-\end{figure}
-
-	
 \begin{figure*}[]
 	\centering
 	\fbox{\includegraphics[width=0.85\linewidth]{Overview}}
@@ -54,12 +43,12 @@ The ego-vehicle immediately engages an emergency brake and comes to a standstill
 	\caption{Vehicle and pedestrian coordinate system \cite{Aeberhard}}
 	\label{fig:coordinate}
 \end{figure}
-\subsection{Creating objects list of \ac{GT} data}\label{B}
-The \ac{GT} Objects List includes four message vectors for every spawned object-,Classification, Dimension, Features and Geometric shown in \cref{fig:vectors}. These messages are used to classify the objects, send their geometrical dimensions, location, acceleration, angles and visible edges \cite{Aeberhard}.
+\subsection{Creating object lists of \ac{GT} data}\label{B}
+The \ac{GT} object list includes four message vectors for every spawned object - Classification, Dimension, Features and Geometric shown in \cref{eq:vectors}. These messages are used to classify the objects, send their geometrical dimensions, location, acceleration, angles and visible edges \cite{Aeberhard}.
 The Classification parameters indicate the type of the spawned objects and differentiate between the relevant classes car and pedestrian. In addition, the Features vector contains all visible and invisible edges of the objects. The evaluation of both messages is statically generated for this scenario referring to the bounding box data of every spawned object. The third message represents the length, width and height of the object. This Dimensions vector receives the information as well from the bounding box. Furthermore, the Geometric message is used to represent the coordinates, velocity, yaw angle and acceleration of the objects relative to the ego-vehicle. 
-The \ac{GT} data will be published via \ac{ROS} in two different topics. Every topic includes a header with timestamp, object \ac{ID} as well as an Objects List message. This message includes all four messages vectors mentioned before for the pedestrian and both parked vehicles in topic one and is referenced to the center of the objects. \Cref{fig:coordinate} illustrates the coordinate system used for the ego-vehicle (bottom right) and the two parked vehicles and the pedestrian (center). 
+The \ac{GT} data will be published via \ac{ROS} in two different topics. Every topic includes a header with timestamp, object \ac{ID} as well as an object list message. This message includes all four messages vectors mentioned before for the pedestrian and both parked vehicles in topic one and is referenced to the center of the objects. \Cref{fig:coordinate} illustrates the coordinate system used for the ego-vehicle (bottom right) and the two parked vehicles and the pedestrian (center). 
 
-Topic two includes only the Objects List message with the Geometric data of the ego-vehicle based on the camera position at the front middle of the ego-vehicle.
+Topic two includes only the object list message with the Geometric data of the ego-vehicle based on the camera position at the front middle of the ego-vehicle.
 The test scenario offers two options for publishing different data in topic one.
 \begin{itemize}
 	\item Publishing only objects in the field of view of the camera (200 m and a total opening angle of \ang{60})
