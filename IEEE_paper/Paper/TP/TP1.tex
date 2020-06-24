@@ -1,4 +1,3 @@
-
 \subsection{Creating NCAP test scenario CPNC-50}
 A major part of the project deals with the used software to create the test environment and the test scenario itself. With its variable sensor suites and full controllable static and dynamic actors an maps CARLA is especially suitable for setting up an own test scenario \cite{Dosovitskiy17}. The adaptable \ac{API} and the \ac{ROS} integration provides a lot of flexibility and the possibility to extract the \ac{GT} data directly from the scenario. The work is based on CARLA 0.9.8 release combined with \ac{ROS} melodic which uses python3 packages and an \ac{API} based on python3.5. The test case is derived from the Euro NCAP autonomous emergency braking scenario which uses the Car-to-Pedestrian Nearside Child 50\,\% (CPNC-50) test case from the Insurance Institute for Highway Safety (IIHS) test protocol \cite{NCAP, Protocoll}. \Cref{Test conditions} presents the elementary test conditions for the created test scenario. 
 
@@ -23,16 +22,18 @@ A major part of the project deals with the used software to create the test envi
 	\end{center}
 \end{table}
 
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth]{vector.png}
-	\caption{vector \cite{Aeberhard}}
+	\fbox{\includegraphics[width=1\linewidth]{vector.png}}
+	\caption{Object list vector \cite{Aeberhard}}
 	\label{fig:vectors}
 \end{figure}
 
+	
 \begin{figure*}[]
 	\centering
-	\includegraphics[width=0.85\linewidth]{Overview}
+	\fbox{\includegraphics[width=0.85\linewidth]{Overview}}
 	\caption{Process diagram for data generation, illustration and evaluation}
 	\label{fig:Overview}
 \end{figure*}
@@ -42,14 +43,14 @@ The test procedure starts with launching the test scenario by first spawning the
 The ego-vehicle immediately engages an emergency brake and comes to a standstill in front of the child. At this point the pedestrian is at the 50\,\% overlapping point. The child continues crossing the street and the scenario ends as soon as the child completely passed the ego-vehicle.
 \begin{figure}[b]
 	\centering
-	\includegraphics[width=0.23\textwidth]{images/Target_Placement_test_scenario.png}
+	\fbox{\includegraphics[width=0.23\textwidth]{images/Target_Placement_test_scenario.png}}
 	\caption{Target placement based on CPNC-50 Scenario Child \cite{Protocoll}}
 	\label{fig:coordination}
 \end{figure}
 
 \begin{figure}[b]
 	\centering
-	\includegraphics[scale=0.4]{images/KoordinatenSystem}
+	\fbox{\includegraphics[width=0.8\linewidth]{images/KoordinatenSystem}}
 	\caption{Vehicle and pedestrian coordinate system \cite{Aeberhard}}
 	\label{fig:coordinate}
 \end{figure}
