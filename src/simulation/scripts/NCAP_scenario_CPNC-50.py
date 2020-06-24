@@ -1974,7 +1974,7 @@ def game_loop(args):
 			pygame.display.flip()
 			
 #===============================================================================================			
-# NCAP scenario parameter (set velocity (ego-vehicle), set starting/braking points
+# NCAP scenario parameter set velocity (ego-vehicle), set starting/braking points
 #===============================================================================================
 			# get location of objects
 			player_pos = world.player.get_location()  
