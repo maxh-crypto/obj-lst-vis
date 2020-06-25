@@ -29,12 +29,12 @@ bag = rosbag.Bag(path,'w')
 # Function will be called after receiving a calculated data topic
 def callback_camera(data):
     
-    bag.write('objectlist',data)
+    bag.write('objectlist',data, data.header.stamp)
    
 # Function will be called after receiving a ego vehicle topic
 def callback_egovehicle(data):
     
-    bag.write('egovehicle',data)
+    bag.write('egovehicle',data, data.header.stamp)
 def listener():
 
     rospy.Subscriber("camera_calculation", ObjectsList, callback_camera)
