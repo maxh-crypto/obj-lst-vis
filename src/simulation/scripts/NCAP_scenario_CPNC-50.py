@@ -25,6 +25,7 @@ import sys
 import weakref
 import rospy 
 import numpy
+import genpy
 
 import glob 
 import cv2
@@ -135,6 +136,10 @@ def yoloVariables(x, y, z, iD_var):
 	objDetectionName = z
 	objID_Var = iD_var
 
+def timeFrame(newTime):
+	global timeOfFrame
+	timeOfFrame = newTime
+	
 # image of depth sensor
 def arrayofdepthcamera(imagedepth):
 	global depthimage
@@ -566,7 +571,7 @@ def yoloTalker(allData):
 
 	#========== appending ObjectsList ==================
 	b.header.frame_id = "ObjectsList VideoGenerated"
-	b.header.stamp = rospy.Time.now()
+	b.header.stamp = timeOfFrame
 
 
 
@@ -1811,7 +1816,7 @@ class RgbSensor(object):
 
 def myprocess(image):
 	#####################################
-	timeFrame(int(str(time.time()*1000000)[0:16]))
+	timeFrame(genpy.rostime.Time.from_sec(time.time()))
 	#####################################
 	#Configurate the RGB-Image and starting the yolo-function
 	array = np.array(image.raw_data)
