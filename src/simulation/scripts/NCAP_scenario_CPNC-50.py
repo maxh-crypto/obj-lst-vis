@@ -121,9 +121,9 @@ configPath = "/opt/yolofolders/yolo-coco/yolov3.cfg"
 print("[INFO] loading YOLO from disk...")
 net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
 
-def arrayofdepthcamera(imagedepth):
-	global depthimage
-	depthimage = imagedepth
+# YOLO variables for depth image and further calculations
+				  
+						
 
 def yoloVariables(x, y, z, iD_var):
 	global objCoordinates
@@ -135,22 +135,27 @@ def yoloVariables(x, y, z, iD_var):
 	objDetectionName = z
 	objID_Var = iD_var
 
-def objSum(number):
-	global objNumber
-	objNumber = number
+# image of depth sensor
+def arrayofdepthcamera(imagedepth):
+	global depthimage
+	depthimage = imagedepth
 
+# object Length   
 def length_def(transform_length):
 	global objLength
 	objLength = transform_length
 
+# object distance
 def distance(dist):
 	global objDistance
 	objDistance = dist
 
+# init for first YOLO frame
 def count(a):
 	global counter
 	counter =a
 
+# methods for controlling data flow
 def process1(b):
 	global step1
 	step1 = b
@@ -163,11 +168,12 @@ def process3(d):
 	global step3
 	step3 = d
 
+# global time
 def setTime(zeit):
 	global TIME_PERIOD
-	TIME_PERIOD = zeit 
+	TIME_PERIOD = zeit
 
-#=================================
+								  
 
 ####################################################
 ### Klassen für Berechnung der Objektliste #########
@@ -563,6 +569,7 @@ def yoloTalker(allData):
 	b.header.stamp = rospy.Time.now()
 
 
+
 	#========== just append if object is detected
 	#if a_car1.geometric.x != 0 and a_car1.geometric.y != 0 and count>=1:
 	#	b.obj_list.append(a_car1)
@@ -590,6 +597,7 @@ def yoloTalker(allData):
 ct = CentroidTracker()
 ########
 
+# get length of given object
 def getlength(arraycoordinates,transform_name, transform_len):
 	array = arraycoordinates
 	newimageRGB = rgb_frame
@@ -601,6 +609,8 @@ def getlength(arraycoordinates,transform_name, transform_len):
 	elif transform_len>3:
 		length_def(0)
 	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
+		
+		# create a grayscaled image of the RGB image, find value changes (borders) and set pixel to 0 or 255, depending on threshold
 		frame_of_interest = newimageRGB[array[1]:(array[1]+array[3]),array[0]:(array[0]+array[2])]
 		frame_of_interest_grayscaled = cv2.cvtColor(frame_of_interest, cv2.COLOR_BGR2GRAY)
 		gaus_threshold = cv2.adaptiveThreshold(frame_of_interest_grayscaled, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
@@ -609,17 +619,16 @@ def getlength(arraycoordinates,transform_name, transform_len):
 		nearest = 1000
 		furthest = 0
 
+		# iterate through the processed grayscaled RGB image , find every black pixel and calculate distance using values of the same pixel in depth image
+		# save furthest and nearest distance to calculate the length of the oject
 		for i in range(array[3]):
 			for j in range(array[2]):
 				if (array[0]+i)>IM_HEIGTH:
-						#i = counti
+				 
 						break
-				elif (array[1]+j)>IM_WIDTH:
-						#j = countj
+				elif (array[1]+j)>IM_WIDTH:			 
 						break
 				elif gaus_threshold[i,j] == 0:
-					#counti = i
-					#countj = j
 					pixel_length = depth[(array[1]+i),(array[0]+j)]
 					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
 					calc_in_meters = 1000 * calc
@@ -644,13 +653,13 @@ def getlength(arraycoordinates,transform_name, transform_len):
 		length_def(0)
 
 
-
+# get distance of given object
 def getdistance(arraycoordinates,transform_len, winkelarray):
 	winkel = winkelarray
 	array = arraycoordinates
 	depth = depthimage
 	length = objLength
-	#print("Unser Winkel ist: ",winkel)
+									
 	if type(array) == int:
 		distance(0)
 	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
@@ -658,98 +667,102 @@ def getdistance(arraycoordinates,transform_len, winkelarray):
 	elif transform_len>3:
 		distance(0)
 	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
+		
+		# reference point for distance calculation
 		ycenter = array[0] + (array[2] * 0.35)
 		xcenter = array[1] + (array[3] * 0.5)
 
 		pixel = depth[int(xcenter),int(ycenter)]
+		
+		# find reference point of the object using object distance, object length and object yaw angle
 		normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
-		in_meters = (1000 * normalized) #+ (length * 0.5)
+		in_meters = (1000 * normalized)
 		hlength = length * 0.5
-		if winkel != [] and winkel != 0:# and type(winkel) == float:
+		if winkel != [] and winkel != 0:
 			finaldistance = (hlength**2 + in_meters**2 - (2 * hlength * in_meters * math.cos(float(winkel[0]))))**(1/2)
 		else:
-			finaldistance = in_meters = (1000 * normalized) + (length * 0.5)
+			finaldistance = in_meters + (hlength)
 		
 
 		distance(finaldistance)
-		#print("final: ", finaldistance, " vs. direct: ", in_meters)
+															  
 	else:
 		distance(0)
 
-def getdepth(arraycoordinates,transform_name, transform_len):
-	array = arraycoordinates
-	newimageRGB = rgb_frame
-	if type(array) == int:
-		distance(0)
-		length(0)
-	elif 0>array[0]>IM_WIDTH and 0>array[1]>IM_HEIGTH and array[2]<0 and array[3]<0:
-		distance(0)
-		length(0)
-	elif transform_len>3:
-		distance(0)
-		length(0)
-	elif 0<array[0]<IM_WIDTH and 0<array[1]<IM_HEIGTH and array[2]>0 and array[3]>0:
-		#print("I am here")
-		ycenter = array[0] + (array[2] * 0.35)
-		xcenter = array[1] + (array[3] * 0.5)
+															 
+						 
+						
+					   
+			 
+		   
+																				 
+			 
+		   
+					  
+			 
+		   
+																				 
+					 
+										
+									   
 
-		pixel = depthimage[int(xcenter),int(ycenter)]
-		normalized = (pixel[2] + pixel[1] * 256 + pixel[0] * 256 * 256) / (256 * 256 * 256 - 1)
-		in_meters = 1000 * normalized
+# running YOLO and returning YOLO variables
+																						 
+							   
 
 
 
-		frame_of_interest = newimageRGB[array[1]:(array[1]+array[3]),array[0]:(array[0]+array[2])]
-		frame_of_interest_grayscaled = cv2.cvtColor(frame_of_interest, cv2.COLOR_BGR2GRAY)
-		gaus_threshold = cv2.adaptiveThreshold(frame_of_interest_grayscaled, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 115,1)
+																							
+																					
+																																	 
+  
+																		 
+
+				
+			  
+
+
+						   
+							
+								
+							   
+			  
+							  
+			   
+														 
+																										   
+								 
+
+
+								 
+							  
+								  
+							   
+
+				 
+																				  
 		
-		#print("array[3]: ",array[3], " and range(array[3]: ", range(array[3]))
-
-		nearest = 1000
-		furthest = 0
-
-
-		for i in range(array[3]):
-			for j in range(array[2]):
-				if gaus_threshold[i,j] == 0:
-					if (array[0]+i)>IM_HEIGTH:
-						i = i -1
-					if (array[1]+j)>IM_WIDTH:
-						j = j - 1
-					pixel_length = depthimage[(array[1]+i),(array[0]+j)]
-					calc = (pixel_length[2] + pixel_length[1] * 256 + pixel_length[0] * 256 * 256) / (256 * 256 * 256 - 1)
-					calc_in_meters = 1000 * calc
-
-
-					if calc_in_meters < nearest:
-						nearest = calc_in_meters
-					if calc_in_meters > furthest:
-						furthest = calc_in_meters
-
-		#if angle != 0:
-			#dist = math.sqrt(in_meters**2 + length**2 +2*in_meters*length*math.cos(angle))
-		#else:
-			#dist = in_meters
-		#print("Distanz: ", in_meters)
-		length = furthest-nearest
-		if length == -1000:
-			distance(in_meters)
-		elif transform_name == ['car'] and length > 7:
-			dist = in_meters + 2
-			distance(dist)
-			length(4.0)
-		elif transform_name == ['person'] and length > 2:
-			dist = in_meters + 0.3
-			distance(dist)
-			length(0.6)
-		else:
-			dist = in_meters + length * 0.5
-			distance(dist)
-			length(length)
-		
-	else:
-		distance(0)
-		length(0)
+					
+								
+						   
+					 
+					  
+												
+					   
+				 
+			  
+												   
+						 
+				 
+			  
+	   
+								  
+				 
+				 
+  
+	  
+			 
+		   
 
 def yolostart(imagevariable):
 	global rgb_frame
@@ -758,8 +771,8 @@ def yolostart(imagevariable):
 		frame = imagevariable
 		(H, W) = imagevariable.shape[:2]
 		# determine only the *output* layer names that we need from YOLO
-		#ln = net.getLayerNames()
-		#ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+						   
+															 
 		ln = net.getUnconnectedOutLayersNames()
 		# construct a blob from the input image and then perform a forward
 		# pass of the YOLO object detector, giving us our bounding boxes and
@@ -771,7 +784,7 @@ def yolostart(imagevariable):
 		layerOutputs = net.forward(ln)
 		end = time.time()
 		# show timing information on YOLO
-		#print("[INFO] YOLO took {:.6f} seconds".format(end - start))
+															   
 		# initialize our lists of detected bounding boxes, confidences, and
 		# class IDs, respectively
 		boxes = []
@@ -788,10 +801,10 @@ def yolostart(imagevariable):
 			# loop over each of the detections
 			for detection in output:
 
-				#classNameString = ""
-				#classNameString = classNameString.join(np.argmax(scores))
-				#if(classNameString == "umbrella"):
-				#	print("umbrella !!!!!!!!!!!!!!!!!!")
+						 
+															  
+									   
+										  
 				# extract the class ID and confidence (i.e., probability) of
 				# the current object detection
 				scores = detection[5:]
@@ -806,7 +819,7 @@ def yolostart(imagevariable):
 					confidence = scores[classID]
 				# filter out weak predictions by ensuring the detected
 				# probability is greater than the minimum probability
-				#print(classID)
+				   
 				if confidence > CONFIDENCE:
 					# scale the bounding box coordinates back relative to the
 					# size of the image, keeping in mind that YOLO actually
@@ -814,10 +827,10 @@ def yolostart(imagevariable):
 					# box followed by the boxes' width and height
 					box = detection[0:4] * np.array([W, H, W, H])
 					(centerX, centerY, width, height) = box.astype("int")
-					########
+			 
 					box2 = [centerX-width/2, centerX+width/2, centerY-height/2, centerY+height/2]
 					rects.append(box2)
-					#######
+			
 					# use the center (x, y)-coordinates to derive the top and
 					# and left corner of the bounding box
 					x = int(centerX - (width / 2))
@@ -827,14 +840,14 @@ def yolostart(imagevariable):
 					boxes.append([x, y, int(width), int(height)])
 					confidences.append(float(confidence))
 					classIDs.append(classID)
-		########
+		  
 		objects = ct.update(rects)
 		iiiDs = []
 		for(objIDs, centroid) in objects.items():
-			#print(objIDs)
-			#print(type(objIDs))
+				 
+					   
 			iiiDs.append(objIDs)
-		#print(iiiDs)
+			   
 		if counter > 0 :            
 			# apply non-maxima suppression to suppress weak, overlapping bounding
 			# boxes
@@ -856,23 +869,23 @@ def yolostart(imagevariable):
 						s.append([LABELS[classIDs[i]]])	#changed
 						j.append([boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]])
 						k.append([confidences[i]])
-						#print("Index: {}".format(i))
-						#print(s)
-						#print(len(iiiDs))
+								   
+			   
+						
 						if i < len(iiiDs):
 							i_D_Var.append([iiiDs[i]])
 						yoloVariables(j, k, s, i_D_Var)
-						process2(1)
+						process2(1) # unlock data flow for depth image calculation
 						rgb_frame = imagevariable
-			else:
+			else: # if no object is detected
 				process1(2)
 
 		count(2)        
 	if counter < 1:
-		process1(2)
+		process1(2) # unlock data flow for yolostart after init
 	return None  
 
-
+# processing and reshaping image of depth camera
 def depthAlgo(image2):
 	if step2 == 1:
 		array = np.array(image2.raw_data)
@@ -1780,7 +1793,7 @@ class GnssSensor(object):
 		self.lon = event.longitude
 
 # ==============================================================================
-# -- RGB-Camera TP2 -------------------------------------------------------------
+# -- RGB-Camera ----------------------------------------------------------------
 # ==============================================================================
 
 class RgbSensor(object):
@@ -1797,6 +1810,9 @@ class RgbSensor(object):
 		self.sensor.listen(lambda image: (myprocess(image)))		
 
 def myprocess(image):
+	#####################################
+	timeFrame(int(str(time.time()*1000000)[0:16]))
+	#####################################
 	#Configurate the RGB-Image and starting the yolo-function
 	array = np.array(image.raw_data)
 	i2 = array.reshape(IM_HEIGTH,IM_WIDTH,4)
@@ -2009,11 +2025,11 @@ def game_loop(args):
 			#set pedestrian position to start moving if ego-vehicle (40km/h) reaches this position
 			if player_pos.x > 170.56:  
 				world.walker1.apply_control(world.control)
-#end scenario parameter
+			#end scenario parameter
 
 	
 			if step3 == 1:
-				#hier variable
+				  
 
 				if counter > 1:
 
@@ -2031,7 +2047,7 @@ def game_loop(args):
 					startTime = time.time()
 					setTime(DiffTime)
 
-
+					# iterate through every detected object
 
 
 					for i in range(len(newObjDetectionName)):
@@ -2042,41 +2058,42 @@ def game_loop(args):
 							else:
 								getlength(newObjCoordinates[i], newObjDetectionName[i], len(newObjDetectionName))
 								getdistance(newObjCoordinates[i], len(newObjDetectionName), winkelArray)
-								#getdepth(newObjCoordinates[i], newObjDetectionName[i], len(newObjDetectionName))
+																						 
 							
 
-							idFound = False
-							
+							idFound = False		
+	   
 							for j in range(len(ListeObj2)):
 
 								if ("".join(ListeObj2[j].iD_Classname) == "".join(newObjDetectionName[i]) and int("".join(map(str,newObjID_Var[i]))) == ListeObj2[j].id_Klasse):
 									ListeObj2[j].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 									idFound = True
-									#print(type(float("".join(map(str,newObjConfidence[i])))))
+																   
 
 							if idFound == False:
 								ListeObj2.append(AllMSG())
 								ListeObj2[i].setAllValues(objDistance,newObjCoordinates[i],newObjDetectionName[i],newObjID_Var[i],float("".join(map(str,newObjConfidence[i]))),objLength)
 								
 						if i == len(newObjDetectionName)-1:
+						# reset data flow
 							process3(0)
 							process1(2)
 
 					z = 0
 					while z < len(ListeObj2):
-						#print("Länge der Liste")
-						#print(len(ListeObj2))
+								
+							
 						if z< len(ListeObj2):
 							if ListeObj2[z].geo.x == 0 and ListeObj2[z].geo.y == 0 or not (ListeObj2[z].id_Klasse or ListeObj2[z].id_Klasse ==0):
 								del ListeObj2[z]
-								#del winkelArray[z]
+						   
 								continue
 							if ListeObj2[z].stillChanging != True:
-								#ListeObj2.pop(z)
+						 
 								del ListeObj2[z]
-								#del winkelArray[z]
+						   
 						z +=1
-######################################################################
+																	  
 					del winkelArray[:]
 					del allClassName[:]
 					del allDistances[:]
@@ -2087,21 +2104,21 @@ def game_loop(args):
 						allClassName.append(ListeObj2[z].iD_Classname)
 						allDistances.append(ListeObj2[z].dist_)
 						allCoordinates.append(ListeObj2[z].coordinates_)
-					###################################
-					#Mögliche Methode für Länge
-					###################################
-					
-######################################################################
+										
+								   
+										
+	 
+																	  
 					z = 0
-					print("########################################")
+													  
 					for z in range(len(ListeObj2)):
 						ListeObj2[z].changeTrigger()
 
-					#print("Alle Werte:")
-					#print(winkelArray)
-					#print("Domi's Info: ",allClassName, " Denis's Info: ", newObjDetectionName)
-					#print(allDistances)
-					#print("Domi's Info: ", allCoordinates, " Denis's Info: ", newObjCoordinates)
+						  
+						
+																				 
+						 
+																				  
 					
 					yoloTalker(ListeObj2)
 			
