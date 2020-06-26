@@ -26,6 +26,7 @@ This repository can be cloned and used as catkin workspace in a ROS environment
 	* 'src/simulation/scripts/RecordCamera.py'
 	* 'src/simulation/scripts/carlaGT2.6.py'
 	
+	
 	``` bash
 	chmod +x <filename>
  	 ```
