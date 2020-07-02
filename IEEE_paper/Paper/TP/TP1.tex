@@ -27,7 +27,7 @@ A major part of the project deals with the used software to create the test envi
 	\label{fig:Overview}
 \end{figure*}
 
-The test procedure starts with launching the test scenario by first spawning the three vehicles and the pedestrian to their initial positions into the map. This state consists of an Audi TT (1) in front and an Audi e-tron (2) arranged behind it. The left edges of both cars are parked 0.2 m away from the right edge of the test lane. The longitudinal distance between the cars and between the front car and pedestrian is 1.0 m, each. At the beginning of the simulation, the child is positioned 7.0 m laterally from the center of the ego-vehicle, which is centered in its lane 200 m behind the pedestrian and portrayed as an Audi e-tron. A few seconds after spawning, the ego-vehicle starts accelerating quickly to 40 km/h and the child starts moving with constant speed of 5 km/h from right-to-left to cross the street. The pedestrian becomes visible for the ego-vehicle after he passed the Audi e-tron (2). \Cref{fig:coordination} illustrates the positioning of all vehicles and the pedestrian at this time.
+The test procedure starts with launching the test scenario by first spawning the three vehicles and the pedestrian to their initial positions into the map. This state consists of an Audi TT (1) in front and an Audi e-tron (2) arranged behind it. The left edges of both cars are parked 0.2 m away from the right edge of the test lane. The longitudinal distance between the cars and between the front car and pedestrian is 1.0 m, each. At the beginning of the simulation, the child is positioned 7.0 m laterally from the center of the ego-vehicle, which is centered in its lane 100 m behind the pedestrian and portrayed as an Audi e-tron. A few seconds after spawning, the ego-vehicle starts accelerating quickly to 40 km/h and the child starts moving with constant speed of 5 km/h from right-to-left to cross the street. The pedestrian becomes visible for the ego-vehicle after he passed the Audi e-tron (2). \Cref{fig:coordination} illustrates the positioning of all vehicles and the pedestrian at this time.
 
 The ego-vehicle immediately engages an emergency brake and comes to a standstill in front of the child. At this point the pedestrian is at the 50\,\% overlapping point. The child continues crossing the street and the scenario ends as soon as the child completely passed the ego-vehicle.
 \begin{figure}[b]
@@ -51,6 +51,6 @@ The \ac{GT} data will be published via \ac{ROS} in two different topics. Every t
 Topic two includes only the object list message with the Geometric data of the ego-vehicle based on the camera position at the front middle of the ego-vehicle.
 The test scenario offers two options for publishing different data in topic one.
 \begin{itemize}
-	\item Publishing only objects in the field of view of the camera (200 m and a total opening angle of \ang{60})
+	\item Publishing only objects in the field of view of the camera (100 m and a total opening angle of \ang{60})
 	\item Publishing all spawned objects over the whole test period
 \end{itemize}
